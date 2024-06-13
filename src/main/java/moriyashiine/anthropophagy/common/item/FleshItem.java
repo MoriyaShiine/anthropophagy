@@ -3,7 +3,7 @@
  */
 package moriyashiine.anthropophagy.common.item;
 
-import moriyashiine.anthropophagy.common.init.ModDataComponentTypes;
+import moriyashiine.anthropophagy.common.init.ModComponentTypes;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
@@ -25,19 +25,19 @@ public class FleshItem extends Item {
 	}
 
 	public static String getOwnerName(ItemStack stack) {
-		return stack.getOrDefault(ModDataComponentTypes.OWNER_NAME, "");
+		return stack.getOrDefault(ModComponentTypes.OWNER_NAME, "");
 	}
 
 	public static boolean isOwnerPlayer(ItemStack stack) {
-		return stack.getOrDefault(ModDataComponentTypes.FROM_PLAYER, false);
+		return stack.getOrDefault(ModComponentTypes.FROM_PLAYER, false);
 	}
 
 	public static void setOwner(ItemStack stack, String ownerName, boolean fromPlayer) {
 		if (ownerName.isEmpty()) {
 			return;
 		}
-		stack.set(ModDataComponentTypes.OWNER_NAME, ownerName);
-		stack.set(ModDataComponentTypes.FROM_PLAYER, fromPlayer);
+		stack.set(ModComponentTypes.OWNER_NAME, ownerName);
+		stack.set(ModComponentTypes.FROM_PLAYER, fromPlayer);
 	}
 
 	public static void setOwner(ItemStack stack, Entity entity) {

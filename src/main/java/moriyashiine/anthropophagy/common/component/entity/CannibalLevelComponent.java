@@ -3,9 +3,9 @@
  */
 package moriyashiine.anthropophagy.common.component.entity;
 
+import moriyashiine.anthropophagy.common.Anthropophagy;
 import moriyashiine.anthropophagy.common.init.ModEntityComponents;
 import net.minecraft.entity.EquipmentSlot;
-import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.attribute.EntityAttribute;
 import net.minecraft.entity.attribute.EntityAttributeModifier;
 import net.minecraft.entity.attribute.EntityAttributes;
@@ -16,25 +16,25 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.registry.RegistryWrapper;
 import net.minecraft.registry.entry.RegistryEntry;
+import net.minecraft.util.Identifier;
 import net.minecraft.util.Pair;
 import net.minecraft.util.math.MathHelper;
 import org.ladysnake.cca.api.v3.component.sync.AutoSyncedComponent;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 
 public class CannibalLevelComponent implements AutoSyncedComponent {
 	public static final int MAX_LEVEL = 120;
 	private static final int MIN_FUNCTIONAL_LEVEL = 30;
 	private static final float MAX_FUNCTIONAL_LEVEL = MAX_LEVEL - MIN_FUNCTIONAL_LEVEL;
 
-	private static final UUID ATTACK_DAMAGE_UUID = UUID.fromString("93e0b453-db2e-47ed-af22-c9d61f7199b9");
-	private static final UUID ARMOR_UUID = UUID.fromString("5f263444-8723-45f1-bdb7-509d7c135a3c");
-	private static final UUID KNOCKBACK_RESISTANCE_UUID = UUID.fromString("3372742b-db21-4824-b810-3815d738ce6b");
-	private static final UUID MOVEMENT_SPEED_UUID = UUID.fromString("317f8550-84d3-405b-a1c7-34d83c3bae1c");
-	private static final UUID SAFE_FALL_DISTANCE_UUID = UUID.fromString("d6842570-7e0a-4c81-83ef-9952173f6af4");
-	private static final UUID STEP_HEIGHT_UUID = UUID.fromString("f96eca30-12ef-4089-a5c8-def0d38d83d0");
+	private static final Identifier ATTACK_DAMAGE_ID = Anthropophagy.id("attack_damage");
+	private static final Identifier ARMOR_ID = Anthropophagy.id("armor");
+	private static final Identifier KNOCKBACK_RESISTANCE_ID = Anthropophagy.id("knockback_resistance");
+	private static final Identifier MOVEMENT_SPEED_ID = Anthropophagy.id("movement_speed");
+	private static final Identifier SAFE_FALL_DISTANCE_ID = Anthropophagy.id("safe_fall_distance");
+	private static final Identifier STEP_HEIGHT_ID = Anthropophagy.id("step_height");
 
 	private final PlayerEntity obj;
 	private int cannibalLevel = 0;
@@ -67,7 +67,7 @@ public class CannibalLevelComponent implements AutoSyncedComponent {
 
 	public boolean canEquip(ItemStack stack) {
 		if ((stack.getItem() instanceof ArmorItem armorItem && armorItem.getProtection() > 0) || stack.getItem() instanceof ElytraItem) {
-			EquipmentSlot slot = LivingEntity.getPreferredEquipmentSlot(stack);
+			EquipmentSlot slot = obj.getPreferredEquipmentSlot(stack);
 			if (cannibalLevel >= 30 && slot == EquipmentSlot.LEGS) {
 				return false;
 			} else if (cannibalLevel >= 50 && slot == EquipmentSlot.HEAD) {
@@ -86,12 +86,12 @@ public class CannibalLevelComponent implements AutoSyncedComponent {
 					obj.dropStack(stack.copyAndEmpty());
 				}
 			}
-			obj.getAttributeInstance(EntityAttributes.GENERIC_ATTACK_DAMAGE).tryRemoveModifier(ATTACK_DAMAGE_UUID);
-			obj.getAttributeInstance(EntityAttributes.GENERIC_ARMOR).tryRemoveModifier(ARMOR_UUID);
-			obj.getAttributeInstance(EntityAttributes.GENERIC_KNOCKBACK_RESISTANCE).tryRemoveModifier(KNOCKBACK_RESISTANCE_UUID);
-			obj.getAttributeInstance(EntityAttributes.GENERIC_MOVEMENT_SPEED).tryRemoveModifier(MOVEMENT_SPEED_UUID);
-			obj.getAttributeInstance(EntityAttributes.GENERIC_SAFE_FALL_DISTANCE).tryRemoveModifier(SAFE_FALL_DISTANCE_UUID);
-			obj.getAttributeInstance(EntityAttributes.GENERIC_STEP_HEIGHT).tryRemoveModifier(STEP_HEIGHT_UUID);
+			obj.getAttributeInstance(EntityAttributes.GENERIC_ATTACK_DAMAGE).removeModifier(ATTACK_DAMAGE_ID);
+			obj.getAttributeInstance(EntityAttributes.GENERIC_ARMOR).removeModifier(ARMOR_ID);
+			obj.getAttributeInstance(EntityAttributes.GENERIC_KNOCKBACK_RESISTANCE).removeModifier(KNOCKBACK_RESISTANCE_ID);
+			obj.getAttributeInstance(EntityAttributes.GENERIC_MOVEMENT_SPEED).removeModifier(MOVEMENT_SPEED_ID);
+			obj.getAttributeInstance(EntityAttributes.GENERIC_SAFE_FALL_DISTANCE).removeModifier(SAFE_FALL_DISTANCE_ID);
+			obj.getAttributeInstance(EntityAttributes.GENERIC_STEP_HEIGHT).removeModifier(STEP_HEIGHT_ID);
 			getModifiersForLevel(cannibalLevel).attributes().forEach(pair -> obj.getAttributeInstance(pair.getLeft()).addPersistentModifier(pair.getRight()));
 		}
 	}
@@ -113,34 +113,28 @@ public class CannibalLevelComponent implements AutoSyncedComponent {
 		AttributeModifierSet attributes = new AttributeModifierSet(new ArrayList<>());
 		if (level > MIN_FUNCTIONAL_LEVEL) {
 			attributes.addModifier(EntityAttributes.GENERIC_ATTACK_DAMAGE,
-					new EntityAttributeModifier(ATTACK_DAMAGE_UUID,
-							"Cannibal modifier",
+					new EntityAttributeModifier(ATTACK_DAMAGE_ID,
 							lerp(level, 6),
 							EntityAttributeModifier.Operation.ADD_VALUE));
 			attributes.addModifier(EntityAttributes.GENERIC_ARMOR,
-					new EntityAttributeModifier(ARMOR_UUID,
-							"Cannibal modifier",
+					new EntityAttributeModifier(ARMOR_ID,
 							lerp(level, 14),
 							EntityAttributeModifier.Operation.ADD_VALUE));
 			attributes.addModifier(EntityAttributes.GENERIC_KNOCKBACK_RESISTANCE,
-					new EntityAttributeModifier(KNOCKBACK_RESISTANCE_UUID,
-							"Cannibal modifier",
+					new EntityAttributeModifier(KNOCKBACK_RESISTANCE_ID,
 							lerp(level, 0.2F),
 							EntityAttributeModifier.Operation.ADD_VALUE));
 			attributes.addModifier(EntityAttributes.GENERIC_MOVEMENT_SPEED,
-					new EntityAttributeModifier(MOVEMENT_SPEED_UUID,
-							"Cannibal modifier",
+					new EntityAttributeModifier(MOVEMENT_SPEED_ID,
 							lerp(level, 0.5F),
 							EntityAttributeModifier.Operation.ADD_MULTIPLIED_TOTAL));
 			attributes.addModifier(EntityAttributes.GENERIC_SAFE_FALL_DISTANCE,
-					new EntityAttributeModifier(SAFE_FALL_DISTANCE_UUID,
-							"Cannibal modifier",
+					new EntityAttributeModifier(SAFE_FALL_DISTANCE_ID,
 							lerp(level, 4),
 							EntityAttributeModifier.Operation.ADD_VALUE));
 			if (level >= 60) {
 				attributes.addModifier(EntityAttributes.GENERIC_STEP_HEIGHT,
-						new EntityAttributeModifier(STEP_HEIGHT_UUID,
-								"Cannibal modifier",
+						new EntityAttributeModifier(STEP_HEIGHT_ID,
 								1,
 								EntityAttributeModifier.Operation.ADD_VALUE));
 			}

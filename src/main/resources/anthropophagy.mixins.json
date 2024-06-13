@@ -6,10 +6,10 @@
 	"AbstractCookingRecipeMixin",
 	"AbstractFurnaceBlockEntityMixin",
 	"ArmorItemMixin",
+	"ArmorSlotMixin",
 	"HungerManagerMixin",
 	"LivingEntityMixin",
-	"PlayerEntityMixin",
-	"PlayerScreenHandlerMixin"
+	"PlayerEntityMixin"
   ],
   "client": [
 	"client.LightmapTextureManagerMixin"

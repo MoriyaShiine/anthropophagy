@@ -7,7 +7,7 @@ import eu.midnightdust.lib.config.MidnightConfig;
 import moriyashiine.anthropophagy.common.event.CannibalSleepEvent;
 import moriyashiine.anthropophagy.common.event.CopyCannibalLevelEvent;
 import moriyashiine.anthropophagy.common.event.DropFleshEvent;
-import moriyashiine.anthropophagy.common.init.ModDataComponentTypes;
+import moriyashiine.anthropophagy.common.init.ModComponentTypes;
 import moriyashiine.anthropophagy.common.init.ModEntityTypes;
 import moriyashiine.anthropophagy.common.init.ModItems;
 import moriyashiine.anthropophagy.common.init.ModSoundEvents;
@@ -30,7 +30,7 @@ public class Anthropophagy implements ModInitializer {
 	@Override
 	public void onInitialize() {
 		MidnightConfig.init(MOD_ID, ModConfig.class);
-		ModDataComponentTypes.init();
+		ModComponentTypes.init();
 		ModEntityTypes.init();
 		ModItems.init();
 		ModSoundEvents.init();
@@ -41,6 +41,6 @@ public class Anthropophagy implements ModInitializer {
 	}
 
 	public static Identifier id(String value) {
-		return new Identifier(MOD_ID, value);
+		return Identifier.of(MOD_ID, value);
 	}
 }

@@ -10,7 +10,7 @@ import net.minecraft.registry.tag.TagKey;
 import net.minecraft.util.Identifier;
 
 public class ModItemTags {
-	public static final TagKey<Item> KNIVES = TagKey.of(RegistryKeys.ITEM, new Identifier("c", "knives"));
+	public static final TagKey<Item> KNIVES = TagKey.of(RegistryKeys.ITEM, Identifier.of("c", "knives"));
 
 	public static final TagKey<Item> FLESH = TagKey.of(RegistryKeys.ITEM, Anthropophagy.id("flesh"));
 }

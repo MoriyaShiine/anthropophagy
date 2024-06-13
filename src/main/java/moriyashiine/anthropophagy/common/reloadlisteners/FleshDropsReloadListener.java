@@ -35,18 +35,18 @@ public class FleshDropsReloadListener implements SimpleSynchronousResourceReload
 			for (Resource resource : resources) {
 				try (InputStream stream = resource.getInputStream()) {
 					JsonObject object = JsonParser.parseReader(new JsonReader(new InputStreamReader(stream))).getAsJsonObject();
-					Identifier entityId = new Identifier(identifier.getPath().substring(identifier.getPath().indexOf("/") + 1, identifier.getPath().length() - 5).replace("/", ":"));
+					Identifier entityId = Identifier.of(identifier.getPath().substring(identifier.getPath().indexOf("/") + 1, identifier.getPath().length() - 5).replace("/", ":"));
 					EntityType<?> entityType = Registries.ENTITY_TYPE.get(entityId);
 					if (entityType == Registries.ENTITY_TYPE.get(Registries.ENTITY_TYPE.getDefaultId()) && !entityId.equals(Registries.ENTITY_TYPE.getDefaultId())) {
 						continue;
 					}
-					Identifier rawDropId = new Identifier(JsonHelper.getString(object, "raw_drop"));
+					Identifier rawDropId = Identifier.of(JsonHelper.getString(object, "raw_drop"));
 					Item rawDrop = Registries.ITEM.get(rawDropId);
 					if (rawDrop == Registries.ITEM.get(Registries.ITEM.getDefaultId()) && !rawDropId.equals(Registries.ITEM.getDefaultId())) {
 						Anthropophagy.LOGGER.error("Unknown item '{}' in file '{}'", rawDropId, identifier);
 						continue;
 					}
-					Identifier cookedDropId = new Identifier(JsonHelper.getString(object, "raw_drop"));
+					Identifier cookedDropId = Identifier.of(JsonHelper.getString(object, "raw_drop"));
 					Item cookedDrop = Registries.ITEM.get(cookedDropId);
 					if (cookedDrop == Registries.ITEM.get(Registries.ITEM.getDefaultId()) && !cookedDropId.equals(Registries.ITEM.getDefaultId())) {
 						Anthropophagy.LOGGER.error("Unknown item '{}' in file '{}'", cookedDropId, identifier);

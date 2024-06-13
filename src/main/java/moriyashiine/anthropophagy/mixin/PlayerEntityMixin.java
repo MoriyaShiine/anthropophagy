@@ -12,10 +12,11 @@ import moriyashiine.anthropophagy.common.event.DropFleshEvent;
 import moriyashiine.anthropophagy.common.init.ModEntityComponents;
 import moriyashiine.anthropophagy.common.item.FleshItem;
 import moriyashiine.anthropophagy.common.tag.ModItemTags;
-import net.minecraft.component.DataComponentTypes;
+import net.minecraft.component.type.FoodComponent;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.entity.player.PlayerEntity;
@@ -35,8 +36,8 @@ public abstract class PlayerEntityMixin extends LivingEntity {
 	}
 
 	@Inject(method = "attack", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/player/PlayerEntity;resetLastAttackedTicks()V"), locals = LocalCapture.CAPTURE_FAILHARD)
-	private void anthropophagy$updateEventCooldown(Entity target, CallbackInfo ci, float attackDamage, float extraDamage, float attackCooldown) {
-		DropFleshEvent.attackCooldown = attackCooldown;
+	private void anthropophagy$updateEventCooldown(Entity target, CallbackInfo ci, float f, ItemStack itemStack, DamageSource damageSource, float g, float h) {
+		DropFleshEvent.attackCooldown = h;
 	}
 
 	@Inject(method = "attack", at = @At("TAIL"))
@@ -45,32 +46,30 @@ public abstract class PlayerEntityMixin extends LivingEntity {
 	}
 
 	@Inject(method = "eatFood", at = @At("HEAD"))
-	private void anthropophagy$handleCannibalFood(World world, ItemStack stack, CallbackInfoReturnable<ItemStack> cir) {
-		if (stack.contains(DataComponentTypes.FOOD)) {
-			CannibalLevelComponent cannibalLevelComponent = ModEntityComponents.CANNIBAL_LEVEL.get(this);
-			TetheredComponent tetheredComponent = ModEntityComponents.TETHERED.get(this);
-			if (stack.isIn(ModItemTags.FLESH)) {
-				if (!tetheredComponent.isTethered()) {
-					if (cannibalLevelComponent.getCannibalLevel() < CannibalLevelComponent.MAX_LEVEL) {
-						cannibalLevelComponent.setCannibalLevel(Math.min(CannibalLevelComponent.MAX_LEVEL, cannibalLevelComponent.getCannibalLevel() + 2));
-						cannibalLevelComponent.updateAttributes();
-					}
-					if (!world.isClient && cannibalLevelComponent.getCannibalLevel() == 20 || cannibalLevelComponent.getCannibalLevel() == 21) {
-						addStatusEffect(new StatusEffectInstance(StatusEffects.NAUSEA, 200));
-						addStatusEffect(new StatusEffectInstance(StatusEffects.BLINDNESS, 200));
-					}
-				}
-				if (ModConfig.enablePiglutton) {
-					PigluttonEntity.attemptSpawn(this, cannibalLevelComponent.getCannibalLevel(), FleshItem.isOwnerPlayer(stack) && getName().getString().equals(FleshItem.getOwnerName(stack)));
-				}
-			} else {
-				if (!tetheredComponent.isTethered() && cannibalLevelComponent.getCannibalLevel() > 0) {
-					cannibalLevelComponent.setCannibalLevel(Math.max(0, cannibalLevelComponent.getCannibalLevel() - 1));
+	private void anthropophagy$handleCannibalFood(World world, ItemStack stack, FoodComponent foodComponent, CallbackInfoReturnable<ItemStack> cir) {
+		CannibalLevelComponent cannibalLevelComponent = ModEntityComponents.CANNIBAL_LEVEL.get(this);
+		TetheredComponent tetheredComponent = ModEntityComponents.TETHERED.get(this);
+		if (stack.isIn(ModItemTags.FLESH)) {
+			if (!tetheredComponent.isTethered()) {
+				if (cannibalLevelComponent.getCannibalLevel() < CannibalLevelComponent.MAX_LEVEL) {
+					cannibalLevelComponent.setCannibalLevel(Math.min(CannibalLevelComponent.MAX_LEVEL, cannibalLevelComponent.getCannibalLevel() + 2));
 					cannibalLevelComponent.updateAttributes();
 				}
-				if (!world.isClient && cannibalLevelComponent.getCannibalLevel() >= 20) {
-					ModEntityComponents.playerCannibalLevel = cannibalLevelComponent.getCannibalLevel();
+				if (!world.isClient && cannibalLevelComponent.getCannibalLevel() == 20 || cannibalLevelComponent.getCannibalLevel() == 21) {
+					addStatusEffect(new StatusEffectInstance(StatusEffects.NAUSEA, 200));
+					addStatusEffect(new StatusEffectInstance(StatusEffects.BLINDNESS, 200));
 				}
+			}
+			if (ModConfig.enablePiglutton) {
+				PigluttonEntity.attemptSpawn(this, cannibalLevelComponent.getCannibalLevel(), FleshItem.isOwnerPlayer(stack) && getName().getString().equals(FleshItem.getOwnerName(stack)));
+			}
+		} else {
+			if (!tetheredComponent.isTethered() && cannibalLevelComponent.getCannibalLevel() > 0) {
+				cannibalLevelComponent.setCannibalLevel(Math.max(0, cannibalLevelComponent.getCannibalLevel() - 1));
+				cannibalLevelComponent.updateAttributes();
+			}
+			if (!world.isClient && cannibalLevelComponent.getCannibalLevel() >= 20) {
+				ModEntityComponents.playerCannibalLevel = cannibalLevelComponent.getCannibalLevel();
 			}
 		}
 	}

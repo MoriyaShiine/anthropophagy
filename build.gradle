@@ -31,6 +31,10 @@ modrinth {
     syncBodyFrom = rootProject.file("README.md").text
 }
 
+loom {
+    accessWidenerPath = file("src/main/resources/anthropophagy.accesswidener")
+}
+
 fabricApi {
     configureDataGeneration()
 }
