@@ -20,7 +20,7 @@ public class StalkGoal extends Goal {
 
 	@Override
 	public boolean canStart() {
-		return !mob.isFleeing();
+		return !mob.isBusy();
 	}
 
 	@Override

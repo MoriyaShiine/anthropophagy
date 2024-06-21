@@ -17,6 +17,8 @@ import net.minecraft.particle.ItemStackParticleEffect;
 import net.minecraft.particle.ParticleTypes;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundEvents;
+import net.minecraft.util.Hand;
+import net.minecraft.util.math.Vec3d;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
@@ -49,26 +51,12 @@ public class EatFleshGoal extends Goal {
 			if (mob.distanceTo(closestFleshItem) < mob.getWidth()) {
 				if (!mob.getWorld().isClient) {
 					ItemStack flesh = closestFleshItem.getStack().split(1);
-					((ServerWorld) mob.getWorld()).spawnParticles(new ItemStackParticleEffect(ParticleTypes.ITEM, flesh),
-							closestFleshItem.getX(), closestFleshItem.getY(), closestFleshItem.getZ(),
-							8,
-							closestFleshItem.getWidth() / 2, closestFleshItem.getHeight() / 2, closestFleshItem.getWidth() / 2,
-							0);
-					mob.playSound(SoundEvents.ENTITY_GENERIC_EAT, 1, 1);
-					if (!isTargetFlesh(flesh)) {
-						mob.startFleeing();
-					}
-					int healAmount = 6;
-					if (closestFleshItem.getStack().contains(DataComponentTypes.FOOD)) {
-						healAmount = closestFleshItem.getStack().get(DataComponentTypes.FOOD).nutrition() * 2;
-					}
-					if (mob.getHealth() >= mob.getMaxHealth() && closestFleshItem.getOwner() == mob.getTarget() && !isTargetFlesh(flesh)) {
-						mob.overhealAmount += healAmount;
-						if (mob.overhealAmount >= OVERHEAL_REQUIRED) {
-							mob.runAwayAndDespawn();
-						}
+					if (isTargetFlesh(flesh)) {
+						heal(mob, flesh, false);
+						playEffects(mob, flesh, closestFleshItem.getPos());
 					} else {
-						mob.heal(healAmount);
+						mob.setStackInHand(Hand.MAIN_HAND, flesh);
+						mob.setEating(true);
 					}
 				}
 			}
@@ -77,7 +65,7 @@ public class EatFleshGoal extends Goal {
 
 	@Nullable
 	public static ItemEntity getNearestFlesh(PathAwareEntity mob) {
-		List<ItemEntity> drops = mob.getWorld().getEntitiesByType(EntityType.ITEM, mob.getBoundingBox().expand(8, 4, 8), foundEntity -> foundEntity.getStack().isIn(ModItemTags.FLESH) && !foundEntity.getStack().isOf(ModItems.CORRUPT_FLESH));
+		List<ItemEntity> drops = mob.getWorld().getEntitiesByType(EntityType.ITEM, mob.getBoundingBox().expand(10, 4, 10), foundEntity -> foundEntity.getStack().isIn(ModItemTags.FLESH) && !foundEntity.getStack().isOf(ModItems.CORRUPT_FLESH));
 		if (drops.isEmpty()) {
 			return null;
 		}
@@ -86,5 +74,35 @@ public class EatFleshGoal extends Goal {
 
 	private boolean isTargetFlesh(ItemStack flesh) {
 		return mob.getTarget() != null && FleshItem.getOwnerName(flesh).equals(mob.getTarget().getName().getString());
+	}
+
+	public static void heal(PigluttonEntity mob, ItemStack stack, boolean allowOverhaul) {
+		int healAmount = 6;
+		if (stack.contains(DataComponentTypes.FOOD)) {
+			healAmount = stack.get(DataComponentTypes.FOOD).nutrition() * 2;
+		}
+		if (allowOverhaul && mob.getHealth() >= mob.getMaxHealth()) {
+			mob.overhealAmount += healAmount;
+			if (mob.overhealAmount >= OVERHEAL_REQUIRED) {
+				((ServerWorld) mob.getWorld()).spawnParticles(ParticleTypes.SMOKE,
+						mob.getX(), mob.getY(), mob.getZ(),
+						64,
+						mob.getWidth() / 2, mob.getHeight() / 2, mob.getWidth() / 2,
+						0);
+				mob.dropItem(ModItems.PIGLUTTON_HEART);
+				mob.discard();
+			}
+		} else {
+			mob.heal(healAmount);
+		}
+	}
+
+	public static void playEffects(PigluttonEntity mob, ItemStack stack, Vec3d pos) {
+		((ServerWorld) mob.getWorld()).spawnParticles(new ItemStackParticleEffect(ParticleTypes.ITEM, stack),
+				pos.getX(), pos.getY(), pos.getZ(),
+				8,
+				0.125, 0.125, 0.125,
+				0);
+		mob.playSound(SoundEvents.ENTITY_GENERIC_EAT, 1, 1);
 	}
 }

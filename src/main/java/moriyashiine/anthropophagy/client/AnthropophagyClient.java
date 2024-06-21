@@ -7,12 +7,9 @@ import moriyashiine.anthropophagy.client.render.entity.PigluttonEntityRenderer;
 import moriyashiine.anthropophagy.client.render.entity.model.PigluttonEntityModel;
 import moriyashiine.anthropophagy.common.init.ModEntityTypes;
 import net.fabricmc.api.ClientModInitializer;
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.client.rendering.v1.EntityModelLayerRegistry;
 import net.fabricmc.fabric.api.client.rendering.v1.EntityRendererRegistry;
 
-@Environment(EnvType.CLIENT)
 public class AnthropophagyClient implements ClientModInitializer {
 	@Override
 	public void onInitializeClient() {

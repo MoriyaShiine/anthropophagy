@@ -5,8 +5,6 @@ package moriyashiine.anthropophagy.mixin.client;
 
 import moriyashiine.anthropophagy.common.component.entity.CannibalLevelComponent;
 import moriyashiine.anthropophagy.common.init.ModEntityComponents;
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.render.LightmapTextureManager;
 import net.minecraft.util.math.MathHelper;
@@ -16,7 +14,6 @@ import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.ModifyVariable;
 
-@Environment(EnvType.CLIENT)
 @Mixin(LightmapTextureManager.class)
 public class LightmapTextureManagerMixin {
 	@Shadow

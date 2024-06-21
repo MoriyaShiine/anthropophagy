@@ -17,7 +17,6 @@ import net.minecraft.advancement.criterion.InventoryChangedCriterion;
 import net.minecraft.advancement.criterion.OnKilledCriterion;
 import net.minecraft.predicate.entity.EntityPredicate;
 import net.minecraft.predicate.item.ItemPredicate;
-import net.minecraft.registry.BuiltinRegistries;
 import net.minecraft.registry.RegistryWrapper;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
@@ -26,8 +25,8 @@ import java.util.concurrent.CompletableFuture;
 import java.util.function.Consumer;
 
 public class ModAdvancementProvider extends FabricAdvancementProvider {
-	public ModAdvancementProvider(FabricDataOutput output) {
-		super(output, CompletableFuture.supplyAsync(BuiltinRegistries::createWrapperLookup));
+	public ModAdvancementProvider(FabricDataOutput output, CompletableFuture<RegistryWrapper.WrapperLookup> completableFuture) {
+		super(output, completableFuture);
 	}
 
 	@Override

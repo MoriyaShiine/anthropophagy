@@ -14,14 +14,14 @@ import net.minecraft.recipe.Ingredient;
 import net.minecraft.recipe.RecipeSerializer;
 import net.minecraft.recipe.SmokingRecipe;
 import net.minecraft.recipe.book.RecipeCategory;
-import net.minecraft.registry.BuiltinRegistries;
+import net.minecraft.registry.RegistryWrapper;
 import net.minecraft.registry.tag.ItemTags;
 
 import java.util.concurrent.CompletableFuture;
 
 public class ModRecipeProvider extends FabricRecipeProvider {
-	public ModRecipeProvider(FabricDataOutput output) {
-		super(output, CompletableFuture.supplyAsync(BuiltinRegistries::createWrapperLookup));
+	public ModRecipeProvider(FabricDataOutput output, CompletableFuture<RegistryWrapper.WrapperLookup> completableFuture) {
+		super(output, completableFuture);
 	}
 
 	@Override

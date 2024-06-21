@@ -10,6 +10,7 @@ import moriyashiine.anthropophagy.common.init.ModSoundEvents;
 import moriyashiine.anthropophagy.common.tag.ModBlockTags;
 import moriyashiine.anthropophagy.common.tag.ModEntityTypeTags;
 import net.minecraft.block.BlockState;
+import net.minecraft.entity.AnimationState;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.SpawnReason;
@@ -18,11 +19,12 @@ import net.minecraft.entity.ai.pathing.PathNodeType;
 import net.minecraft.entity.attribute.DefaultAttributeContainer;
 import net.minecraft.entity.attribute.EntityAttributes;
 import net.minecraft.entity.damage.DamageSource;
+import net.minecraft.entity.data.DataTracker;
+import net.minecraft.entity.data.TrackedData;
+import net.minecraft.entity.data.TrackedDataHandlerRegistry;
 import net.minecraft.entity.mob.HostileEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.NbtCompound;
-import net.minecraft.particle.ParticleTypes;
-import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvent;
 import net.minecraft.util.math.BlockPos;
@@ -36,14 +38,25 @@ import net.minecraft.world.World;
 public class PigluttonEntity extends HostileEntity {
 	private static final int DAMAGE_THRESHOLD = 20;
 
+	private static final TrackedData<Boolean> EATING = DataTracker.registerData(PigluttonEntity.class, TrackedDataHandlerRegistry.BOOLEAN);
+	private static final TrackedData<Integer> ATTACK_INDEX = DataTracker.registerData(PigluttonEntity.class, TrackedDataHandlerRegistry.INTEGER);
+
 	public boolean canAttack = false;
-	public int fleeDistance = 0, overhealAmount = 0, stalkTicks = 0;
+	public int overhealAmount = 0, stalkTicks = 0;
 	private float damageTaken = 0;
 	private int fleeingTicks = 0;
 
+	private int attackTicks = 0, eatingTicks = 0;
+
+	public AnimationState idleAnimationState = new AnimationState();
+	public AnimationState attackLeftAnimationState = new AnimationState();
+	public AnimationState attackRightAnimationState = new AnimationState();
+	public AnimationState attackTusksAnimationState = new AnimationState();
+	public AnimationState eatAnimationState = new AnimationState();
+
 	public PigluttonEntity(EntityType<? extends HostileEntity> entityType, World world) {
 		super(entityType, world);
-		navigation = new BetterMobNavigation(this, getWorld(), 1);
+		navigation = new BetterMobNavigation(this, getWorld(), 3);
 		experiencePoints = 30;
 		setPathfindingPenalty(PathNodeType.LEAVES, 0);
 		setPathfindingPenalty(PathNodeType.WATER, -1);
@@ -67,13 +80,10 @@ public class PigluttonEntity extends HostileEntity {
 	@Override
 	public void readCustomDataFromNbt(NbtCompound nbt) {
 		super.readCustomDataFromNbt(nbt);
+		setEating(nbt.getBoolean("Eating"));
+		setAttackIndex(nbt.getInt("AttackIndex"));
 		canAttack = nbt.getBoolean("CanAttack");
 		damageTaken = nbt.getFloat("DamageTaken");
-		if (nbt.contains("FleeDistance")) {
-			fleeDistance = nbt.getInt("FleeDistance");
-		} else {
-			fleeDistance = 6;
-		}
 		overhealAmount = nbt.getInt("OverhealAmount");
 		stalkTicks = nbt.getInt("StalkTicks");
 		fleeingTicks = nbt.getInt("FleeingTicks");
@@ -82,12 +92,20 @@ public class PigluttonEntity extends HostileEntity {
 	@Override
 	public void writeCustomDataToNbt(NbtCompound nbt) {
 		super.writeCustomDataToNbt(nbt);
+		nbt.putBoolean("Eating", isEating());
+		nbt.putInt("AttackIndex", getAttackIndex());
 		nbt.putBoolean("CanAttack", canAttack);
 		nbt.putFloat("DamageTaken", damageTaken);
-		nbt.putInt("FleeDistance", fleeDistance);
 		nbt.putInt("OverhealAmount", overhealAmount);
 		nbt.putInt("StalkTicks", stalkTicks);
 		nbt.putInt("FleeingTicks", fleeingTicks);
+	}
+
+	@Override
+	protected void initDataTracker(DataTracker.Builder builder) {
+		super.initDataTracker(builder);
+		builder.add(EATING, false);
+		builder.add(ATTACK_INDEX, 0);
 	}
 
 	@Override
@@ -101,24 +119,44 @@ public class PigluttonEntity extends HostileEntity {
 		goalSelector.add(5, new LookAtEntityGoal(this, PlayerEntity.class, 16));
 		goalSelector.add(5, new LookAroundGoal(this));
 		targetSelector.add(0, new RevengeGoal(this));
-		targetSelector.add(1, new ActiveTargetGoal<>(this, LivingEntity.class, 10, true, false, living -> !isFleeing() && living.getType().isIn(ModEntityTypeTags.PIGLUTTON_TARGETS)));
+		targetSelector.add(1, new ActiveTargetGoal<>(this, LivingEntity.class, 10, true, false, living -> !isBusy() && living.getType().isIn(ModEntityTypeTags.PIGLUTTON_TARGETS)));
+	}
+
+	@Override
+	public void tick() {
+		super.tick();
+		if (getWorld().isClient) {
+			idleAnimationState.startIfNotRunning(age);
+			int index = getAttackIndex();
+			attackLeftAnimationState.setRunning(attackTicks > 0 && index == 0, age);
+			attackRightAnimationState.setRunning(attackTicks > 0 && index == 1, age);
+			attackTusksAnimationState.setRunning(attackTicks > 0 && index == 2, age);
+			eatAnimationState.setRunning(eatingTicks > 0, age);
+		}
 	}
 
 	@Override
 	protected void mobTick() {
 		super.mobTick();
-		if (fleeingTicks > 0) {
-			fleeingTicks--;
-			if (fleeingTicks < 160 && fleeingTicks % 20 == 0) {
-				getWorld().playSound(null, getBlockPos(), ModSoundEvents.ENTITY_PIGLUTTON_FLEE, getSoundCategory(), getSoundVolume() * 4, getSoundPitch());
+		if (fleeingTicks > 0 && --fleeingTicks % 20 == 0) {
+			getWorld().playSound(null, getBlockPos(), ModSoundEvents.ENTITY_PIGLUTTON_FLEE, getSoundCategory(), getSoundVolume() * 4, getSoundPitch());
+		}
+		if (attackTicks > 0 && --attackTicks == 0 && getTarget() != null && distanceTo(getTarget()) < 4.5) {
+			tryAttack(getTarget());
+		}
+		if (eatingTicks > 0) {
+			eatingTicks--;
+			if (eatingTicks <= 35 && eatingTicks >= 15 && eatingTicks % 5 == 0) {
+				EatFleshGoal.playEffects(this, getMainHandStack(), getEyePos().add(getRotationVector().multiply(1.2)));
 			}
-			if (fleeingTicks == 160) {
-				((ServerWorld) getWorld()).spawnParticles(ParticleTypes.SMOKE,
-						getX(), getY(), getZ(),
-						64,
-						getWidth() / 2, getHeight() / 2, getWidth() / 2,
-						0);
-				discard();
+			if (eatingTicks == 15) {
+				EatFleshGoal.heal(this, getMainHandStack(), true);
+			}
+			if (eatingTicks == 14) {
+				getMainHandStack().decrement(1);
+			}
+			if (eatingTicks == 0) {
+				setEating(false);
 			}
 		}
 	}
@@ -126,7 +164,7 @@ public class PigluttonEntity extends HostileEntity {
 	@Override
 	public void tickMovement() {
 		super.tickMovement();
-		if (!getWorld().isClient && horizontalCollision && getWorld().getGameRules().getBoolean(GameRules.DO_MOB_GRIEFING)) {
+		if (!getWorld().isClient && (horizontalCollision || (verticalCollision && !groundCollision)) && getWorld().getGameRules().getBoolean(GameRules.DO_MOB_GRIEFING)) {
 			Box box = getBoundingBox().expand(0.2);
 			for (BlockPos pos : BlockPos.iterate(MathHelper.floor(box.minX), MathHelper.floor(box.minY), MathHelper.floor(box.minZ), MathHelper.floor(box.maxX), MathHelper.floor(box.maxY), MathHelper.floor(box.maxZ))) {
 				BlockState state = getWorld().getBlockState(pos);
@@ -162,10 +200,10 @@ public class PigluttonEntity extends HostileEntity {
 	protected float modifyAppliedDamage(DamageSource source, float amount) {
 		float damage = super.modifyAppliedDamage(source, amount);
 		damageTaken += damage;
-		fleeDistance = 6;
 		fleeingTicks = 0;
 		if (damageTaken >= DAMAGE_THRESHOLD) {
-			startFleeing();
+			damageTaken = 0;
+			fleeingTicks = 160;
 		}
 		return damage;
 	}
@@ -180,18 +218,80 @@ public class PigluttonEntity extends HostileEntity {
 		return true;
 	}
 
+	@Override
+	public void onTrackedDataSet(TrackedData<?> data) {
+		super.onTrackedDataSet(data);
+		if (data == EATING) {
+			if (dataTracker.get(EATING)) {
+				eatingTicks = 65;
+			} else {
+				eatingTicks = 0;
+			}
+		}
+		if (data == ATTACK_INDEX) {
+			attackTicks = 10;
+		}
+	}
+
+	@Override
+	public void setPitch(float pitch) {
+		if (eatingTicks == 0) {
+			super.setPitch(pitch);
+		}
+	}
+
+	@Override
+	public void setYaw(float yaw) {
+		if (eatingTicks == 0) {
+			super.setYaw(yaw);
+		}
+	}
+
+	@Override
+	public void setBodyYaw(float bodyYaw) {
+		if (eatingTicks == 0) {
+			super.setBodyYaw(bodyYaw);
+		}
+	}
+
+	@Override
+	public void setHeadYaw(float headYaw) {
+		if (eatingTicks == 0) {
+			super.setHeadYaw(headYaw);
+		}
+	}
+
+	public int getAttackIndex() {
+		return dataTracker.get(ATTACK_INDEX);
+	}
+
+	private void setAttackIndex(int index) {
+		dataTracker.set(ATTACK_INDEX, index);
+	}
+
+	public boolean isEating() {
+		return dataTracker.get(EATING);
+	}
+
+	public void setEating(boolean eating) {
+		dataTracker.set(EATING, eating);
+	}
+
+	public void attack() {
+		int index = getAttackIndex();
+		index++;
+		if (index > 2) {
+			index = 0;
+		}
+		setAttackIndex(index);
+	}
+
 	public boolean isFleeing() {
 		return fleeingTicks > 0;
 	}
 
-	public void startFleeing() {
-		damageTaken = 0;
-		fleeingTicks = 160;
-	}
-
-	public void runAwayAndDespawn() {
-		fleeDistance = 64;
-		fleeingTicks = 400;
+	public boolean isBusy() {
+		return isFleeing() || eatingTicks > 0;
 	}
 
 	public static void attemptSpawn(LivingEntity living, int cannibalLevel, boolean ownFlesh) {
