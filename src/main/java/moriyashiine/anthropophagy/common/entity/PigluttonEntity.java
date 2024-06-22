@@ -141,13 +141,13 @@ public class PigluttonEntity extends HostileEntity {
 		if (fleeingTicks > 0 && --fleeingTicks % 20 == 0) {
 			getWorld().playSound(null, getBlockPos(), ModSoundEvents.ENTITY_PIGLUTTON_FLEE, getSoundCategory(), getSoundVolume() * 4, getSoundPitch());
 		}
-		if (attackTicks > 0 && --attackTicks == 0 && getTarget() != null && distanceTo(getTarget()) < 4.5) {
+		if (attackTicks > 0 && --attackTicks == 0 && getTarget() != null && distanceTo(getTarget()) < 4.5 * getScale()) {
 			tryAttack(getTarget());
 		}
 		if (eatingTicks > 0) {
 			eatingTicks--;
 			if (eatingTicks <= 35 && eatingTicks >= 15 && eatingTicks % 5 == 0) {
-				EatFleshGoal.playEffects(this, getMainHandStack(), getEyePos().add(getRotationVector().multiply(1.2)));
+				EatFleshGoal.playEffects(this, getMainHandStack(), getEyePos().add(getRotationVector().multiply(2).multiply(getScale())));
 			}
 			if (eatingTicks == 15) {
 				EatFleshGoal.heal(this, getMainHandStack(), true);
