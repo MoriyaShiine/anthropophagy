@@ -313,7 +313,7 @@ public class PigluttonEntity extends HostileEntity {
 					if (piglutton.teleport(living.getX() + dX, living.getY() + dY, living.getZ() + dZ, false)) {
 						living.getWorld().spawnEntity(piglutton);
 						piglutton.setTarget(living);
-						living.getWorld().playSoundFromEntity(null, piglutton, ModSoundEvents.ENTITY_PIGLUTTON_SPAWN, SoundCategory.HOSTILE, 1, 1);
+						living.getWorld().playSoundFromEntity(null, piglutton, ModSoundEvents.ENTITY_PIGLUTTON_SPAWN, SoundCategory.HOSTILE, 3, 1);
 						return;
 					}
 				}
