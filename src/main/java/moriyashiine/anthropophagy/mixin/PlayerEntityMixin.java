@@ -76,9 +76,6 @@ public abstract class PlayerEntityMixin extends LivingEntity {
 
 	@ModifyReturnValue(method = "canEquip", at = @At("RETURN"))
 	private boolean anthropophagy$preventArmorDispensing(boolean original, ItemStack stack) {
-		if (original && !ModEntityComponents.CANNIBAL_LEVEL.get(this).canEquip(stack)) {
-			return false;
-		}
-		return original;
+		return original && ModEntityComponents.CANNIBAL_LEVEL.get(this).canEquip(stack);
 	}
 }
