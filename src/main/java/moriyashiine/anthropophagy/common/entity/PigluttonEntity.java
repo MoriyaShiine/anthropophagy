@@ -150,7 +150,7 @@ public class PigluttonEntity extends HostileEntity {
 				EatFleshGoal.playEffects(this, getMainHandStack(), getEyePos().add(getRotationVector().multiply(2).multiply(getScale())));
 			}
 			if (eatingTicks == 15) {
-				EatFleshGoal.heal(this, getMainHandStack(), true);
+				EatFleshGoal.heal(this, getMainHandStack(), !hasCustomName());
 			}
 			if (eatingTicks == 14) {
 				getMainHandStack().decrement(1);
