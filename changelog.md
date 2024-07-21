@@ -1,4 +1,12 @@
 ------------------------------------------------------
+Version 1.21-r1
+------------------------------------------------------
+- update to 1.21
+- merge https://github.com/MoriyaShiine/anthropophagy/pull/12
+- update piglutton model and animations
+- slightly adjust piglutton ai
+
+------------------------------------------------------
 Version 1.20.6-r1
 ------------------------------------------------------
 - update to 1.20.6
