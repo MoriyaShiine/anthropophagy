@@ -23,7 +23,7 @@ public class ArmorSlotMixin {
 	@ModifyReturnValue(method = "canInsert(Lnet/minecraft/item/ItemStack;)Z", at = @At("RETURN"))
 	private boolean anthropophagy$preventEquipping(boolean original, ItemStack stack) {
 		CannibalLevelComponent cannibalLevelComponent = ModEntityComponents.CANNIBAL_LEVEL.getNullable(entity);
-		if (cannibalLevelComponent != null && !cannibalLevelComponent.canEquip(stack)) {
+		if (cannibalLevelComponent != null && cannibalLevelComponent.cannotEquip(stack)) {
 			return false;
 		}
 		return original;

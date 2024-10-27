@@ -49,10 +49,10 @@ public class EatFleshGoal extends Goal {
 		if (closestFleshItem != null) {
 			mob.getNavigation().startMovingTo(closestFleshItem, 1);
 			if (mob.distanceTo(closestFleshItem) < mob.getWidth()) {
-				if (!mob.getWorld().isClient) {
+				if (mob.getWorld() instanceof ServerWorld serverWorld) {
 					ItemStack flesh = closestFleshItem.getStack().split(1);
 					if (isTargetFlesh(flesh)) {
-						heal(mob, flesh, false);
+						heal(serverWorld, mob, flesh, false);
 						playEffects(mob, flesh, closestFleshItem.getPos());
 					} else {
 						mob.setStackInHand(Hand.MAIN_HAND, flesh);
@@ -76,7 +76,7 @@ public class EatFleshGoal extends Goal {
 		return mob.getTarget() != null && FleshItem.getOwnerName(flesh).equals(mob.getTarget().getName().getString());
 	}
 
-	public static void heal(PigluttonEntity mob, ItemStack stack, boolean allowOverhaul) {
+	public static void heal(ServerWorld world, PigluttonEntity mob, ItemStack stack, boolean allowOverhaul) {
 		int healAmount = 6;
 		if (stack.contains(DataComponentTypes.FOOD)) {
 			healAmount = stack.get(DataComponentTypes.FOOD).nutrition() * 2;
@@ -89,7 +89,7 @@ public class EatFleshGoal extends Goal {
 						64,
 						mob.getWidth() / 2, mob.getHeight() / 2, mob.getWidth() / 2,
 						0);
-				mob.dropItem(ModItems.PIGLUTTON_HEART);
+				mob.dropItem(world, ModItems.PIGLUTTON_HEART);
 				mob.discard();
 			}
 		} else {
@@ -103,6 +103,6 @@ public class EatFleshGoal extends Goal {
 				8,
 				0.125, 0.125, 0.125,
 				0);
-		mob.playSound(SoundEvents.ENTITY_GENERIC_EAT, 1, 1);
+		mob.playSound(SoundEvents.ENTITY_GENERIC_EAT.value(), 1, 1);
 	}
 }

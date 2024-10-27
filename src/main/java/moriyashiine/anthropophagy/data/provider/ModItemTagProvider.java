@@ -46,12 +46,12 @@ public class ModItemTagProvider extends FabricTagProvider.ItemTagProvider {
 				.add(ModItems.DIAMOND_KNIFE)
 				.add(ModItems.NETHERITE_KNIFE);
 
-		getOrCreateTagBuilder(ConventionalItemTags.RAW_MEATS_FOODS)
+		getOrCreateTagBuilder(ConventionalItemTags.RAW_MEAT_FOODS)
 				.add(ModItems.FLESH)
 				.add(ModItems.CORRUPT_FLESH)
 				.add(ModItems.PIGLUTTON_HEART)
 				.add(ModItems.TETHERED_HEART);
-		getOrCreateTagBuilder(ConventionalItemTags.COOKED_MEATS_FOODS)
+		getOrCreateTagBuilder(ConventionalItemTags.COOKED_MEAT_FOODS)
 				.add(ModItems.COOKED_FLESH);
 	}
 }

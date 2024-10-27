@@ -3,6 +3,7 @@
  */
 package moriyashiine.anthropophagy.mixin;
 
+import com.llamalad7.mixinextras.injector.ModifyReturnValue;
 import moriyashiine.anthropophagy.common.component.entity.CannibalLevelComponent;
 import moriyashiine.anthropophagy.common.init.ModEntityComponents;
 import moriyashiine.anthropophagy.common.init.ModItems;
@@ -10,8 +11,10 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.damage.DamageSource;
+import net.minecraft.item.ItemStack;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.world.World;
+import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -24,11 +27,22 @@ public abstract class LivingEntityMixin extends Entity {
 		super(type, world);
 	}
 
+	@ModifyReturnValue(method = {"canEquip", "canEquipFromDispenser"}, at = @At("RETURN"))
+	private boolean anthropophagy$preventEquipping(boolean original, ItemStack stack) {
+		if (original) {
+			@Nullable CannibalLevelComponent cannibalLevelComponent = ModEntityComponents.CANNIBAL_LEVEL.getNullable(this);
+			if (cannibalLevelComponent != null && cannibalLevelComponent.cannotEquip(stack)) {
+				return false;
+			}
+		}
+		return original;
+	}
+
 	@Inject(method = "dropEquipment", at = @At("HEAD"))
 	private void anthropophagy$dropTetheredHeart(ServerWorld world, DamageSource source, boolean causedByPlayer, CallbackInfo ci) {
 		ModEntityComponents.TETHERED.maybeGet(this).ifPresent(tetheredComponent -> {
 			if (tetheredComponent.isTethered()) {
-				dropItem(ModItems.PIGLUTTON_HEART);
+				dropItem(world, ModItems.PIGLUTTON_HEART);
 			}
 		});
 	}

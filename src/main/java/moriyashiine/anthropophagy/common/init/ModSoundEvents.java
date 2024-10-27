@@ -16,10 +16,10 @@ public class ModSoundEvents {
 	public static final SoundEvent ENTITY_PIGLUTTON_FLEE = SoundEvent.of(Anthropophagy.id("entity.piglutton.flee"));
 
 	public static void init() {
-		Registry.register(Registries.SOUND_EVENT, ENTITY_PIGLUTTON_AMBIENT.getId(), ENTITY_PIGLUTTON_AMBIENT);
-		Registry.register(Registries.SOUND_EVENT, ENTITY_PIGLUTTON_HURT.getId(), ENTITY_PIGLUTTON_HURT);
-		Registry.register(Registries.SOUND_EVENT, ENTITY_PIGLUTTON_DEATH.getId(), ENTITY_PIGLUTTON_DEATH);
-		Registry.register(Registries.SOUND_EVENT, ENTITY_PIGLUTTON_SPAWN.getId(), ENTITY_PIGLUTTON_SPAWN);
-		Registry.register(Registries.SOUND_EVENT, ENTITY_PIGLUTTON_FLEE.getId(), ENTITY_PIGLUTTON_FLEE);
+		Registry.register(Registries.SOUND_EVENT, ENTITY_PIGLUTTON_AMBIENT.id(), ENTITY_PIGLUTTON_AMBIENT);
+		Registry.register(Registries.SOUND_EVENT, ENTITY_PIGLUTTON_HURT.id(), ENTITY_PIGLUTTON_HURT);
+		Registry.register(Registries.SOUND_EVENT, ENTITY_PIGLUTTON_DEATH.id(), ENTITY_PIGLUTTON_DEATH);
+		Registry.register(Registries.SOUND_EVENT, ENTITY_PIGLUTTON_SPAWN.id(), ENTITY_PIGLUTTON_SPAWN);
+		Registry.register(Registries.SOUND_EVENT, ENTITY_PIGLUTTON_FLEE.id(), ENTITY_PIGLUTTON_FLEE);
 	}
 }

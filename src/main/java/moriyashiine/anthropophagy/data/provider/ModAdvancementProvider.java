@@ -15,8 +15,11 @@ import net.minecraft.advancement.AdvancementFrame;
 import net.minecraft.advancement.criterion.ConsumeItemCriterion;
 import net.minecraft.advancement.criterion.InventoryChangedCriterion;
 import net.minecraft.advancement.criterion.OnKilledCriterion;
+import net.minecraft.entity.EntityType;
+import net.minecraft.item.Item;
 import net.minecraft.predicate.entity.EntityPredicate;
 import net.minecraft.predicate.item.ItemPredicate;
+import net.minecraft.registry.RegistryKeys;
 import net.minecraft.registry.RegistryWrapper;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
@@ -31,6 +34,9 @@ public class ModAdvancementProvider extends FabricAdvancementProvider {
 
 	@Override
 	public void generateAdvancement(RegistryWrapper.WrapperLookup registryLookup, Consumer<AdvancementEntry> consumer) {
+		RegistryWrapper<Item> itemLookup = registryLookup.getOrThrow(RegistryKeys.ITEM);
+		RegistryWrapper<EntityType<?>> entityTypeLookup = registryLookup.getOrThrow(RegistryKeys.ENTITY_TYPE);
+
 		consumer.accept(Advancement.Builder.create()
 				.parent(Identifier.tryParse("husbandry/root"))
 				.display(ModItems.FLESH,
@@ -41,7 +47,7 @@ public class ModAdvancementProvider extends FabricAdvancementProvider {
 						true,
 						true,
 						true)
-				.criterion("consume_flesh", ConsumeItemCriterion.Conditions.predicate(ItemPredicate.Builder.create().tag(ModItemTags.FLESH)))
+				.criterion("consume_flesh", ConsumeItemCriterion.Conditions.predicate(ItemPredicate.Builder.create().tag(itemLookup, ModItemTags.FLESH)))
 				.build(consumer, Anthropophagy.id("husbandry/consume_flesh").toString()));
 
 		consumer.accept(Advancement.Builder.create()
@@ -54,7 +60,7 @@ public class ModAdvancementProvider extends FabricAdvancementProvider {
 						true,
 						true,
 						true)
-				.criterion("killed_piglutton", OnKilledCriterion.Conditions.createPlayerKilledEntity(new EntityPredicate.Builder().type(ModEntityTypes.PIGLUTTON)))
+				.criterion("killed_piglutton", OnKilledCriterion.Conditions.createPlayerKilledEntity(new EntityPredicate.Builder().type(entityTypeLookup, ModEntityTypes.PIGLUTTON)))
 				.build(consumer, Anthropophagy.id("husbandry/kill_piglutton").toString()));
 
 		consumer.accept(Advancement.Builder.create()
@@ -67,7 +73,7 @@ public class ModAdvancementProvider extends FabricAdvancementProvider {
 						true,
 						true,
 						false)
-				.criterion("has_knife", InventoryChangedCriterion.Conditions.items(ItemPredicate.Builder.create().tag(ModItemTags.KNIVES)))
+				.criterion("has_knife", InventoryChangedCriterion.Conditions.items(ItemPredicate.Builder.create().tag(itemLookup, ModItemTags.KNIVES)))
 				.build(consumer, Anthropophagy.id("husbandry/obtain_knife").toString()));
 	}
 }

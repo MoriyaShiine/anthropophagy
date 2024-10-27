@@ -3,13 +3,15 @@
   "package": "moriyashiine.anthropophagy.mixin",
   "compatibilityLevel": "JAVA_21",
   "mixins": [
-	"AbstractCookingRecipeMixin",
 	"AbstractFurnaceBlockEntityMixin",
-	"ArmorItemMixin",
 	"ArmorSlotMixin",
+	"CampfireBlockEntityMixin",
+	"ConsumableComponentMixin",
+	"EquippableComponentMixin",
 	"HungerManagerMixin",
 	"LivingEntityMixin",
-	"PlayerEntityMixin"
+	"PlayerEntityMixin",
+	"ToolMaterialMixin"
   ],
   "client": [
 	"client.LightmapTextureManagerMixin"

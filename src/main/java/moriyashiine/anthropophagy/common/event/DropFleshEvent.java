@@ -13,6 +13,7 @@ import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.item.ItemStack;
+import net.minecraft.server.world.ServerWorld;
 
 public class DropFleshEvent implements ServerLivingEntityEvents.AllowDamage {
 	public static float attackCooldown = -1;
@@ -30,7 +31,7 @@ public class DropFleshEvent implements ServerLivingEntityEvents.AllowDamage {
 					if (drop.getItem() instanceof FleshItem) {
 						FleshItem.setOwner(drop, entity);
 					}
-					entity.dropStack(drop).setPickupDelay(40);
+					entity.dropStack((ServerWorld) entity.getWorld(), drop).setPickupDelay(40);
 				}
 			}
 		}

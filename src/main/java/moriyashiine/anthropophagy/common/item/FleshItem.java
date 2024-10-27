@@ -19,7 +19,7 @@ public class FleshItem extends Item {
 	public Text getName(ItemStack stack) {
 		String ownerName = getOwnerName(stack);
 		if (!ownerName.isEmpty()) {
-			return Text.translatable(getTranslationKey(stack) + "_owned", ownerName);
+			return Text.translatable(getTranslationKey() + "_owned", ownerName);
 		}
 		return super.getName(stack);
 	}

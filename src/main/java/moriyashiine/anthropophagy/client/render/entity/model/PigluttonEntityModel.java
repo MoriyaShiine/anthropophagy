@@ -4,36 +4,25 @@
 package moriyashiine.anthropophagy.client.render.entity.model;
 
 import moriyashiine.anthropophagy.client.render.entity.animation.PigluttonAnimations;
+import moriyashiine.anthropophagy.client.render.entity.state.PigluttonEntityRenderState;
 import moriyashiine.anthropophagy.common.Anthropophagy;
-import moriyashiine.anthropophagy.common.entity.PigluttonEntity;
 import net.minecraft.client.model.*;
-import net.minecraft.client.render.VertexConsumer;
+import net.minecraft.client.render.entity.model.EntityModel;
 import net.minecraft.client.render.entity.model.EntityModelLayer;
 import net.minecraft.client.render.entity.model.ModelWithArms;
-import net.minecraft.client.render.entity.model.SinglePartEntityModel;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.util.Arm;
 
-public class PigluttonEntityModel<T extends PigluttonEntity> extends SinglePartEntityModel<T> implements ModelWithArms {
+public class PigluttonEntityModel extends EntityModel<PigluttonEntityRenderState> implements ModelWithArms {
 	public static final EntityModelLayer MODEL_LAYER = new EntityModelLayer(Anthropophagy.id("piglutton"), "main");
 
-	private final ModelPart root;
-	private final ModelPart body;
 	private final ModelPart neck;
-	private final ModelPart lArm01;
-	private final ModelPart rArm01;
-	private final ModelPart lLeg01;
-	private final ModelPart rLeg01;
 	private final ModelPart[] heldItemTranslations;
 
 	public PigluttonEntityModel(ModelPart root) {
-		this.root = root;
-		body = root.getChild("body");
-		neck = body.getChild("neck");
-		lArm01 = root.getChild("lArm01");
-		rArm01 = root.getChild("rArm01");
-		lLeg01 = root.getChild("lLeg01");
-		rLeg01 = root.getChild("rLeg01");
+		super(root);
+		neck = root.getChild("body").getChild("neck");
+		ModelPart rArm01 = root.getChild("rArm01");
 		heldItemTranslations = new ModelPart[]{rArm01, rArm01.getChild("rArm02"), rArm01.getChild("rArm02").getChild("rHandHoof01")};
 	}
 
@@ -78,32 +67,18 @@ public class PigluttonEntityModel<T extends PigluttonEntity> extends SinglePartE
 	}
 
 	@Override
-	public ModelPart getPart() {
-		return root;
-	}
-
-	@Override
-	public void render(MatrixStack matrices, VertexConsumer vertices, int light, int overlay, int color) {
-		body.render(matrices, vertices, light, overlay, color);
-		lArm01.render(matrices, vertices, light, overlay, color);
-		rArm01.render(matrices, vertices, light, overlay, color);
-		lLeg01.render(matrices, vertices, light, overlay, color);
-		rLeg01.render(matrices, vertices, light, overlay, color);
-	}
-
-	@Override
-	public void setAngles(T entity, float limbAngle, float limbDistance, float animationProgress, float headYaw, float headPitch) {
-		getPart().traverse().forEach(ModelPart::resetTransform);
-		if (!entity.eatAnimationState.isRunning()) {
-			neck.pitch = headPitch * ((float) Math.PI / 180) / 2;
-			neck.yaw = headYaw * ((float) Math.PI / 180) / 2;
+	public void setAngles(PigluttonEntityRenderState state) {
+		super.setAngles(state);
+		if (!state.eatAnimationState.isRunning()) {
+			neck.pitch = state.pitch * ((float) Math.PI / 180) / 2;
+			neck.yaw = state.yawDegrees * ((float) Math.PI / 180) / 2;
 		}
-		animateMovement(PigluttonAnimations.WALK, limbAngle, limbDistance, 4, 25);
-		updateAnimation(entity.idleAnimationState, PigluttonAnimations.IDLE, animationProgress);
-		updateAnimation(entity.attackLeftAnimationState, PigluttonAnimations.ATTACK_LEFT, animationProgress);
-		updateAnimation(entity.attackRightAnimationState, PigluttonAnimations.ATTACK_RIGHT, animationProgress);
-		updateAnimation(entity.attackTusksAnimationState, PigluttonAnimations.ATTACK_TUSKS, animationProgress);
-		updateAnimation(entity.eatAnimationState, PigluttonAnimations.EAT, animationProgress, 0.4F);
+		animateWalking(PigluttonAnimations.WALK, state.limbFrequency, state.limbAmplitudeMultiplier, 4, 25);
+		animate(state.idleAnimationState, PigluttonAnimations.IDLE, state.age);
+		animate(state.attackLeftAnimationState, PigluttonAnimations.ATTACK_LEFT, state.age);
+		animate(state.attackRightAnimationState, PigluttonAnimations.ATTACK_RIGHT, state.age);
+		animate(state.attackTusksAnimationState, PigluttonAnimations.ATTACK_TUSKS, state.age);
+		animate(state.eatAnimationState, PigluttonAnimations.EAT, state.age, 0.4F);
 	}
 
 	@Override

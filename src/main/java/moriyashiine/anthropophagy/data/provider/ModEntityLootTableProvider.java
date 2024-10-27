@@ -34,7 +34,7 @@ public class ModEntityLootTableProvider extends SimpleFabricLootTableProvider {
 	public void accept(BiConsumer<RegistryKey<LootTable>, LootTable.Builder> builder) {
 		RegistryWrapper.WrapperLookup registries = completableFuture.join();
 		builder.accept(
-				ModEntityTypes.PIGLUTTON.getLootTableId(),
+				ModEntityTypes.PIGLUTTON.getLootTableKey().orElseThrow(),
 				LootTable.builder()
 						.pool(LootPool.builder()
 								.rolls(ConstantLootNumberProvider.create(1))

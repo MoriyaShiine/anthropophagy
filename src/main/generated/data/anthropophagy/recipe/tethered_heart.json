@@ -2,15 +2,9 @@
   "type": "minecraft:crafting_shaped",
   "category": "equipment",
   "key": {
-	"E": {
-	  "item": "minecraft:ender_pearl"
-	},
-	"H": {
-	  "item": "anthropophagy:piglutton_heart"
-	},
-	"I": {
-	  "tag": "c:ingots/iron"
-	}
+	"E": "#c:ender_pearls",
+	"H": "anthropophagy:piglutton_heart",
+	"I": "#c:ingots/iron"
   },
   "pattern": [
 	"EIE",

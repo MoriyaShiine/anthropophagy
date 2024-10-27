@@ -5,17 +5,18 @@ package moriyashiine.anthropophagy.common.component.entity;
 
 import moriyashiine.anthropophagy.common.Anthropophagy;
 import moriyashiine.anthropophagy.common.init.ModEntityComponents;
+import net.minecraft.component.DataComponentTypes;
+import net.minecraft.component.type.AttributeModifiersComponent;
 import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.attribute.EntityAttribute;
 import net.minecraft.entity.attribute.EntityAttributeModifier;
 import net.minecraft.entity.attribute.EntityAttributes;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.ArmorItem;
-import net.minecraft.item.ElytraItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.registry.RegistryWrapper;
 import net.minecraft.registry.entry.RegistryEntry;
+import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.Pair;
 import net.minecraft.util.math.MathHelper;
@@ -65,33 +66,33 @@ public class CannibalLevelComponent implements AutoSyncedComponent {
 		this.cannibalLevel = cannibalLevel;
 	}
 
-	public boolean canEquip(ItemStack stack) {
-		if ((stack.getItem() instanceof ArmorItem armorItem && armorItem.getProtection() > 0) || stack.getItem() instanceof ElytraItem) {
+	public boolean cannotEquip(ItemStack stack) {
+		if (stack.getOrDefault(DataComponentTypes.ATTRIBUTE_MODIFIERS, AttributeModifiersComponent.DEFAULT).modifiers().stream().anyMatch(entry -> entry.attribute() == EntityAttributes.ARMOR) || stack.contains(DataComponentTypes.GLIDER)) {
 			EquipmentSlot slot = obj.getPreferredEquipmentSlot(stack);
 			if (cannibalLevel >= 30 && slot == EquipmentSlot.LEGS) {
-				return false;
+				return true;
 			} else if (cannibalLevel >= 50 && slot == EquipmentSlot.HEAD) {
-				return false;
+				return true;
 			} else if (cannibalLevel >= 70 && slot == EquipmentSlot.FEET) {
-				return false;
-			} else return cannibalLevel < 90 || slot != EquipmentSlot.CHEST;
+				return true;
+			} else return cannibalLevel >= 90 && slot == EquipmentSlot.CHEST;
 		}
-		return true;
+		return false;
 	}
 
 	public void updateAttributes() {
-		if (!obj.getWorld().isClient) {
+		if (obj.getWorld() instanceof ServerWorld serverWorld) {
 			for (ItemStack stack : obj.getEquippedItems()) {
-				if (!canEquip(stack)) {
-					obj.dropStack(stack.copyAndEmpty());
+				if (cannotEquip(stack)) {
+					obj.dropStack(serverWorld, stack.copyAndEmpty());
 				}
 			}
-			obj.getAttributeInstance(EntityAttributes.GENERIC_ATTACK_DAMAGE).removeModifier(ATTACK_DAMAGE_ID);
-			obj.getAttributeInstance(EntityAttributes.GENERIC_ARMOR).removeModifier(ARMOR_ID);
-			obj.getAttributeInstance(EntityAttributes.GENERIC_KNOCKBACK_RESISTANCE).removeModifier(KNOCKBACK_RESISTANCE_ID);
-			obj.getAttributeInstance(EntityAttributes.GENERIC_MOVEMENT_SPEED).removeModifier(MOVEMENT_SPEED_ID);
-			obj.getAttributeInstance(EntityAttributes.GENERIC_SAFE_FALL_DISTANCE).removeModifier(SAFE_FALL_DISTANCE_ID);
-			obj.getAttributeInstance(EntityAttributes.GENERIC_STEP_HEIGHT).removeModifier(STEP_HEIGHT_ID);
+			obj.getAttributeInstance(EntityAttributes.ATTACK_DAMAGE).removeModifier(ATTACK_DAMAGE_ID);
+			obj.getAttributeInstance(EntityAttributes.ARMOR).removeModifier(ARMOR_ID);
+			obj.getAttributeInstance(EntityAttributes.KNOCKBACK_RESISTANCE).removeModifier(KNOCKBACK_RESISTANCE_ID);
+			obj.getAttributeInstance(EntityAttributes.MOVEMENT_SPEED).removeModifier(MOVEMENT_SPEED_ID);
+			obj.getAttributeInstance(EntityAttributes.SAFE_FALL_DISTANCE).removeModifier(SAFE_FALL_DISTANCE_ID);
+			obj.getAttributeInstance(EntityAttributes.STEP_HEIGHT).removeModifier(STEP_HEIGHT_ID);
 			getModifiersForLevel(cannibalLevel).attributes().forEach(pair -> obj.getAttributeInstance(pair.getLeft()).addPersistentModifier(pair.getRight()));
 		}
 	}
@@ -112,28 +113,28 @@ public class CannibalLevelComponent implements AutoSyncedComponent {
 	private static AttributeModifierSet getModifiersForLevel(int level) {
 		AttributeModifierSet attributes = new AttributeModifierSet(new ArrayList<>());
 		if (level > MIN_FUNCTIONAL_LEVEL) {
-			attributes.addModifier(EntityAttributes.GENERIC_ATTACK_DAMAGE,
+			attributes.addModifier(EntityAttributes.ATTACK_DAMAGE,
 					new EntityAttributeModifier(ATTACK_DAMAGE_ID,
 							lerp(level, 6),
 							EntityAttributeModifier.Operation.ADD_VALUE));
-			attributes.addModifier(EntityAttributes.GENERIC_ARMOR,
+			attributes.addModifier(EntityAttributes.ARMOR,
 					new EntityAttributeModifier(ARMOR_ID,
 							lerp(level, 14),
 							EntityAttributeModifier.Operation.ADD_VALUE));
-			attributes.addModifier(EntityAttributes.GENERIC_KNOCKBACK_RESISTANCE,
+			attributes.addModifier(EntityAttributes.KNOCKBACK_RESISTANCE,
 					new EntityAttributeModifier(KNOCKBACK_RESISTANCE_ID,
 							lerp(level, 0.2F),
 							EntityAttributeModifier.Operation.ADD_VALUE));
-			attributes.addModifier(EntityAttributes.GENERIC_MOVEMENT_SPEED,
+			attributes.addModifier(EntityAttributes.MOVEMENT_SPEED,
 					new EntityAttributeModifier(MOVEMENT_SPEED_ID,
 							lerp(level, 0.5F),
 							EntityAttributeModifier.Operation.ADD_MULTIPLIED_TOTAL));
-			attributes.addModifier(EntityAttributes.GENERIC_SAFE_FALL_DISTANCE,
+			attributes.addModifier(EntityAttributes.SAFE_FALL_DISTANCE,
 					new EntityAttributeModifier(SAFE_FALL_DISTANCE_ID,
 							lerp(level, 4),
 							EntityAttributeModifier.Operation.ADD_VALUE));
 			if (level >= 60) {
-				attributes.addModifier(EntityAttributes.GENERIC_STEP_HEIGHT,
+				attributes.addModifier(EntityAttributes.STEP_HEIGHT,
 						new EntityAttributeModifier(STEP_HEIGHT_ID,
 								1,
 								EntityAttributeModifier.Operation.ADD_VALUE));

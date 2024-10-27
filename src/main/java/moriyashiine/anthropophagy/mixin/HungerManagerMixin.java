@@ -15,8 +15,7 @@ public class HungerManagerMixin {
 	@ModifyVariable(method = "addInternal", at = @At("HEAD"), argsOnly = true)
 	private int anthropophagy$reduceHungerGained(int value) {
 		if (ModEntityComponents.playerCannibalLevel != -1) {
-			value = Math.round(value * getFoodModifier(ModEntityComponents.playerCannibalLevel));
-			ModEntityComponents.playerCannibalLevel = -1;
+			return Math.round(value * getFoodModifier(ModEntityComponents.playerCannibalLevel));
 		}
 		return value;
 	}

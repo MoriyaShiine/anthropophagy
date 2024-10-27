@@ -15,14 +15,17 @@ import net.minecraft.entity.SpawnLocationTypes;
 import net.minecraft.entity.SpawnRestriction;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.Registry;
+import net.minecraft.registry.RegistryKey;
+import net.minecraft.registry.RegistryKeys;
 import net.minecraft.registry.tag.BiomeTags;
 import net.minecraft.world.Heightmap;
 
 public class ModEntityTypes {
-	public static final EntityType<PigluttonEntity> PIGLUTTON = EntityType.Builder.create(PigluttonEntity::new, SpawnGroup.MONSTER).dimensions(3, 2.6F).spawnableFarFromPlayer().build();
+	public static final RegistryKey<EntityType<?>> PIGLUTTON_KEY = RegistryKey.of(RegistryKeys.ENTITY_TYPE, Anthropophagy.id("piglutton"));
+	public static final EntityType<PigluttonEntity> PIGLUTTON = EntityType.Builder.create(PigluttonEntity::new, SpawnGroup.MONSTER).dimensions(3, 2.6F).spawnableFarFromPlayer().build(PIGLUTTON_KEY);
 
 	public static void init() {
-		Registry.register(Registries.ENTITY_TYPE, Anthropophagy.id("piglutton"), PIGLUTTON);
+		Registry.register(Registries.ENTITY_TYPE, PIGLUTTON_KEY.getValue(), PIGLUTTON);
 		FabricDefaultAttributeRegistry.register(PIGLUTTON, PigluttonEntity.buildAttributes());
 		SpawnRestriction.register(PIGLUTTON, SpawnLocationTypes.ON_GROUND, Heightmap.Type.WORLD_SURFACE, PigluttonEntity::canSpawn);
 		if (ModConfig.enablePiglutton) {

@@ -25,6 +25,7 @@ import net.minecraft.entity.data.TrackedDataHandlerRegistry;
 import net.minecraft.entity.mob.HostileEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.NbtCompound;
+import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvent;
 import net.minecraft.util.math.BlockPos;
@@ -48,11 +49,11 @@ public class PigluttonEntity extends HostileEntity {
 
 	private int attackTicks = 0, eatingTicks = 0;
 
-	public AnimationState idleAnimationState = new AnimationState();
-	public AnimationState attackLeftAnimationState = new AnimationState();
-	public AnimationState attackRightAnimationState = new AnimationState();
-	public AnimationState attackTusksAnimationState = new AnimationState();
-	public AnimationState eatAnimationState = new AnimationState();
+	public final AnimationState idleAnimationState = new AnimationState();
+	public final AnimationState attackLeftAnimationState = new AnimationState();
+	public final AnimationState attackRightAnimationState = new AnimationState();
+	public final AnimationState attackTusksAnimationState = new AnimationState();
+	public final AnimationState eatAnimationState = new AnimationState();
 
 	public PigluttonEntity(EntityType<? extends HostileEntity> entityType, World world) {
 		super(entityType, world);
@@ -64,13 +65,13 @@ public class PigluttonEntity extends HostileEntity {
 
 	public static DefaultAttributeContainer.Builder buildAttributes() {
 		return HostileEntity.createHostileAttributes()
-				.add(EntityAttributes.GENERIC_MAX_HEALTH, 80)
-				.add(EntityAttributes.GENERIC_ARMOR, 14)
-				.add(EntityAttributes.GENERIC_ATTACK_DAMAGE, 32)
-				.add(EntityAttributes.GENERIC_MOVEMENT_SPEED, 0.6)
-				.add(EntityAttributes.GENERIC_KNOCKBACK_RESISTANCE, 0.8)
-				.add(EntityAttributes.GENERIC_FOLLOW_RANGE, 64)
-				.add(EntityAttributes.GENERIC_STEP_HEIGHT, 1);
+				.add(EntityAttributes.MAX_HEALTH, 80)
+				.add(EntityAttributes.ARMOR, 14)
+				.add(EntityAttributes.ATTACK_DAMAGE, 32)
+				.add(EntityAttributes.MOVEMENT_SPEED, 0.6)
+				.add(EntityAttributes.KNOCKBACK_RESISTANCE, 0.8)
+				.add(EntityAttributes.FOLLOW_RANGE, 64)
+				.add(EntityAttributes.STEP_HEIGHT, 1);
 	}
 
 	public static boolean canSpawn(EntityType<PigluttonEntity> type, ServerWorldAccess world, SpawnReason spawnReason, BlockPos pos, Random random) {
@@ -119,7 +120,7 @@ public class PigluttonEntity extends HostileEntity {
 		goalSelector.add(5, new LookAtEntityGoal(this, PlayerEntity.class, 16));
 		goalSelector.add(5, new LookAroundGoal(this));
 		targetSelector.add(0, new RevengeGoal(this));
-		targetSelector.add(1, new ActiveTargetGoal<>(this, LivingEntity.class, 10, true, false, living -> !isBusy() && living.getType().isIn(ModEntityTypeTags.PIGLUTTON_TARGETS)));
+		targetSelector.add(1, new ActiveTargetGoal<>(this, LivingEntity.class, 10, true, false, (target, world) -> !isBusy() && target.getType().isIn(ModEntityTypeTags.PIGLUTTON_TARGETS)));
 	}
 
 	@Override
@@ -136,13 +137,13 @@ public class PigluttonEntity extends HostileEntity {
 	}
 
 	@Override
-	protected void mobTick() {
-		super.mobTick();
+	protected void mobTick(ServerWorld world) {
+		super.mobTick(world);
 		if (fleeingTicks > 0 && --fleeingTicks % 20 == 0) {
 			getWorld().playSound(null, getBlockPos(), ModSoundEvents.ENTITY_PIGLUTTON_FLEE, getSoundCategory(), getSoundVolume() * 4, getSoundPitch());
 		}
 		if (attackTicks > 0 && --attackTicks == 0 && getTarget() != null && distanceTo(getTarget()) < 4.5 * getScale()) {
-			tryAttack(getTarget());
+			tryAttack(world, getTarget());
 		}
 		if (eatingTicks > 0) {
 			eatingTicks--;
@@ -150,7 +151,7 @@ public class PigluttonEntity extends HostileEntity {
 				EatFleshGoal.playEffects(this, getMainHandStack(), getEyePos().add(getRotationVector().multiply(2).multiply(getScale())));
 			}
 			if (eatingTicks == 15) {
-				EatFleshGoal.heal(this, getMainHandStack(), !hasCustomName());
+				EatFleshGoal.heal(world, this, getMainHandStack(), !hasCustomName());
 			}
 			if (eatingTicks == 14) {
 				getMainHandStack().decrement(1);
@@ -164,13 +165,13 @@ public class PigluttonEntity extends HostileEntity {
 	@Override
 	public void tickMovement() {
 		super.tickMovement();
-		if (!getWorld().isClient && (horizontalCollision || (verticalCollision && !groundCollision)) && getWorld().getGameRules().getBoolean(GameRules.DO_MOB_GRIEFING)) {
+		if (getWorld() instanceof ServerWorld serverWorld && (horizontalCollision || (verticalCollision && !groundCollision)) && serverWorld.getGameRules().getBoolean(GameRules.DO_MOB_GRIEFING)) {
 			Box box = getBoundingBox().expand(0.2);
 			for (BlockPos pos : BlockPos.iterate(MathHelper.floor(box.minX), MathHelper.floor(box.minY), MathHelper.floor(box.minZ), MathHelper.floor(box.maxX), MathHelper.floor(box.maxY), MathHelper.floor(box.maxZ))) {
-				BlockState state = getWorld().getBlockState(pos);
-				float hardness = state.getHardness(getWorld(), pos);
+				BlockState state = serverWorld.getBlockState(pos);
+				float hardness = state.getHardness(serverWorld, pos);
 				if (hardness >= 0 && (hardness < 0.5F || state.isIn(ModBlockTags.PIGLUTTON_BREAKABLE))) {
-					getWorld().breakBlock(pos, true);
+					serverWorld.breakBlock(pos, true);
 				}
 			}
 		}
@@ -303,7 +304,7 @@ public class PigluttonEntity extends HostileEntity {
 			chance *= 3;
 		}
 		if (living.getRandom().nextFloat() < chance) {
-			PigluttonEntity piglutton = ModEntityTypes.PIGLUTTON.create(living.getWorld());
+			PigluttonEntity piglutton = ModEntityTypes.PIGLUTTON.create(living.getWorld(), SpawnReason.TRIGGERED);
 			if (piglutton != null) {
 				final int minH = 16, maxH = 32;
 				for (int i = 0; i < 8; i++) {

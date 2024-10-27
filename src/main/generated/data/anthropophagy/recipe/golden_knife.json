@@ -2,12 +2,8 @@
   "type": "minecraft:crafting_shaped",
   "category": "equipment",
   "key": {
-	"I": {
-	  "tag": "c:ingots/gold"
-	},
-	"S": {
-	  "item": "minecraft:stick"
-	}
+	"I": "#c:ingots/gold",
+	"S": "minecraft:stick"
   },
   "pattern": [
 	" I",
