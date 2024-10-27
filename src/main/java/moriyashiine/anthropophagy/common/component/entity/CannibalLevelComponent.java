@@ -27,7 +27,7 @@ import java.util.List;
 
 public class CannibalLevelComponent implements AutoSyncedComponent {
 	public static final int MAX_LEVEL = 120;
-	private static final int MIN_FUNCTIONAL_LEVEL = 30;
+	public static final int MIN_FUNCTIONAL_LEVEL = 30;
 	private static final float MAX_FUNCTIONAL_LEVEL = MAX_LEVEL - MIN_FUNCTIONAL_LEVEL;
 
 	private static final Identifier ATTACK_DAMAGE_ID = Anthropophagy.id("attack_damage");

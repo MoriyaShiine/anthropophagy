@@ -14,7 +14,8 @@
 	"ToolMaterialMixin"
   ],
   "client": [
-	"client.LightmapTextureManagerMixin"
+	"client.GameRendererMixin",
+	"client.LivingEntityMixin"
   ],
   "injectors": {
 	"defaultRequire": 1
