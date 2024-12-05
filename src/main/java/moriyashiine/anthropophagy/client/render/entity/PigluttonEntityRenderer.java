@@ -17,7 +17,7 @@ public class PigluttonEntityRenderer extends MobEntityRenderer<PigluttonEntity, 
 
 	public PigluttonEntityRenderer(EntityRendererFactory.Context context) {
 		super(context, new PigluttonEntityModel(context.getPart(PigluttonEntityModel.MODEL_LAYER)), 1.1F);
-		addFeature(new HeldItemFeatureRenderer<>(this, context.getItemRenderer()));
+		addFeature(new HeldItemFeatureRenderer<>(this));
 	}
 
 	@Override
