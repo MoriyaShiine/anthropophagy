@@ -46,7 +46,7 @@ public class FleshDropsReloadListener implements SimpleSynchronousResourceReload
 						Anthropophagy.LOGGER.error("Unknown item '{}' in file '{}'", rawDropId, identifier);
 						continue;
 					}
-					Identifier cookedDropId = Identifier.of(JsonHelper.getString(object, "raw_drop"));
+					Identifier cookedDropId = Identifier.of(JsonHelper.getString(object, "cooked_drop"));
 					Item cookedDrop = Registries.ITEM.get(cookedDropId);
 					if (cookedDrop == Registries.ITEM.get(Registries.ITEM.getDefaultId()) && !cookedDropId.equals(Registries.ITEM.getDefaultId())) {
 						Anthropophagy.LOGGER.error("Unknown item '{}' in file '{}'", cookedDropId, identifier);
