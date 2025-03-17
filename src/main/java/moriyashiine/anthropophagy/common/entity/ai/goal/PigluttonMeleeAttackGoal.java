@@ -9,20 +9,21 @@ import net.minecraft.entity.ai.goal.MeleeAttackGoal;
 import net.minecraft.util.Hand;
 
 public class PigluttonMeleeAttackGoal extends MeleeAttackGoal {
+	private final PigluttonEntity mob;
+
 	public PigluttonMeleeAttackGoal(PigluttonEntity mob, double speed, boolean pauseWhenMobIdle) {
 		super(mob, speed, pauseWhenMobIdle);
+		this.mob = mob;
 	}
 
 	@Override
 	public boolean canStart() {
-		PigluttonEntity piglutton = (PigluttonEntity) mob;
-		return piglutton.canAttack && !piglutton.isBusy() && super.canStart();
+		return mob.canAttack && !mob.isBusy() && super.canStart();
 	}
 
 	@Override
 	public void tick() {
-		PigluttonEntity piglutton = (PigluttonEntity) mob;
-		if (piglutton.canAttack && !piglutton.isBusy()) {
+		if (mob.canAttack && !mob.isBusy()) {
 			super.tick();
 		}
 	}
@@ -30,7 +31,7 @@ public class PigluttonMeleeAttackGoal extends MeleeAttackGoal {
 	@Override
 	protected void attack(LivingEntity target) {
 		if (canAttack(target)) {
-			((PigluttonEntity) mob).attack();
+			mob.attack();
 			resetCooldown();
 			mob.swingHand(Hand.MAIN_HAND);
 		}

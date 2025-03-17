@@ -28,7 +28,7 @@ public class DropFleshEvent implements ServerLivingEntityEvents.AllowDamage {
 		if (source.getSource() instanceof LivingEntity living && (living.getMainHandStack().isIn(ModItemTags.KNIVES) || source.getAttacker() instanceof PigluttonEntity)) {
 			boolean dropCooked = entity.getFireTicks() > 0 || EnchantmentHelper.hasAnyEnchantmentsIn(living.getMainHandStack(), EnchantmentTags.SMELTS_LOOT);
 			for (EntityType<?> entityType : FleshDropEntry.DROP_MAP.keySet()) {
-				if (entity.getType() == entityType && entity.getWorld().random.nextFloat() * ModConfig.damageNeededForGuaranteedFleshDrop < amount) {
+				if (entity.getType() == entityType && entity.getWorld().getRandom().nextFloat() * ModConfig.damageNeededForGuaranteedFleshDrop < amount) {
 					FleshDropEntry entry = FleshDropEntry.DROP_MAP.get(entityType);
 					ItemStack drop = new ItemStack(dropCooked ? entry.cooked_drop() : entry.raw_drop());
 					if (drop.getItem() instanceof FleshItem) {

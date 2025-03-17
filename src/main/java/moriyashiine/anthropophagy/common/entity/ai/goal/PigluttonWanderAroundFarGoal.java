@@ -7,8 +7,8 @@ import moriyashiine.anthropophagy.common.entity.PigluttonEntity;
 import net.minecraft.entity.ai.goal.WanderAroundFarGoal;
 
 public class PigluttonWanderAroundFarGoal extends WanderAroundFarGoal {
-	public PigluttonWanderAroundFarGoal(PigluttonEntity pathAwareEntity, double speed) {
-		super(pathAwareEntity, speed);
+	public PigluttonWanderAroundFarGoal(PigluttonEntity pigluttonEntity, double speed) {
+		super(pigluttonEntity, speed);
 	}
 
 	@Override

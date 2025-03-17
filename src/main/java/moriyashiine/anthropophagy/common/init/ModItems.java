@@ -10,13 +10,10 @@ import moriyashiine.anthropophagy.common.item.TetheredHeartItem;
 import net.fabricmc.fabric.api.itemgroup.v1.FabricItemGroup;
 import net.fabricmc.fabric.api.itemgroup.v1.ItemGroupEvents;
 import net.minecraft.item.*;
-import net.minecraft.registry.Registries;
-import net.minecraft.registry.Registry;
-import net.minecraft.registry.RegistryKey;
-import net.minecraft.registry.RegistryKeys;
 import net.minecraft.text.Text;
 
-import java.util.function.Function;
+import static moriyashiine.strawberrylib.api.module.SLibRegistries.registerItem;
+import static moriyashiine.strawberrylib.api.module.SLibRegistries.registerItemGroup;
 
 public class ModItems {
 	static {
@@ -25,32 +22,28 @@ public class ModItems {
 
 	public static ItemGroup GROUP;
 
-	public static final Item WOODEN_KNIFE = register("wooden_knife", settings -> new KnifeItem(ToolMaterial.WOOD, settings), settings());
-	public static final Item STONE_KNIFE = register("stone_knife", settings -> new KnifeItem(ToolMaterial.STONE, settings), settings());
-	public static final Item IRON_KNIFE = register("iron_knife", settings -> new KnifeItem(ToolMaterial.IRON, settings), settings());
-	public static final Item GOLDEN_KNIFE = register("golden_knife", settings -> new KnifeItem(ToolMaterial.GOLD, settings), settings());
-	public static final Item DIAMOND_KNIFE = register("diamond_knife", settings -> new KnifeItem(ToolMaterial.DIAMOND, settings), settings());
-	public static final Item NETHERITE_KNIFE = register("netherite_knife", settings -> new KnifeItem(ToolMaterial.NETHERITE, settings), settings().fireproof());
+	public static final Item WOODEN_KNIFE = registerItem("wooden_knife", settings -> new KnifeItem(ToolMaterial.WOOD, settings));
+	public static final Item STONE_KNIFE = registerItem("stone_knife", settings -> new KnifeItem(ToolMaterial.STONE, settings));
+	public static final Item IRON_KNIFE = registerItem("iron_knife", settings -> new KnifeItem(ToolMaterial.IRON, settings));
+	public static final Item GOLDEN_KNIFE = registerItem("golden_knife", settings -> new KnifeItem(ToolMaterial.GOLD, settings));
+	public static final Item DIAMOND_KNIFE = registerItem("diamond_knife", settings -> new KnifeItem(ToolMaterial.DIAMOND, settings));
+	public static final Item NETHERITE_KNIFE = registerItem("netherite_knife", settings -> new KnifeItem(ToolMaterial.NETHERITE, settings), settings().fireproof());
 
-	public static final Item FLESH = register("flesh", FleshItem::new, settings().food(ModFoodComponents.FLESH));
-	public static final Item COOKED_FLESH = register("cooked_flesh", FleshItem::new, settings().food(ModFoodComponents.COOKED_FLESH));
-	public static final Item CORRUPT_FLESH = register("corrupt_flesh", FleshItem::new, settings().food(ModFoodComponents.CORRUPT_FLESH, ModConsumableComponents.CORRUPT_FLESH));
+	public static final Item FLESH = registerItem("flesh", FleshItem::new, settings().food(ModFoodComponents.FLESH));
+	public static final Item COOKED_FLESH = registerItem("cooked_flesh", FleshItem::new, settings().food(ModFoodComponents.COOKED_FLESH));
+	public static final Item CORRUPT_FLESH = registerItem("corrupt_flesh", FleshItem::new, settings().food(ModFoodComponents.CORRUPT_FLESH, ModConsumableComponents.CORRUPT_FLESH));
 
-	public static final Item PIGLUTTON_HEART = register("piglutton_heart", FleshItem::new, settings().food(ModFoodComponents.COOKED_FLESH));
-	public static final Item TETHERED_HEART = register("tethered_heart", TetheredHeartItem::new, settings().food(ModFoodComponents.TETHERED_HEART));
+	public static final Item PIGLUTTON_HEART = registerItem("piglutton_heart", FleshItem::new, settings().food(ModFoodComponents.COOKED_FLESH));
+	public static final Item TETHERED_HEART = registerItem("tethered_heart", TetheredHeartItem::new, settings().food(ModFoodComponents.TETHERED_HEART));
 
-	public static final Item PIGLUTTON_SPAWN_EGG = register("piglutton_spawn_egg", settings -> new SpawnEggItem(ModEntityTypes.PIGLUTTON, settings), settings());
+	public static final Item PIGLUTTON_SPAWN_EGG = registerItem("piglutton_spawn_egg", settings -> new SpawnEggItem(ModEntityTypes.PIGLUTTON, settings));
 
 	private static Item.Settings settings() {
 		return new Item.Settings();
 	}
 
-	private static Item register(String name, Function<Item.Settings, Item> factory, Item.Settings settings) {
-		return Items.register(RegistryKey.of(RegistryKeys.ITEM, Anthropophagy.id(name)), factory, settings);
-	}
-
 	public static void init() {
-		GROUP = FabricItemGroup.builder().displayName(Text.translatable("itemGroup." + Anthropophagy.MOD_ID)).icon(() -> new ItemStack(ModItems.IRON_KNIFE)).entries((displayContext, entries) -> {
+		GROUP = registerItemGroup(FabricItemGroup.builder().displayName(Text.translatable("itemGroup." + Anthropophagy.MOD_ID)).icon(ModItems.IRON_KNIFE::getDefaultStack).entries((displayContext, entries) -> {
 			entries.add(WOODEN_KNIFE);
 			entries.add(STONE_KNIFE);
 			entries.add(IRON_KNIFE);
@@ -66,8 +59,7 @@ public class ModItems {
 			entries.add(TETHERED_HEART);
 
 			entries.add(PIGLUTTON_SPAWN_EGG);
-		}).build();
-		Registry.register(Registries.ITEM_GROUP, Anthropophagy.id(Anthropophagy.MOD_ID), GROUP);
+		}).build());
 
 		ItemGroupEvents.modifyEntriesEvent(ItemGroups.SPAWN_EGGS).register(entries -> entries.add(PIGLUTTON_SPAWN_EGG));
 		KnifeItem.applyKnifeSettings = false;

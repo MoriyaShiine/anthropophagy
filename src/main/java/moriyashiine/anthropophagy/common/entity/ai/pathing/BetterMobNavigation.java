@@ -68,7 +68,7 @@ public class BetterMobNavigation extends MobNavigation {
 				Vec3d nextNodePosition = Vec3d.ofBottomCenter(currentPath.getNodePos(currentPath.getCurrentNodeIndex() + 1));
 				Vec3d directionToNextNode = nextNodePosition.subtract(currentNodePosition);
 				Vec3d dirFromCurrentPos = currentPos.subtract(currentNodePosition);
-				return directionToNextNode.dotProduct(dirFromCurrentPos) > 0.0D;
+				return directionToNextNode.dotProduct(dirFromCurrentPos) > 0;
 			}
 		}
 		return false;

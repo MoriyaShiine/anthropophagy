@@ -4,18 +4,11 @@
   "compatibilityLevel": "JAVA_21",
   "mixins": [
 	"AbstractFurnaceBlockEntityMixin",
-	"ArmorSlotMixin",
 	"CampfireBlockEntityMixin",
-	"ConsumableComponentMixin",
-	"EquippableComponentMixin",
 	"HungerManagerMixin",
 	"LivingEntityMixin",
 	"PlayerEntityMixin",
 	"ToolMaterialMixin"
-  ],
-  "client": [
-	"client.GameRendererMixin",
-	"client.LivingEntityMixin"
   ],
   "injectors": {
 	"defaultRequire": 1

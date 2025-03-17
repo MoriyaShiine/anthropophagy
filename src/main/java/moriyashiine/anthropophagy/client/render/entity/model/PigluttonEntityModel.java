@@ -70,8 +70,8 @@ public class PigluttonEntityModel extends EntityModel<PigluttonEntityRenderState
 	public void setAngles(PigluttonEntityRenderState state) {
 		super.setAngles(state);
 		if (!state.eatAnimationState.isRunning()) {
-			neck.pitch = state.pitch * ((float) Math.PI / 180) / 2;
-			neck.yaw = state.yawDegrees * ((float) Math.PI / 180) / 2;
+			neck.pitch = (float) Math.toRadians(state.pitch / 2);
+			neck.yaw = (float) Math.toRadians(state.yawDegrees / 2);
 		}
 		animateWalking(PigluttonAnimations.WALK, state.limbFrequency, state.limbAmplitudeMultiplier, 4, 25);
 		animate(state.idleAnimationState, PigluttonAnimations.IDLE, state.age);

@@ -7,6 +7,8 @@ import moriyashiine.anthropophagy.common.entity.PigluttonEntity;
 import moriyashiine.anthropophagy.common.init.ModItems;
 import moriyashiine.anthropophagy.common.item.FleshItem;
 import moriyashiine.anthropophagy.common.tag.ModItemTags;
+import moriyashiine.strawberrylib.api.module.SLibUtils;
+import moriyashiine.strawberrylib.api.objects.enums.ParticleAnchor;
 import net.minecraft.component.DataComponentTypes;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.ItemEntity;
@@ -84,11 +86,7 @@ public class EatFleshGoal extends Goal {
 		if (allowOverhaul && mob.getHealth() >= mob.getMaxHealth()) {
 			mob.overhealAmount += healAmount;
 			if (mob.overhealAmount >= OVERHEAL_REQUIRED) {
-				((ServerWorld) mob.getWorld()).spawnParticles(ParticleTypes.SMOKE,
-						mob.getX(), mob.getY(), mob.getZ(),
-						64,
-						mob.getWidth() / 2, mob.getHeight() / 2, mob.getWidth() / 2,
-						0);
+				SLibUtils.addParticles(mob, ParticleTypes.SMOKE, 64, ParticleAnchor.BODY);
 				mob.dropItem(world, ModItems.PIGLUTTON_HEART);
 				mob.discard();
 			}
@@ -103,6 +101,6 @@ public class EatFleshGoal extends Goal {
 				8,
 				0.125, 0.125, 0.125,
 				0);
-		mob.playSound(SoundEvents.ENTITY_GENERIC_EAT.value(), 1, 1);
+		SLibUtils.playSound(mob, SoundEvents.ENTITY_GENERIC_EAT.value());
 	}
 }

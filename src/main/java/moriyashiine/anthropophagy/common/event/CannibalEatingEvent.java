@@ -1,7 +1,7 @@
 /*
  * Copyright (c) MoriyaShiine. All Rights Reserved.
  */
-package moriyashiine.anthropophagy.mixin;
+package moriyashiine.anthropophagy.common.event;
 
 import moriyashiine.anthropophagy.common.ModConfig;
 import moriyashiine.anthropophagy.common.component.entity.CannibalLevelComponent;
@@ -10,24 +10,20 @@ import moriyashiine.anthropophagy.common.entity.PigluttonEntity;
 import moriyashiine.anthropophagy.common.init.ModEntityComponents;
 import moriyashiine.anthropophagy.common.item.FleshItem;
 import moriyashiine.anthropophagy.common.tag.ModItemTags;
-import net.minecraft.component.type.ConsumableComponent;
+import moriyashiine.strawberrylib.api.event.EatFoodEvent;
+import net.minecraft.component.type.FoodComponent;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
-import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
-@Mixin(ConsumableComponent.class)
-public class ConsumableComponentMixin {
-	@Inject(method = "finishConsumption", at = @At("HEAD"))
-	private void anthropophagy$handleCannibalFood(World world, LivingEntity user, ItemStack stack, CallbackInfoReturnable<ItemStack> cir) {
-		@Nullable CannibalLevelComponent cannibalLevelComponent = ModEntityComponents.CANNIBAL_LEVEL.getNullable(user);
-		@Nullable TetheredComponent tetheredComponent = ModEntityComponents.TETHERED.getNullable(user);
+public class CannibalEatingEvent implements EatFoodEvent {
+	@Override
+	public void eat(World world, LivingEntity entity, ItemStack stack, FoodComponent foodComponent) {
+		@Nullable CannibalLevelComponent cannibalLevelComponent = ModEntityComponents.CANNIBAL_LEVEL.getNullable(entity);
+		@Nullable TetheredComponent tetheredComponent = ModEntityComponents.TETHERED.getNullable(entity);
 		if (cannibalLevelComponent == null || tetheredComponent == null) {
 			return;
 		}
@@ -38,12 +34,12 @@ public class ConsumableComponentMixin {
 					cannibalLevelComponent.updateAttributes();
 				}
 				if (!world.isClient && cannibalLevelComponent.getCannibalLevel() == 20 || cannibalLevelComponent.getCannibalLevel() == 21) {
-					user.addStatusEffect(new StatusEffectInstance(StatusEffects.NAUSEA, 200));
-					user.addStatusEffect(new StatusEffectInstance(StatusEffects.BLINDNESS, 200));
+					entity.addStatusEffect(new StatusEffectInstance(StatusEffects.NAUSEA, 200));
+					entity.addStatusEffect(new StatusEffectInstance(StatusEffects.BLINDNESS, 200));
 				}
 			}
 			if (ModConfig.enablePiglutton) {
-				PigluttonEntity.attemptSpawn(user, cannibalLevelComponent.getCannibalLevel(), FleshItem.isOwnerPlayer(stack) && user.getName().getString().equals(FleshItem.getOwnerName(stack)));
+				PigluttonEntity.attemptSpawn(entity, cannibalLevelComponent.getCannibalLevel(), FleshItem.isOwnerPlayer(stack) && entity.getName().getString().equals(FleshItem.getOwnerName(stack)));
 			}
 		} else {
 			if (!tetheredComponent.isTethered() && cannibalLevelComponent.getCannibalLevel() > 0) {

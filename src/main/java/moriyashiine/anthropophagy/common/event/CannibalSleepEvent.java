@@ -16,7 +16,7 @@ public class CannibalSleepEvent implements EntitySleepEvents.AllowSleeping {
 	@Nullable
 	@Override
 	public PlayerEntity.SleepFailureReason allowSleep(PlayerEntity player, BlockPos sleepingPos) {
-		List<PlayerEntity> nearbyCannibals = player.getWorld().getEntitiesByClass(PlayerEntity.class, new Box(sleepingPos.getX() - 8, sleepingPos.getY() - 5, sleepingPos.getZ() - 8, sleepingPos.getX() + 8, sleepingPos.getY() + 5, sleepingPos.getZ() + 8), foundPlayer -> foundPlayer != player && ModEntityComponents.CANNIBAL_LEVEL.get(foundPlayer).getCannibalLevel() >= 70);
+		List<PlayerEntity> nearbyCannibals = player.getWorld().getEntitiesByClass(PlayerEntity.class, new Box(sleepingPos).expand(8, 5, 8), foundPlayer -> foundPlayer != player && ModEntityComponents.CANNIBAL_LEVEL.get(foundPlayer).getCannibalLevel() >= 70);
 		if (!nearbyCannibals.isEmpty()) {
 			return PlayerEntity.SleepFailureReason.NOT_SAFE;
 		}
