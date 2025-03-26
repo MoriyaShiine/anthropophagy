@@ -1,5 +1,4 @@
 # Anthropophagy
-
 [Inspired by the old Cannibalism mod.](https://www.curseforge.com/minecraft/mc-mods/cannibalism)
 
 This mod adds a new way of obtaining food: people!
@@ -14,17 +13,16 @@ armor pieces. If too much flesh is consumed, however, the legendary Piglutton ma
 flesh, so much so that it prioritizes dropped flesh over attacking... Perhaps you could stay your hunger by tethering
 its heart?
 
-### Knife Recipe (Can be Planks, Cobblestone, Iron Ingot, Gold Ingot, or Diamond)
-![Recipe](https://i.imgur.com/FAM9tbi.png)
+**Knife Recipe (Can be Planks, Cobblestone, Iron Ingot, Gold Ingot, or Diamond)**
 
-### Tethered Heart Recipe
-![Recipe](https://i.imgur.com/9prQJYL.png)
+![Recipe](https://github.com/MoriyaShiine/anthropophagy/blob/main/.webassets/knife_recipe.png?raw=true)
+
+**Tethered Heart Recipe**
+
+![Recipe](https://github.com/MoriyaShiine/anthropophagy/blob/main/.webassets/tethered_heart_recipe.png?raw=true)
 
 ## External Links
-Support me on Ko-fi! I release new versions of my mods early here &lt;3
-
-[![Ko-fi](https://i.imgur.com/6pkJV6h.png)](https://ko-fi.com/moriyashiine)
-
-Join my Discord!
-
-[![Discord](https://i.imgur.com/72QzxP1.png)](https://discord.gg/Am6M8VQ)
+### Support me on Ko-fi! Any amount is appreciated, and you can get cosmetic benefits for doing so <3
+[![Ko-fi](https://github.com/MoriyaShiine/strawberrylib/blob/main/.webassets/kofi.png?raw=true)](https://ko-fi.com/moriyashiine)
+### Join my Discord!
+[![Discord](https://github.com/MoriyaShiine/strawberrylib/blob/main/.webassets/discord.png?raw=true)](https://discord.gg/Am6M8VQ)
