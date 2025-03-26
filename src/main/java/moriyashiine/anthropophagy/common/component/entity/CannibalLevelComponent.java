@@ -46,7 +46,7 @@ public class CannibalLevelComponent implements AutoSyncedComponent {
 
 	@Override
 	public void readFromNbt(NbtCompound tag, RegistryWrapper.WrapperLookup registryLookup) {
-		cannibalLevel = tag.getInt("CannibalLevel");
+		cannibalLevel = tag.getInt("CannibalLevel", 0);
 	}
 
 	@Override
@@ -82,7 +82,9 @@ public class CannibalLevelComponent implements AutoSyncedComponent {
 
 	public void updateAttributes() {
 		if (obj.getWorld() instanceof ServerWorld serverWorld) {
-			for (ItemStack stack : obj.getEquippedItems()) {
+			// todo check if needed
+			for (EquipmentSlot slot : EquipmentSlot.values()) {
+				ItemStack stack = obj.getEquippedStack(slot);
 				if (cannotEquip(stack)) {
 					obj.dropStack(serverWorld, stack.copyAndEmpty());
 				}

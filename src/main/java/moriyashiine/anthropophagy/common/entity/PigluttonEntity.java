@@ -81,13 +81,13 @@ public class PigluttonEntity extends HostileEntity {
 	@Override
 	public void readCustomDataFromNbt(NbtCompound nbt) {
 		super.readCustomDataFromNbt(nbt);
-		setEating(nbt.getBoolean("Eating"));
-		setAttackIndex(nbt.getInt("AttackIndex"));
-		canAttack = nbt.getBoolean("CanAttack");
-		damageTaken = nbt.getFloat("DamageTaken");
-		overhealAmount = nbt.getInt("OverhealAmount");
-		stalkTicks = nbt.getInt("StalkTicks");
-		fleeingTicks = nbt.getInt("FleeingTicks");
+		setEating(nbt.getBoolean("Eating", false));
+		setAttackIndex(nbt.getInt("AttackIndex", 0));
+		canAttack = nbt.getBoolean("CanAttack", false);
+		damageTaken = nbt.getFloat("DamageTaken", 0);
+		overhealAmount = nbt.getInt("OverhealAmount", 0);
+		stalkTicks = nbt.getInt("StalkTicks", 0);
+		fleeingTicks = nbt.getInt("FleeingTicks", 0);
 	}
 
 	@Override
@@ -215,8 +215,8 @@ public class PigluttonEntity extends HostileEntity {
 	}
 
 	@Override
-	public boolean disablesShield() {
-		return true;
+	public float getWeaponDisableBlockingForSeconds() {
+		return 5;
 	}
 
 	@Override

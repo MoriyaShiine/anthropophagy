@@ -12,20 +12,20 @@ import net.minecraft.component.type.AttributeModifiersComponent;
 import net.minecraft.entity.attribute.EntityAttributeModifier;
 import net.minecraft.entity.attribute.EntityAttributes;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.SwordItem;
+import net.minecraft.item.Item;
 import net.minecraft.item.ToolMaterial;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
 import net.minecraft.world.World;
 
-public class KnifeItem extends SwordItem {
+public class KnifeItem extends Item {
 	public static boolean applyKnifeSettings = false;
 
 	public static final EntityAttributeModifier ENTITY_INTERACTION_RANGE_MODIFIER = new EntityAttributeModifier(Anthropophagy.id("knife_interaction_range"), -0.5, EntityAttributeModifier.Operation.ADD_VALUE);
 
 	public KnifeItem(ToolMaterial toolMaterial, Settings settings) {
-		super(toolMaterial, 0, -2, settings);
+		super(settings.sword(toolMaterial, 0, -2));
 	}
 
 	public static AttributeModifiersComponent appendKnifeAttributeModifiers(AttributeModifiersComponent original) {

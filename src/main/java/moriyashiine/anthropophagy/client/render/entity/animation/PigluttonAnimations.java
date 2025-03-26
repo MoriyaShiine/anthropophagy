@@ -10,12 +10,12 @@ import net.minecraft.client.render.entity.animation.Transformation;
 
 public class PigluttonAnimations {
 	public static final Animation IDLE = Animation.Builder.create(1.0F).looping()
-			.addBoneAnimation("body", new Transformation(Transformation.Targets.TRANSLATE,
+			.addBoneAnimation("body", new Transformation(Transformation.Targets.MOVE_ORIGIN,
 					new Keyframe(0.0F, AnimationHelper.createTranslationalVector(0.0F, 0.0F, 0.0F), Transformation.Interpolations.LINEAR),
 					new Keyframe(0.5F, AnimationHelper.createTranslationalVector(0.0F, 0.25F, 0.0F), Transformation.Interpolations.LINEAR),
 					new Keyframe(1.0F, AnimationHelper.createTranslationalVector(0.0F, 0.0F, 0.0F), Transformation.Interpolations.LINEAR)
 			))
-			.addBoneAnimation("stomach", new Transformation(Transformation.Targets.TRANSLATE,
+			.addBoneAnimation("stomach", new Transformation(Transformation.Targets.MOVE_ORIGIN,
 					new Keyframe(0.0F, AnimationHelper.createTranslationalVector(0.0F, 0.2F, 0.0F), Transformation.Interpolations.LINEAR),
 					new Keyframe(0.1667F, AnimationHelper.createTranslationalVector(0.0F, 0.1F, 0.0F), Transformation.Interpolations.LINEAR),
 					new Keyframe(0.3333F, AnimationHelper.createTranslationalVector(0.0F, -0.1F, 0.0F), Transformation.Interpolations.LINEAR),
@@ -102,7 +102,7 @@ public class PigluttonAnimations {
 			.build();
 
 	public static final Animation WALK = Animation.Builder.create(1.0F).looping()
-			.addBoneAnimation("hog", new Transformation(Transformation.Targets.TRANSLATE,
+			.addBoneAnimation("hog", new Transformation(Transformation.Targets.MOVE_ORIGIN,
 					new Keyframe(0.0F, AnimationHelper.createTranslationalVector(0.0F, 0.0F, 0.0F), Transformation.Interpolations.LINEAR),
 					new Keyframe(0.5F, AnimationHelper.createTranslationalVector(0.0F, 1.0F, 0.0F), Transformation.Interpolations.LINEAR),
 					new Keyframe(1.0F, AnimationHelper.createTranslationalVector(0.0F, 0.0F, 0.0F), Transformation.Interpolations.LINEAR)
@@ -167,7 +167,7 @@ public class PigluttonAnimations {
 					new Keyframe(0.75F, AnimationHelper.createRotationalVector(20.0F, 0.0F, 0.0F), Transformation.Interpolations.LINEAR),
 					new Keyframe(1.0F, AnimationHelper.createRotationalVector(-20.0F, 0.0F, 0.0F), Transformation.Interpolations.LINEAR)
 			))
-			.addBoneAnimation("lArm01", new Transformation(Transformation.Targets.TRANSLATE,
+			.addBoneAnimation("lArm01", new Transformation(Transformation.Targets.MOVE_ORIGIN,
 					new Keyframe(0.0F, AnimationHelper.createTranslationalVector(0.0F, 0.0F, 0.0F), Transformation.Interpolations.LINEAR),
 					new Keyframe(0.25F, AnimationHelper.createTranslationalVector(0.0F, -0.5F, 0.0F), Transformation.Interpolations.LINEAR),
 					new Keyframe(0.5F, AnimationHelper.createTranslationalVector(0.0F, 0.0F, 0.0F), Transformation.Interpolations.LINEAR),
@@ -181,7 +181,7 @@ public class PigluttonAnimations {
 					new Keyframe(0.75F, AnimationHelper.createRotationalVector(-42.5F, 0.0F, 0.0F), Transformation.Interpolations.LINEAR),
 					new Keyframe(1.0F, AnimationHelper.createRotationalVector(7.5F, 0.0F, 0.0F), Transformation.Interpolations.LINEAR)
 			))
-			.addBoneAnimation("lArm02", new Transformation(Transformation.Targets.TRANSLATE,
+			.addBoneAnimation("lArm02", new Transformation(Transformation.Targets.MOVE_ORIGIN,
 					new Keyframe(0.0F, AnimationHelper.createTranslationalVector(0.0F, 0.0F, 0.0F), Transformation.Interpolations.LINEAR),
 					new Keyframe(0.25F, AnimationHelper.createTranslationalVector(0.0F, 0.0F, 0.0F), Transformation.Interpolations.LINEAR),
 					new Keyframe(0.5F, AnimationHelper.createTranslationalVector(0.0F, 0.0F, 0.0F), Transformation.Interpolations.LINEAR),
@@ -194,7 +194,7 @@ public class PigluttonAnimations {
 					new Keyframe(0.75F, AnimationHelper.createRotationalVector(0.0F, 0.0F, 0.0F), Transformation.Interpolations.LINEAR),
 					new Keyframe(1.0F, AnimationHelper.createRotationalVector(-20.0F, 0.0F, 0.0F), Transformation.Interpolations.LINEAR)
 			))
-			.addBoneAnimation("lHandHoof01", new Transformation(Transformation.Targets.TRANSLATE,
+			.addBoneAnimation("lHandHoof01", new Transformation(Transformation.Targets.MOVE_ORIGIN,
 					new Keyframe(0.0F, AnimationHelper.createTranslationalVector(0.0F, 4.0F, 0.0F), Transformation.Interpolations.LINEAR),
 					new Keyframe(0.25F, AnimationHelper.createTranslationalVector(0.0F, 0.0F, 0.0F), Transformation.Interpolations.LINEAR),
 					new Keyframe(0.75F, AnimationHelper.createTranslationalVector(0.0F, 0.0F, 0.0F), Transformation.Interpolations.LINEAR),
@@ -205,7 +205,7 @@ public class PigluttonAnimations {
 					new Keyframe(0.5F, AnimationHelper.createRotationalVector(-20.0F, 0.0F, 0.0F), Transformation.Interpolations.LINEAR),
 					new Keyframe(1.0F, AnimationHelper.createRotationalVector(10.0F, 0.0F, 0.0F), Transformation.Interpolations.LINEAR)
 			))
-			.addBoneAnimation("rArm01", new Transformation(Transformation.Targets.TRANSLATE,
+			.addBoneAnimation("rArm01", new Transformation(Transformation.Targets.MOVE_ORIGIN,
 					new Keyframe(0.0F, AnimationHelper.createTranslationalVector(0.0F, -1.0F, 0.0F), Transformation.Interpolations.LINEAR),
 					new Keyframe(0.25F, AnimationHelper.createTranslationalVector(0.0F, 0.5F, 0.0F), Transformation.Interpolations.LINEAR),
 					new Keyframe(0.5F, AnimationHelper.createTranslationalVector(0.0F, 0.0F, 0.0F), Transformation.Interpolations.LINEAR),
@@ -218,7 +218,7 @@ public class PigluttonAnimations {
 					new Keyframe(0.75F, AnimationHelper.createRotationalVector(0.0F, 0.0F, 0.0F), Transformation.Interpolations.LINEAR),
 					new Keyframe(1.0F, AnimationHelper.createRotationalVector(10.0F, 0.0F, 0.0F), Transformation.Interpolations.LINEAR)
 			))
-			.addBoneAnimation("rArm02", new Transformation(Transformation.Targets.TRANSLATE,
+			.addBoneAnimation("rArm02", new Transformation(Transformation.Targets.MOVE_ORIGIN,
 					new Keyframe(0.0F, AnimationHelper.createTranslationalVector(0.0F, 0.0F, 0.0F), Transformation.Interpolations.LINEAR),
 					new Keyframe(0.25F, AnimationHelper.createTranslationalVector(0.0F, 0.0F, 0.0F), Transformation.Interpolations.LINEAR),
 					new Keyframe(0.5F, AnimationHelper.createTranslationalVector(0.0F, 0.0F, 0.0F), Transformation.Interpolations.LINEAR),
@@ -231,7 +231,7 @@ public class PigluttonAnimations {
 					new Keyframe(0.75F, AnimationHelper.createRotationalVector(0.0F, 0.0F, 0.0F), Transformation.Interpolations.LINEAR),
 					new Keyframe(1.0F, AnimationHelper.createRotationalVector(-20.0F, 0.0F, 0.0F), Transformation.Interpolations.LINEAR)
 			))
-			.addBoneAnimation("rHandHoof01", new Transformation(Transformation.Targets.TRANSLATE,
+			.addBoneAnimation("rHandHoof01", new Transformation(Transformation.Targets.MOVE_ORIGIN,
 					new Keyframe(0.0F, AnimationHelper.createTranslationalVector(0.0F, 4.0F, 0.0F), Transformation.Interpolations.LINEAR),
 					new Keyframe(0.25F, AnimationHelper.createTranslationalVector(0.0F, 0.0F, 0.0F), Transformation.Interpolations.LINEAR),
 					new Keyframe(0.75F, AnimationHelper.createTranslationalVector(0.0F, 0.0F, 0.0F), Transformation.Interpolations.LINEAR),
@@ -242,7 +242,7 @@ public class PigluttonAnimations {
 					new Keyframe(0.5F, AnimationHelper.createRotationalVector(-17.5F, 0.0F, 0.0F), Transformation.Interpolations.LINEAR),
 					new Keyframe(1.0F, AnimationHelper.createRotationalVector(62.5F, 0.0F, 0.0F), Transformation.Interpolations.LINEAR)
 			))
-			.addBoneAnimation("lLeg01", new Transformation(Transformation.Targets.TRANSLATE,
+			.addBoneAnimation("lLeg01", new Transformation(Transformation.Targets.MOVE_ORIGIN,
 					new Keyframe(0.0F, AnimationHelper.createTranslationalVector(0.0F, -1.0F, 1.0F), Transformation.Interpolations.LINEAR),
 					new Keyframe(0.5F, AnimationHelper.createTranslationalVector(0.0F, -1.0F, -2.0F), Transformation.Interpolations.LINEAR),
 					new Keyframe(1.0F, AnimationHelper.createTranslationalVector(0.0F, -1.0F, 1.0F), Transformation.Interpolations.LINEAR)
@@ -253,7 +253,7 @@ public class PigluttonAnimations {
 					new Keyframe(0.7917F, AnimationHelper.createRotationalVector(-32.5F, 0.0F, 0.0F), Transformation.Interpolations.LINEAR),
 					new Keyframe(1.0F, AnimationHelper.createRotationalVector(-11.62F, 0.0F, 0.0F), Transformation.Interpolations.LINEAR)
 			))
-			.addBoneAnimation("lLeg02", new Transformation(Transformation.Targets.TRANSLATE,
+			.addBoneAnimation("lLeg02", new Transformation(Transformation.Targets.MOVE_ORIGIN,
 					new Keyframe(0.0F, AnimationHelper.createTranslationalVector(0.0F, 1.0F, -1.76F), Transformation.Interpolations.LINEAR),
 					new Keyframe(0.5F, AnimationHelper.createTranslationalVector(0.0F, 0.0F, 0.0F), Transformation.Interpolations.LINEAR),
 					new Keyframe(0.7917F, AnimationHelper.createTranslationalVector(0.0F, 0.0F, -3.0F), Transformation.Interpolations.LINEAR),
@@ -264,7 +264,7 @@ public class PigluttonAnimations {
 					new Keyframe(0.5F, AnimationHelper.createRotationalVector(62.5F, 0.0F, 0.0F), Transformation.Interpolations.LINEAR),
 					new Keyframe(1.0F, AnimationHelper.createRotationalVector(-17.5F, 0.0F, 0.0F), Transformation.Interpolations.LINEAR)
 			))
-			.addBoneAnimation("rLeg01", new Transformation(Transformation.Targets.TRANSLATE,
+			.addBoneAnimation("rLeg01", new Transformation(Transformation.Targets.MOVE_ORIGIN,
 					new Keyframe(0.0F, AnimationHelper.createTranslationalVector(0.0F, -1.0F, -2.0F), Transformation.Interpolations.LINEAR),
 					new Keyframe(0.5F, AnimationHelper.createTranslationalVector(0.0F, -1.0F, 1.0F), Transformation.Interpolations.LINEAR),
 					new Keyframe(1.0F, AnimationHelper.createTranslationalVector(0.0F, -1.0F, -2.0F), Transformation.Interpolations.LINEAR)
@@ -275,7 +275,7 @@ public class PigluttonAnimations {
 					new Keyframe(0.5F, AnimationHelper.createRotationalVector(-11.62F, 0.0F, 0.0F), Transformation.Interpolations.LINEAR),
 					new Keyframe(1.0F, AnimationHelper.createRotationalVector(0.0F, 0.0F, 0.0F), Transformation.Interpolations.LINEAR)
 			))
-			.addBoneAnimation("rLeg02", new Transformation(Transformation.Targets.TRANSLATE,
+			.addBoneAnimation("rLeg02", new Transformation(Transformation.Targets.MOVE_ORIGIN,
 					new Keyframe(0.0F, AnimationHelper.createTranslationalVector(0.0F, 0.0F, 0.0F), Transformation.Interpolations.LINEAR),
 					new Keyframe(0.2917F, AnimationHelper.createTranslationalVector(0.0F, 0.0F, -3.0F), Transformation.Interpolations.LINEAR),
 					new Keyframe(0.5F, AnimationHelper.createTranslationalVector(0.0F, 1.0F, -1.76F), Transformation.Interpolations.LINEAR),
@@ -312,7 +312,7 @@ public class PigluttonAnimations {
 					new Keyframe(0.5F, AnimationHelper.createRotationalVector(-44.7896F, 27.3575F, 15.9825F), Transformation.Interpolations.LINEAR),
 					new Keyframe(0.75F, AnimationHelper.createRotationalVector(0.0F, 0.0F, 0.0F), Transformation.Interpolations.LINEAR)
 			))
-			.addBoneAnimation("lArm01", new Transformation(Transformation.Targets.TRANSLATE,
+			.addBoneAnimation("lArm01", new Transformation(Transformation.Targets.MOVE_ORIGIN,
 					new Keyframe(0.0F, AnimationHelper.createTranslationalVector(0.0F, 0.0F, 0.0F), Transformation.Interpolations.LINEAR),
 					new Keyframe(0.25F, AnimationHelper.createTranslationalVector(4.0F, 0.0F, 4.0F), Transformation.Interpolations.LINEAR),
 					new Keyframe(0.4167F, AnimationHelper.createTranslationalVector(2.67F, 0.0F, -6.33F), Transformation.Interpolations.LINEAR),
@@ -324,7 +324,7 @@ public class PigluttonAnimations {
 					new Keyframe(0.125F, AnimationHelper.createRotationalVector(-30.0F, 0.0F, 0.0F), Transformation.Interpolations.LINEAR),
 					new Keyframe(0.2917F, AnimationHelper.createRotationalVector(0.0F, 0.0F, 0.0F), Transformation.Interpolations.LINEAR)
 			))
-			.addBoneAnimation("lArm02", new Transformation(Transformation.Targets.TRANSLATE,
+			.addBoneAnimation("lArm02", new Transformation(Transformation.Targets.MOVE_ORIGIN,
 					new Keyframe(0.0F, AnimationHelper.createTranslationalVector(0.0F, 0.0F, 0.0F), Transformation.Interpolations.LINEAR),
 					new Keyframe(0.125F, AnimationHelper.createTranslationalVector(0.0F, 0.0F, 0.0F), Transformation.Interpolations.LINEAR),
 					new Keyframe(0.2917F, AnimationHelper.createTranslationalVector(0.0F, 0.0F, 0.0F), Transformation.Interpolations.LINEAR)
@@ -360,7 +360,7 @@ public class PigluttonAnimations {
 					new Keyframe(0.5F, AnimationHelper.createRotationalVector(-44.7896F, -27.3575F, -15.9825F), Transformation.Interpolations.LINEAR),
 					new Keyframe(0.75F, AnimationHelper.createRotationalVector(0.0F, 0.0F, 0.0F), Transformation.Interpolations.LINEAR)
 			))
-			.addBoneAnimation("rArm01", new Transformation(Transformation.Targets.TRANSLATE,
+			.addBoneAnimation("rArm01", new Transformation(Transformation.Targets.MOVE_ORIGIN,
 					new Keyframe(0.0F, AnimationHelper.createTranslationalVector(0.0F, 0.0F, 0.0F), Transformation.Interpolations.LINEAR),
 					new Keyframe(0.25F, AnimationHelper.createTranslationalVector(-4.0F, 0.0F, 4.0F), Transformation.Interpolations.LINEAR),
 					new Keyframe(0.4167F, AnimationHelper.createTranslationalVector(-2.67F, 0.0F, -6.33F), Transformation.Interpolations.LINEAR),
@@ -372,7 +372,7 @@ public class PigluttonAnimations {
 					new Keyframe(0.125F, AnimationHelper.createRotationalVector(-30.0F, 0.0F, 0.0F), Transformation.Interpolations.LINEAR),
 					new Keyframe(0.2917F, AnimationHelper.createRotationalVector(0.0F, 0.0F, 0.0F), Transformation.Interpolations.LINEAR)
 			))
-			.addBoneAnimation("rArm02", new Transformation(Transformation.Targets.TRANSLATE,
+			.addBoneAnimation("rArm02", new Transformation(Transformation.Targets.MOVE_ORIGIN,
 					new Keyframe(0.0F, AnimationHelper.createTranslationalVector(0.0F, 0.0F, 0.0F), Transformation.Interpolations.LINEAR),
 					new Keyframe(0.125F, AnimationHelper.createTranslationalVector(0.0F, 0.0F, 0.0F), Transformation.Interpolations.LINEAR),
 					new Keyframe(0.2917F, AnimationHelper.createTranslationalVector(0.0F, 0.0F, 0.0F), Transformation.Interpolations.LINEAR)

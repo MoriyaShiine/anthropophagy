@@ -32,6 +32,6 @@ public class ModModelProvider extends FabricModelProvider {
 		itemModelGenerator.register(ModItems.CORRUPT_FLESH, Models.GENERATED);
 		itemModelGenerator.register(ModItems.PIGLUTTON_HEART, Models.GENERATED);
 		itemModelGenerator.register(ModItems.TETHERED_HEART, Models.GENERATED);
-		itemModelGenerator.registerSpawnEgg(ModItems.PIGLUTTON_SPAWN_EGG, 0x7F3D00, 0xC4C4C4);
+		itemModelGenerator.register(ModItems.PIGLUTTON_SPAWN_EGG, Models.GENERATED);
 	}
 }

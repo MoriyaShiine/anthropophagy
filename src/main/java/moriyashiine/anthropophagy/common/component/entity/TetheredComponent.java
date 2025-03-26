@@ -12,7 +12,7 @@ public class TetheredComponent implements AutoSyncedComponent {
 
 	@Override
 	public void readFromNbt(NbtCompound tag, RegistryWrapper.WrapperLookup registryLookup) {
-		tethered = tag.getBoolean("Tethered");
+		tethered = tag.getBoolean("Tethered", false);
 	}
 
 	@Override
