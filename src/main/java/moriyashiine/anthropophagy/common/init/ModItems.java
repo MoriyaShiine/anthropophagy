@@ -16,10 +16,6 @@ import static moriyashiine.strawberrylib.api.module.SLibRegistries.registerItem;
 import static moriyashiine.strawberrylib.api.module.SLibRegistries.registerItemGroup;
 
 public class ModItems {
-	static {
-		KnifeItem.applyKnifeSettings = true;
-	}
-
 	public static ItemGroup GROUP;
 
 	public static final Item WOODEN_KNIFE = registerItem("wooden_knife", settings -> new KnifeItem(ToolMaterial.WOOD, settings));
@@ -62,6 +58,5 @@ public class ModItems {
 		}).build());
 
 		ItemGroupEvents.modifyEntriesEvent(ItemGroups.SPAWN_EGGS).register(entries -> entries.add(PIGLUTTON_SPAWN_EGG));
-		KnifeItem.applyKnifeSettings = false;
 	}
 }

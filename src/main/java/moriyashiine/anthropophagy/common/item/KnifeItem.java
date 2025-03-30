@@ -7,8 +7,8 @@ import moriyashiine.anthropophagy.common.Anthropophagy;
 import moriyashiine.anthropophagy.common.component.entity.TetheredComponent;
 import moriyashiine.anthropophagy.common.init.ModEntityComponents;
 import moriyashiine.anthropophagy.common.init.ModItems;
+import moriyashiine.strawberrylib.api.objects.records.ModifierTrio;
 import net.minecraft.component.type.AttributeModifierSlot;
-import net.minecraft.component.type.AttributeModifiersComponent;
 import net.minecraft.entity.attribute.EntityAttributeModifier;
 import net.minecraft.entity.attribute.EntityAttributes;
 import net.minecraft.entity.player.PlayerEntity;
@@ -19,20 +19,14 @@ import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
 import net.minecraft.world.World;
 
-public class KnifeItem extends Item {
-	public static boolean applyKnifeSettings = false;
+import static moriyashiine.strawberrylib.api.module.SLibRegistries.editModifiers;
 
-	public static final EntityAttributeModifier ENTITY_INTERACTION_RANGE_MODIFIER = new EntityAttributeModifier(Anthropophagy.id("knife_interaction_range"), -0.5, EntityAttributeModifier.Operation.ADD_VALUE);
+public class KnifeItem extends Item {
+	private static final EntityAttributeModifier ENTITY_INTERACTION_RANGE_MODIFIER = new EntityAttributeModifier(Anthropophagy.id("knife_interaction_range"), -0.5, EntityAttributeModifier.Operation.ADD_VALUE);
+	private static final ModifierTrio MODIFIER = new ModifierTrio(EntityAttributes.ENTITY_INTERACTION_RANGE, ENTITY_INTERACTION_RANGE_MODIFIER, AttributeModifierSlot.MAINHAND);
 
 	public KnifeItem(ToolMaterial toolMaterial, Settings settings) {
-		super(settings.sword(toolMaterial, 0, -2));
-	}
-
-	public static AttributeModifiersComponent appendKnifeAttributeModifiers(AttributeModifiersComponent original) {
-		AttributeModifiersComponent.Builder builder = AttributeModifiersComponent.builder();
-		original.modifiers().forEach(entry -> builder.add(entry.attribute(), entry.modifier(), entry.slot()));
-		builder.add(EntityAttributes.ENTITY_INTERACTION_RANGE, KnifeItem.ENTITY_INTERACTION_RANGE_MODIFIER, AttributeModifierSlot.MAINHAND);
-		return builder.build();
+		super(editModifiers(() -> settings.sword(toolMaterial, 0, -2), MODIFIER));
 	}
 
 	@Override
