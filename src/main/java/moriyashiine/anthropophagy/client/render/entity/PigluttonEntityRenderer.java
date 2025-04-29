@@ -10,6 +10,7 @@ import moriyashiine.anthropophagy.common.entity.PigluttonEntity;
 import net.minecraft.client.render.entity.EntityRendererFactory;
 import net.minecraft.client.render.entity.MobEntityRenderer;
 import net.minecraft.client.render.entity.feature.HeldItemFeatureRenderer;
+import net.minecraft.client.render.entity.state.ArmedEntityRenderState;
 import net.minecraft.util.Identifier;
 
 public class PigluttonEntityRenderer extends MobEntityRenderer<PigluttonEntity, PigluttonEntityRenderState, PigluttonEntityModel> {
@@ -33,6 +34,7 @@ public class PigluttonEntityRenderer extends MobEntityRenderer<PigluttonEntity, 
 	@Override
 	public void updateRenderState(PigluttonEntity entity, PigluttonEntityRenderState state, float tickProgress) {
 		super.updateRenderState(entity, state, tickProgress);
+		ArmedEntityRenderState.updateRenderState(entity, state, itemModelResolver);
 		state.idleAnimationState.copyFrom(entity.idleAnimationState);
 		state.attackLeftAnimationState.copyFrom(entity.attackLeftAnimationState);
 		state.attackRightAnimationState.copyFrom(entity.attackRightAnimationState);
