@@ -5,6 +5,7 @@ package moriyashiine.anthropophagy.common.component.entity;
 
 import moriyashiine.anthropophagy.common.Anthropophagy;
 import moriyashiine.anthropophagy.common.init.ModEntityComponents;
+import moriyashiine.strawberrylib.api.event.PreventEquipmentUsageEvent;
 import net.minecraft.component.DataComponentTypes;
 import net.minecraft.component.type.AttributeModifiersComponent;
 import net.minecraft.entity.EquipmentSlot;
@@ -13,10 +14,9 @@ import net.minecraft.entity.attribute.EntityAttributeModifier;
 import net.minecraft.entity.attribute.EntityAttributes;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NbtCompound;
-import net.minecraft.registry.RegistryWrapper;
 import net.minecraft.registry.entry.RegistryEntry;
-import net.minecraft.server.world.ServerWorld;
+import net.minecraft.storage.ReadView;
+import net.minecraft.storage.WriteView;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.Pair;
 import net.minecraft.util.math.MathHelper;
@@ -45,13 +45,13 @@ public class CannibalLevelComponent implements AutoSyncedComponent {
 	}
 
 	@Override
-	public void readFromNbt(NbtCompound tag, RegistryWrapper.WrapperLookup registryLookup) {
-		cannibalLevel = tag.getInt("CannibalLevel", 0);
+	public void readData(ReadView readView) {
+		cannibalLevel = readView.getInt("CannibalLevel", 0);
 	}
 
 	@Override
-	public void writeToNbt(NbtCompound tag, RegistryWrapper.WrapperLookup registryLookup) {
-		tag.putInt("CannibalLevel", cannibalLevel);
+	public void writeData(WriteView writeView) {
+		writeView.putInt("CannibalLevel", cannibalLevel);
 	}
 
 	public void sync() {
@@ -81,14 +81,8 @@ public class CannibalLevelComponent implements AutoSyncedComponent {
 	}
 
 	public void updateAttributes() {
-		if (obj.getWorld() instanceof ServerWorld serverWorld) {
-			// todo check if needed
-			for (EquipmentSlot slot : EquipmentSlot.values()) {
-				ItemStack stack = obj.getEquippedStack(slot);
-				if (cannotEquip(stack)) {
-					obj.dropStack(serverWorld, stack.copyAndEmpty());
-				}
-			}
+		if (!obj.getWorld().isClient) {
+			PreventEquipmentUsageEvent.triggerEquipmentCheck(obj);
 			obj.getAttributeInstance(EntityAttributes.ATTACK_DAMAGE).removeModifier(ATTACK_DAMAGE_ID);
 			obj.getAttributeInstance(EntityAttributes.ARMOR).removeModifier(ARMOR_ID);
 			obj.getAttributeInstance(EntityAttributes.KNOCKBACK_RESISTANCE).removeModifier(KNOCKBACK_RESISTANCE_ID);

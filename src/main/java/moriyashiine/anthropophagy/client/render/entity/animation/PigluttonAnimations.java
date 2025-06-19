@@ -3,13 +3,13 @@
  */
 package moriyashiine.anthropophagy.client.render.entity.animation;
 
-import net.minecraft.client.render.entity.animation.Animation;
+import net.minecraft.client.render.entity.animation.AnimationDefinition;
 import net.minecraft.client.render.entity.animation.AnimationHelper;
 import net.minecraft.client.render.entity.animation.Keyframe;
 import net.minecraft.client.render.entity.animation.Transformation;
 
 public class PigluttonAnimations {
-	public static final Animation IDLE = Animation.Builder.create(1.0F).looping()
+	public static final AnimationDefinition IDLE = AnimationDefinition.Builder.create(1.0F).looping()
 			.addBoneAnimation("body", new Transformation(Transformation.Targets.MOVE_ORIGIN,
 					new Keyframe(0.0F, AnimationHelper.createTranslationalVector(0.0F, 0.0F, 0.0F), Transformation.Interpolations.LINEAR),
 					new Keyframe(0.5F, AnimationHelper.createTranslationalVector(0.0F, 0.25F, 0.0F), Transformation.Interpolations.LINEAR),
@@ -101,12 +101,7 @@ public class PigluttonAnimations {
 			))
 			.build();
 
-	public static final Animation WALK = Animation.Builder.create(1.0F).looping()
-			.addBoneAnimation("hog", new Transformation(Transformation.Targets.MOVE_ORIGIN,
-					new Keyframe(0.0F, AnimationHelper.createTranslationalVector(0.0F, 0.0F, 0.0F), Transformation.Interpolations.LINEAR),
-					new Keyframe(0.5F, AnimationHelper.createTranslationalVector(0.0F, 1.0F, 0.0F), Transformation.Interpolations.LINEAR),
-					new Keyframe(1.0F, AnimationHelper.createTranslationalVector(0.0F, 0.0F, 0.0F), Transformation.Interpolations.LINEAR)
-			))
+	public static final AnimationDefinition WALK = AnimationDefinition.Builder.create(1.0F).looping()
 			.addBoneAnimation("body", new Transformation(Transformation.Targets.ROTATE,
 					new Keyframe(0.0F, AnimationHelper.createRotationalVector(0.0F, 0.0F, 0.0F), Transformation.Interpolations.LINEAR),
 					new Keyframe(0.1667F, AnimationHelper.createRotationalVector(0.0F, 2.6F, 0.0F), Transformation.Interpolations.LINEAR),
@@ -283,7 +278,7 @@ public class PigluttonAnimations {
 			))
 			.build();
 
-	public static final Animation ATTACK_LEFT = Animation.Builder.create(0.75F)
+	public static final AnimationDefinition ATTACK_LEFT = AnimationDefinition.Builder.create(0.75F)
 			.addBoneAnimation("breathingRig", new Transformation(Transformation.Targets.ROTATE,
 					new Keyframe(0.0F, AnimationHelper.createRotationalVector(0.0F, 0.0F, 0.0F), Transformation.Interpolations.LINEAR),
 					new Keyframe(0.125F, AnimationHelper.createRotationalVector(0.0F, -7.5F, 0.0F), Transformation.Interpolations.LINEAR),
@@ -331,7 +326,7 @@ public class PigluttonAnimations {
 			))
 			.build();
 
-	public static final Animation ATTACK_RIGHT = Animation.Builder.create(0.75F)
+	public static final AnimationDefinition ATTACK_RIGHT = AnimationDefinition.Builder.create(0.75F)
 			.addBoneAnimation("breathingRig", new Transformation(Transformation.Targets.ROTATE,
 					new Keyframe(0.0F, AnimationHelper.createRotationalVector(0.0F, 0.0F, 0.0F), Transformation.Interpolations.LINEAR),
 					new Keyframe(0.125F, AnimationHelper.createRotationalVector(0.0F, 7.5F, 0.0F), Transformation.Interpolations.LINEAR),
@@ -379,7 +374,7 @@ public class PigluttonAnimations {
 			))
 			.build();
 
-	public static final Animation ATTACK_TUSKS = Animation.Builder.create(0.75F)
+	public static final AnimationDefinition ATTACK_TUSKS = AnimationDefinition.Builder.create(0.75F)
 			.addBoneAnimation("neck", new Transformation(Transformation.Targets.ROTATE,
 					new Keyframe(0.0F, AnimationHelper.createRotationalVector(0.0F, 0.0F, 0.0F), Transformation.Interpolations.LINEAR),
 					new Keyframe(0.2083F, AnimationHelper.createRotationalVector(20.0F, 0.0F, 0.0F), Transformation.Interpolations.LINEAR),
@@ -400,7 +395,7 @@ public class PigluttonAnimations {
 			))
 			.build();
 
-	public static final Animation EAT = Animation.Builder.create(2.0833F)
+	public static final AnimationDefinition EAT = AnimationDefinition.Builder.create(2.0833F)
 			.addBoneAnimation("head", new Transformation(Transformation.Targets.ROTATE,
 					new Keyframe(0.0F, AnimationHelper.createRotationalVector(0.0F, 0.0F, 0.0F), Transformation.Interpolations.LINEAR),
 					new Keyframe(0.25F, AnimationHelper.createRotationalVector(15.0F, 10.0F, 0.0F), Transformation.Interpolations.LINEAR),

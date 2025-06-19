@@ -7,6 +7,7 @@ import moriyashiine.anthropophagy.client.render.entity.animation.PigluttonAnimat
 import moriyashiine.anthropophagy.client.render.entity.state.PigluttonEntityRenderState;
 import moriyashiine.anthropophagy.common.Anthropophagy;
 import net.minecraft.client.model.*;
+import net.minecraft.client.render.entity.animation.Animation;
 import net.minecraft.client.render.entity.model.EntityModel;
 import net.minecraft.client.render.entity.model.EntityModelLayer;
 import net.minecraft.client.render.entity.model.ModelWithArms;
@@ -19,11 +20,25 @@ public class PigluttonEntityModel extends EntityModel<PigluttonEntityRenderState
 	private final ModelPart neck;
 	private final ModelPart[] heldItemTranslations;
 
+	private final Animation idleAnimation;
+	private final Animation walkAnimation;
+	private final Animation attackLeftAnimation;
+	private final Animation attackRightAnimation;
+	private final Animation attackTusksAnimation;
+	private final Animation eatAnimation;
+
 	public PigluttonEntityModel(ModelPart root) {
 		super(root);
 		neck = root.getChild("body").getChild("neck");
 		ModelPart rArm01 = root.getChild("rArm01");
 		heldItemTranslations = new ModelPart[]{rArm01, rArm01.getChild("rArm02"), rArm01.getChild("rArm02").getChild("rHandHoof01")};
+
+		idleAnimation = PigluttonAnimations.IDLE.createAnimation(root);
+		walkAnimation = PigluttonAnimations.WALK.createAnimation(root);
+		attackLeftAnimation = PigluttonAnimations.ATTACK_LEFT.createAnimation(root);
+		attackRightAnimation = PigluttonAnimations.ATTACK_RIGHT.createAnimation(root);
+		attackTusksAnimation = PigluttonAnimations.ATTACK_TUSKS.createAnimation(root);
+		eatAnimation = PigluttonAnimations.EAT.createAnimation(root);
 	}
 
 	public static TexturedModelData getTexturedModelData() {
@@ -73,12 +88,12 @@ public class PigluttonEntityModel extends EntityModel<PigluttonEntityRenderState
 			neck.pitch = (float) Math.toRadians(state.pitch / 2);
 			neck.yaw = (float) Math.toRadians(state.relativeHeadYaw / 2);
 		}
-		animateWalking(PigluttonAnimations.WALK, state.limbSwingAnimationProgress, state.limbSwingAmplitude, 4, 25);
-		animate(state.idleAnimationState, PigluttonAnimations.IDLE, state.age);
-		animate(state.attackLeftAnimationState, PigluttonAnimations.ATTACK_LEFT, state.age);
-		animate(state.attackRightAnimationState, PigluttonAnimations.ATTACK_RIGHT, state.age);
-		animate(state.attackTusksAnimationState, PigluttonAnimations.ATTACK_TUSKS, state.age);
-		animate(state.eatAnimationState, PigluttonAnimations.EAT, state.age, 0.4F);
+		walkAnimation.applyWalking(state.limbSwingAnimationProgress, state.limbSwingAmplitude, 4, 25);
+		idleAnimation.apply(state.idleAnimationState, state.age);
+		attackLeftAnimation.apply(state.attackLeftAnimationState, state.age);
+		attackRightAnimation.apply(state.attackRightAnimationState, state.age);
+		attackTusksAnimation.apply(state.attackTusksAnimationState, state.age);
+		eatAnimation.apply(state.eatAnimationState, state.age, 0.4F);
 	}
 
 	@Override

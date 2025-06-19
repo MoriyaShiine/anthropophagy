@@ -24,10 +24,11 @@ import net.minecraft.entity.data.TrackedData;
 import net.minecraft.entity.data.TrackedDataHandlerRegistry;
 import net.minecraft.entity.mob.HostileEntity;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.nbt.NbtCompound;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvent;
+import net.minecraft.storage.ReadView;
+import net.minecraft.storage.WriteView;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Box;
 import net.minecraft.util.math.MathHelper;
@@ -79,27 +80,27 @@ public class PigluttonEntity extends HostileEntity {
 	}
 
 	@Override
-	public void readCustomDataFromNbt(NbtCompound nbt) {
-		super.readCustomDataFromNbt(nbt);
-		setEating(nbt.getBoolean("Eating", false));
-		setAttackIndex(nbt.getInt("AttackIndex", 0));
-		canAttack = nbt.getBoolean("CanAttack", false);
-		damageTaken = nbt.getFloat("DamageTaken", 0);
-		overhealAmount = nbt.getInt("OverhealAmount", 0);
-		stalkTicks = nbt.getInt("StalkTicks", 0);
-		fleeingTicks = nbt.getInt("FleeingTicks", 0);
+	protected void readCustomData(ReadView view) {
+		super.readCustomData(view);
+		setEating(view.getBoolean("Eating", false));
+		setAttackIndex(view.getInt("AttackIndex", 0));
+		canAttack = view.getBoolean("CanAttack", false);
+		damageTaken = view.getFloat("DamageTaken", 0);
+		overhealAmount = view.getInt("OverhealAmount", 0);
+		stalkTicks = view.getInt("StalkTicks", 0);
+		fleeingTicks = view.getInt("FleeingTicks", 0);
 	}
 
 	@Override
-	public void writeCustomDataToNbt(NbtCompound nbt) {
-		super.writeCustomDataToNbt(nbt);
-		nbt.putBoolean("Eating", isEating());
-		nbt.putInt("AttackIndex", getAttackIndex());
-		nbt.putBoolean("CanAttack", canAttack);
-		nbt.putFloat("DamageTaken", damageTaken);
-		nbt.putInt("OverhealAmount", overhealAmount);
-		nbt.putInt("StalkTicks", stalkTicks);
-		nbt.putInt("FleeingTicks", fleeingTicks);
+	protected void writeCustomData(WriteView view) {
+		super.writeCustomData(view);
+		view.putBoolean("Eating", isEating());
+		view.putInt("AttackIndex", getAttackIndex());
+		view.putBoolean("CanAttack", canAttack);
+		view.putFloat("DamageTaken", damageTaken);
+		view.putInt("OverhealAmount", overhealAmount);
+		view.putInt("StalkTicks", stalkTicks);
+		view.putInt("FleeingTicks", fleeingTicks);
 	}
 
 	@Override

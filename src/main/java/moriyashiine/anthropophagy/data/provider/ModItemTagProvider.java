@@ -20,25 +20,25 @@ public class ModItemTagProvider extends FabricTagProvider.ItemTagProvider {
 
 	@Override
 	protected void configure(RegistryWrapper.WrapperLookup arg) {
-		getOrCreateTagBuilder(ModItemTags.KNIVES)
+		valueLookupBuilder(ModItemTags.KNIVES)
 				.add(ModItems.WOODEN_KNIFE)
 				.add(ModItems.STONE_KNIFE)
 				.add(ModItems.IRON_KNIFE)
 				.add(ModItems.GOLDEN_KNIFE)
 				.add(ModItems.DIAMOND_KNIFE)
 				.add(ModItems.NETHERITE_KNIFE);
-		getOrCreateTagBuilder(ModItemTags.FLESH)
+		valueLookupBuilder(ModItemTags.FLESH)
 				.add(ModItems.FLESH)
 				.add(ModItems.COOKED_FLESH)
 				.add(ModItems.CORRUPT_FLESH)
 				.add(ModItems.PIGLUTTON_HEART)
 				.add(ModItems.TETHERED_HEART);
 
-		getOrCreateTagBuilder(ItemTags.MEAT)
+		valueLookupBuilder(ItemTags.MEAT)
 				.addOptionalTag(ModItemTags.FLESH);
-		getOrCreateTagBuilder(ItemTags.PIGLIN_LOVED)
+		valueLookupBuilder(ItemTags.PIGLIN_LOVED)
 				.add(ModItems.GOLDEN_KNIFE);
-		getOrCreateTagBuilder(ItemTags.SWORDS)
+		valueLookupBuilder(ItemTags.SWORDS)
 				.add(ModItems.WOODEN_KNIFE)
 				.add(ModItems.STONE_KNIFE)
 				.add(ModItems.IRON_KNIFE)
@@ -46,12 +46,12 @@ public class ModItemTagProvider extends FabricTagProvider.ItemTagProvider {
 				.add(ModItems.DIAMOND_KNIFE)
 				.add(ModItems.NETHERITE_KNIFE);
 
-		getOrCreateTagBuilder(ConventionalItemTags.RAW_MEAT_FOODS)
+		valueLookupBuilder(ConventionalItemTags.RAW_MEAT_FOODS)
 				.add(ModItems.FLESH)
 				.add(ModItems.CORRUPT_FLESH)
 				.add(ModItems.PIGLUTTON_HEART)
 				.add(ModItems.TETHERED_HEART);
-		getOrCreateTagBuilder(ConventionalItemTags.COOKED_MEAT_FOODS)
+		valueLookupBuilder(ConventionalItemTags.COOKED_MEAT_FOODS)
 				.add(ModItems.COOKED_FLESH);
 	}
 }
