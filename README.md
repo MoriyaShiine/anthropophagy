@@ -1,7 +1,12 @@
-# Anthropophagy
-[Inspired by the old Cannibalism mod.](https://www.curseforge.com/minecraft/mc-mods/cannibalism)
+<div align="center">
+  <h1>Anthropophagy</h1>
+  <a href="https://modrinth.com/mod/strawberrylib"><img src="https://github.com/ContentSMP/Badges/raw/refs/heads/main/strawberrylib/cozy_vector.svg"></a>
+  <a href="https://discord.gg/Am6M8VQ"><img src="https://github.com/intergrav/devins-badges/raw/refs/heads/v3/assets/cozy/social/discord-singular_vector.svg"></a>
+  <a href="https://ko-fi.com/moriyashiine"><img src="https://github.com/intergrav/devins-badges/raw/refs/heads/v3/assets/cozy/donate/kofi-singular_vector.svg"></a>
+  <h3>Adds a new way of obtaining food: people!</h3>
+</div>
 
-This mod adds a new way of obtaining food: people!
+[Inspired by the old Cannibalism mod.](https://www.curseforge.com/minecraft/mc-mods/cannibalism)
 
 This mod adds a new type of weapon: the knife. It deals less damage than swords and reduces your attack reach, but they
 attack faster. Another function of the knife is that attacking valid entities with it will make them drop flesh, and it
