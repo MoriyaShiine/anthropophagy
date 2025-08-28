@@ -50,7 +50,7 @@ public class Anthropophagy implements ModInitializer {
 	}
 
 	private void initEvents() {
-		ServerLivingEntityEvents.ALLOW_DAMAGE.register(new DropFleshEvent());
+		ServerLivingEntityEvents.AFTER_DAMAGE.register(new DropFleshEvent());
 		PreventEquipmentUsageEvent.EVENT.register(new CannibalEquipmentEvent());
 		ModifyJumpVelocityEvent.EVENT.register(new CannibalJumpBoostEvent());
 		EatFoodEvent.EVENT.register(new CannibalEatingEvent());
