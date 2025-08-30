@@ -31,7 +31,7 @@ public class KnifeItem extends Item {
 
 	@Override
 	public ActionResult use(World world, PlayerEntity user, Hand hand) {
-		if (user.isSneaking()) {
+		if (user.hurtTime == 0 && user.isSneaking()) {
 			user.attack(user);
 			TetheredComponent tetheredComponent = ModEntityComponents.TETHERED.get(user);
 			if (tetheredComponent.isTethered()) {
