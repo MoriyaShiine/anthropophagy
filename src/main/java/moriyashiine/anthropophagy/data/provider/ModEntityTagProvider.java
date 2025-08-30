@@ -20,7 +20,7 @@ public class ModEntityTagProvider extends FabricTagProvider.EntityTypeTagProvide
 	@Override
 	protected void configure(RegistryWrapper.WrapperLookup arg) {
 		valueLookupBuilder(ModEntityTypeTags.PIGLUTTON_TARGETS)
-				.addOptionalTag(EntityTypeTags.ILLAGER)
+				.forceAddTag(EntityTypeTags.ILLAGER)
 				.add(EntityType.PIGLIN)
 				.add(EntityType.PIGLIN_BRUTE)
 				.add(EntityType.PLAYER)

@@ -35,7 +35,7 @@ public class ModItemTagProvider extends FabricTagProvider.ItemTagProvider {
 				.add(ModItems.TETHERED_HEART);
 
 		valueLookupBuilder(ItemTags.MEAT)
-				.addOptionalTag(ModItemTags.FLESH);
+				.addTag(ModItemTags.FLESH);
 		valueLookupBuilder(ItemTags.PIGLIN_LOVED)
 				.add(ModItems.GOLDEN_KNIFE);
 		valueLookupBuilder(ItemTags.SWORDS)

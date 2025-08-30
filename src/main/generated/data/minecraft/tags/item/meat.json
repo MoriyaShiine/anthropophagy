@@ -1,8 +1,5 @@
 {
   "values": [
-	{
-	  "id": "#anthropophagy:flesh",
-	  "required": false
-	}
+	"#anthropophagy:flesh"
   ]
 }

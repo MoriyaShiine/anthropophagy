@@ -1,9 +1,6 @@
 {
   "values": [
-	{
-	  "id": "#minecraft:illager",
-	  "required": false
-	},
+	"#minecraft:illager",
 	"minecraft:piglin",
 	"minecraft:piglin_brute",
 	"minecraft:player",

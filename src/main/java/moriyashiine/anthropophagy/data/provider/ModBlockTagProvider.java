@@ -19,9 +19,9 @@ public class ModBlockTagProvider extends FabricTagProvider.BlockTagProvider {
 	@Override
 	protected void configure(RegistryWrapper.WrapperLookup arg) {
 		valueLookupBuilder(ModBlockTags.PIGLUTTON_BREAKABLE)
-				.addOptionalTag(BlockTags.FENCE_GATES)
-				.addOptionalTag(BlockTags.LOGS)
-				.addOptionalTag(BlockTags.PLANKS)
-				.addOptionalTag(BlockTags.WOODEN_FENCES);
+				.forceAddTag(BlockTags.FENCE_GATES)
+				.forceAddTag(BlockTags.LOGS)
+				.forceAddTag(BlockTags.PLANKS)
+				.forceAddTag(BlockTags.WOODEN_FENCES);
 	}
 }
