@@ -21,7 +21,7 @@ import net.minecraft.server.world.ServerWorld;
 public class DropFleshEvent implements ServerLivingEntityEvents.AfterDamage {
 	@Override
 	public void afterDamage(LivingEntity entity, DamageSource source, float baseDamageTaken, float damageTaken, boolean blocked) {
-		if (SLibUtils.currentAttackCooldown == -1 || !(SLibUtils.currentAttackCooldown < 0.7F)) {
+		if (SLibUtils.isAttackingPlayerCooldownWithinThreshold(0.7F)) {
 			if (source.getSource() instanceof LivingEntity living && (living.getMainHandStack().isIn(ModItemTags.KNIVES) || source.getAttacker() instanceof PigluttonEntity)) {
 				boolean dropCooked = entity.getFireTicks() > 0 || EnchantmentHelper.hasAnyEnchantmentsIn(living.getMainHandStack(), EnchantmentTags.SMELTS_LOOT);
 				for (EntityType<?> entityType : FleshDropEntry.DROP_MAP.keySet()) {
