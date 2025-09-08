@@ -2,6 +2,7 @@
 Version 1.21.8-r1
 ------------------------------------------------------
 - update to 1.21.8
+- update to latest strawberrylib
 - knives can now only be used on yourself when hurt time is 0
 - clean up tags
 
