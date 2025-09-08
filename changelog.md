@@ -2,6 +2,8 @@
 Version 1.21.8-r1
 ------------------------------------------------------
 - update to 1.21.8
+- knives can now only be used on yourself when hurt time is 0
+- clean up tags
 
 ------------------------------------------------------
 Version 1.21.6-r1
