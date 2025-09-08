@@ -56,7 +56,6 @@ public class ModItems {
 
 			entries.add(PIGLUTTON_SPAWN_EGG);
 		}).build());
-
 		ItemGroupEvents.modifyEntriesEvent(ItemGroups.SPAWN_EGGS).register(entries -> entries.add(PIGLUTTON_SPAWN_EGG));
 	}
 }

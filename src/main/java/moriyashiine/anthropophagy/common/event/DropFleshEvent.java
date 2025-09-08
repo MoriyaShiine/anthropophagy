@@ -8,8 +8,8 @@ import moriyashiine.anthropophagy.common.entity.PigluttonEntity;
 import moriyashiine.anthropophagy.common.item.FleshItem;
 import moriyashiine.anthropophagy.common.tag.ModItemTags;
 import moriyashiine.anthropophagy.common.util.FleshDropEntry;
+import moriyashiine.strawberrylib.api.event.AfterDamageIncludingDeathEvent;
 import moriyashiine.strawberrylib.api.module.SLibUtils;
-import net.fabricmc.fabric.api.entity.event.v1.ServerLivingEntityEvents;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
@@ -18,7 +18,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.registry.tag.EnchantmentTags;
 import net.minecraft.server.world.ServerWorld;
 
-public class DropFleshEvent implements ServerLivingEntityEvents.AfterDamage {
+public class DropFleshEvent implements AfterDamageIncludingDeathEvent {
 	@Override
 	public void afterDamage(LivingEntity entity, DamageSource source, float baseDamageTaken, float damageTaken, boolean blocked) {
 		if (SLibUtils.isAttackingPlayerCooldownWithinThreshold(0.7F)) {

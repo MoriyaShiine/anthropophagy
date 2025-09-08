@@ -11,12 +11,12 @@ import moriyashiine.anthropophagy.common.init.ModItems;
 import moriyashiine.anthropophagy.common.init.ModSoundEvents;
 import moriyashiine.anthropophagy.common.reloadlisteners.FleshDropsReloadListener;
 import moriyashiine.strawberrylib.api.SLib;
+import moriyashiine.strawberrylib.api.event.AfterDamageIncludingDeathEvent;
 import moriyashiine.strawberrylib.api.event.EatFoodEvent;
-import moriyashiine.strawberrylib.api.event.ModifyJumpVelocityEvent;
+import moriyashiine.strawberrylib.api.event.ModifyMovementEvents;
 import moriyashiine.strawberrylib.api.event.PreventEquipmentUsageEvent;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.entity.event.v1.EntitySleepEvents;
-import net.fabricmc.fabric.api.entity.event.v1.ServerLivingEntityEvents;
 import net.fabricmc.fabric.api.entity.event.v1.ServerPlayerEvents;
 import net.fabricmc.fabric.api.resource.ResourceManagerHelper;
 import net.minecraft.resource.ResourceType;
@@ -50,9 +50,9 @@ public class Anthropophagy implements ModInitializer {
 	}
 
 	private void initEvents() {
-		ServerLivingEntityEvents.AFTER_DAMAGE.register(new DropFleshEvent());
+		AfterDamageIncludingDeathEvent.EVENT.register(new DropFleshEvent());
 		PreventEquipmentUsageEvent.EVENT.register(new CannibalEquipmentEvent());
-		ModifyJumpVelocityEvent.EVENT.register(new CannibalJumpBoostEvent());
+		ModifyMovementEvents.JUMP_VELOCITY.register(new CannibalJumpBoostEvent());
 		EatFoodEvent.EVENT.register(new CannibalEatingEvent());
 		ServerPlayerEvents.COPY_FROM.register(new CopyCannibalLevelEvent());
 		EntitySleepEvents.ALLOW_SLEEPING.register(new CannibalSleepEvent());
