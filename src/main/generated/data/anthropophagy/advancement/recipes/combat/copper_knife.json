@@ -1,11 +1,11 @@
 {
   "parent": "minecraft:recipes/root",
   "criteria": {
-	"has_iron_ingot": {
+	"has_copper": {
 	  "conditions": {
 		"items": [
 		  {
-			"items": "#minecraft:iron_tool_materials"
+			"items": "#minecraft:copper_tool_materials"
 		  }
 		]
 	  },
@@ -13,7 +13,7 @@
 	},
 	"has_the_recipe": {
 	  "conditions": {
-		"recipe": "anthropophagy:iron_knife"
+		"recipe": "anthropophagy:copper_knife"
 	  },
 	  "trigger": "minecraft:recipe_unlocked"
 	}
@@ -21,12 +21,12 @@
   "requirements": [
 	[
 	  "has_the_recipe",
-	  "has_iron_ingot"
+	  "has_copper"
 	]
   ],
   "rewards": {
 	"recipes": [
-	  "anthropophagy:iron_knife"
+	  "anthropophagy:copper_knife"
 	]
   }
 }

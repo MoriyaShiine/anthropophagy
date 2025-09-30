@@ -20,6 +20,7 @@ public class ModItems {
 
 	public static final Item WOODEN_KNIFE = registerItem("wooden_knife", settings -> new KnifeItem(ToolMaterial.WOOD, settings));
 	public static final Item STONE_KNIFE = registerItem("stone_knife", settings -> new KnifeItem(ToolMaterial.STONE, settings));
+	public static final Item COPPER_KNIFE = registerItem("copper_knife", settings -> new KnifeItem(ToolMaterial.COPPER, settings));
 	public static final Item IRON_KNIFE = registerItem("iron_knife", settings -> new KnifeItem(ToolMaterial.IRON, settings));
 	public static final Item GOLDEN_KNIFE = registerItem("golden_knife", settings -> new KnifeItem(ToolMaterial.GOLD, settings));
 	public static final Item DIAMOND_KNIFE = registerItem("diamond_knife", settings -> new KnifeItem(ToolMaterial.DIAMOND, settings));
@@ -42,6 +43,7 @@ public class ModItems {
 		GROUP = registerItemGroup(FabricItemGroup.builder().displayName(Text.translatable("itemGroup." + Anthropophagy.MOD_ID)).icon(ModItems.IRON_KNIFE::getDefaultStack).entries((displayContext, entries) -> {
 			entries.add(WOODEN_KNIFE);
 			entries.add(STONE_KNIFE);
+			entries.add(COPPER_KNIFE);
 			entries.add(IRON_KNIFE);
 			entries.add(GOLDEN_KNIFE);
 			entries.add(DIAMOND_KNIFE);

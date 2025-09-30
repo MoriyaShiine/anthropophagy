@@ -2,11 +2,11 @@
   "type": "minecraft:crafting_shaped",
   "category": "equipment",
   "key": {
-	"I": "#minecraft:stone_tool_materials",
+	"M": "#minecraft:stone_tool_materials",
 	"S": "minecraft:stick"
   },
   "pattern": [
-	" I",
+	" M",
 	"S "
   ],
   "result": {
