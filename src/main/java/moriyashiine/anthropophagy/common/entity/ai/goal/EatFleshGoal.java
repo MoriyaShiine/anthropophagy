@@ -8,7 +8,6 @@ import moriyashiine.anthropophagy.common.init.ModItems;
 import moriyashiine.anthropophagy.common.item.FleshItem;
 import moriyashiine.anthropophagy.common.tag.ModItemTags;
 import moriyashiine.strawberrylib.api.module.SLibUtils;
-import moriyashiine.strawberrylib.api.objects.enums.ParticleAnchor;
 import net.minecraft.component.DataComponentTypes;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.ItemEntity;
@@ -51,11 +50,11 @@ public class EatFleshGoal extends Goal {
 		if (closestFleshItem != null) {
 			mob.getNavigation().startMovingTo(closestFleshItem, 1);
 			if (mob.distanceTo(closestFleshItem) < mob.getWidth()) {
-				if (mob.getWorld() instanceof ServerWorld serverWorld) {
+				if (mob.getEntityWorld() instanceof ServerWorld serverWorld) {
 					ItemStack flesh = closestFleshItem.getStack().split(1);
 					if (isTargetFlesh(flesh)) {
 						heal(serverWorld, mob, flesh, false);
-						playEffects(mob, flesh, closestFleshItem.getPos());
+						playEffects(mob, flesh, closestFleshItem.getEntityPos());
 					} else {
 						mob.setStackInHand(Hand.MAIN_HAND, flesh);
 						mob.setEating(true);
@@ -67,7 +66,7 @@ public class EatFleshGoal extends Goal {
 
 	@Nullable
 	public static ItemEntity getNearestFlesh(PathAwareEntity mob) {
-		List<ItemEntity> drops = mob.getWorld().getEntitiesByType(EntityType.ITEM, mob.getBoundingBox().expand(10, 4, 10), foundEntity -> foundEntity.getStack().isIn(ModItemTags.FLESH) && !foundEntity.getStack().isOf(ModItems.CORRUPT_FLESH));
+		List<ItemEntity> drops = mob.getEntityWorld().getEntitiesByType(EntityType.ITEM, mob.getBoundingBox().expand(10, 4, 10), foundEntity -> foundEntity.getStack().isIn(ModItemTags.FLESH) && !foundEntity.getStack().isOf(ModItems.CORRUPT_FLESH));
 		if (drops.isEmpty()) {
 			return null;
 		}
@@ -86,7 +85,7 @@ public class EatFleshGoal extends Goal {
 		if (allowOverhaul && mob.getHealth() >= mob.getMaxHealth()) {
 			mob.overhealAmount += healAmount;
 			if (mob.overhealAmount >= OVERHEAL_REQUIRED) {
-				SLibUtils.addParticles(mob, ParticleTypes.SMOKE, 64, ParticleAnchor.BODY);
+				world.spawnParticles(ParticleTypes.SMOKE, mob.getX(), mob.getY() + mob.getHeight() / 2, mob.getZ(), 64, mob.getWidth() / 2, mob.getHeight() / 2, mob.getWidth() / 2, 0);
 				mob.dropItem(world, ModItems.PIGLUTTON_HEART);
 				mob.discard();
 			}
@@ -96,7 +95,7 @@ public class EatFleshGoal extends Goal {
 	}
 
 	public static void playEffects(PigluttonEntity mob, ItemStack stack, Vec3d pos) {
-		((ServerWorld) mob.getWorld()).spawnParticles(new ItemStackParticleEffect(ParticleTypes.ITEM, stack),
+		((ServerWorld) mob.getEntityWorld()).spawnParticles(new ItemStackParticleEffect(ParticleTypes.ITEM, stack),
 				pos.getX(), pos.getY(), pos.getZ(),
 				8,
 				0.125, 0.125, 0.125,

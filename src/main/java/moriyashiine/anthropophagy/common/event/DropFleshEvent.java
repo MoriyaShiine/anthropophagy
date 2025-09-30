@@ -25,13 +25,13 @@ public class DropFleshEvent implements AfterDamageIncludingDeathEvent {
 			if (source.getSource() instanceof LivingEntity living && (living.getMainHandStack().isIn(ModItemTags.KNIVES) || source.getAttacker() instanceof PigluttonEntity)) {
 				boolean dropCooked = entity.getFireTicks() > 0 || EnchantmentHelper.hasAnyEnchantmentsIn(living.getMainHandStack(), EnchantmentTags.SMELTS_LOOT);
 				for (EntityType<?> entityType : FleshDropEntry.DROP_MAP.keySet()) {
-					if (entity.getType() == entityType && entity.getWorld().getRandom().nextFloat() * ModConfig.damageNeededForGuaranteedFleshDrop < damageTaken) {
+					if (entity.getType() == entityType && entity.getRandom().nextFloat() * ModConfig.damageNeededForGuaranteedFleshDrop < damageTaken) {
 						FleshDropEntry entry = FleshDropEntry.DROP_MAP.get(entityType);
 						ItemStack drop = new ItemStack(dropCooked ? entry.cooked_drop() : entry.raw_drop());
 						if (drop.getItem() instanceof FleshItem) {
 							FleshItem.setOwner(drop, entity);
 						}
-						entity.dropStack((ServerWorld) entity.getWorld(), drop).setPickupDelay(40);
+						entity.dropStack((ServerWorld) entity.getEntityWorld(), drop).setPickupDelay(40);
 					}
 				}
 			}

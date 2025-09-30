@@ -58,7 +58,7 @@ public class PigluttonEntity extends HostileEntity {
 
 	public PigluttonEntity(EntityType<? extends HostileEntity> entityType, World world) {
 		super(entityType, world);
-		navigation = new BetterMobNavigation(this, getWorld(), 3);
+		navigation = new BetterMobNavigation(this, getEntityWorld(), 3);
 		experiencePoints = 30;
 		setPathfindingPenalty(PathNodeType.LEAVES, 0);
 		setPathfindingPenalty(PathNodeType.WATER, -1);
@@ -127,7 +127,7 @@ public class PigluttonEntity extends HostileEntity {
 	@Override
 	public void tick() {
 		super.tick();
-		if (getWorld().isClient) {
+		if (getEntityWorld().isClient()) {
 			idleAnimationState.startIfNotRunning(age);
 			int index = getAttackIndex();
 			attackLeftAnimationState.setRunning(attackTicks > 0 && index == 0, age);
@@ -141,7 +141,7 @@ public class PigluttonEntity extends HostileEntity {
 	protected void mobTick(ServerWorld world) {
 		super.mobTick(world);
 		if (fleeingTicks > 0 && --fleeingTicks % 20 == 0) {
-			getWorld().playSound(null, getBlockPos(), ModSoundEvents.ENTITY_PIGLUTTON_FLEE, getSoundCategory(), getSoundVolume() * 4, getSoundPitch());
+			getEntityWorld().playSound(null, getBlockPos(), ModSoundEvents.ENTITY_PIGLUTTON_FLEE, getSoundCategory(), getSoundVolume() * 4, getSoundPitch());
 		}
 		if (attackTicks > 0 && --attackTicks == 0 && getTarget() != null && distanceTo(getTarget()) < 4.5 * getScale()) {
 			tryAttack(world, getTarget());
@@ -166,13 +166,13 @@ public class PigluttonEntity extends HostileEntity {
 	@Override
 	public void tickMovement() {
 		super.tickMovement();
-		if (getWorld() instanceof ServerWorld serverWorld && (horizontalCollision || (verticalCollision && !groundCollision)) && serverWorld.getGameRules().getBoolean(GameRules.DO_MOB_GRIEFING)) {
+		if (getEntityWorld() instanceof ServerWorld world && (horizontalCollision || (verticalCollision && !groundCollision)) && world.getGameRules().getBoolean(GameRules.DO_MOB_GRIEFING)) {
 			Box box = getBoundingBox().expand(0.2);
 			for (BlockPos pos : BlockPos.iterate(MathHelper.floor(box.minX), MathHelper.floor(box.minY), MathHelper.floor(box.minZ), MathHelper.floor(box.maxX), MathHelper.floor(box.maxY), MathHelper.floor(box.maxZ))) {
-				BlockState state = serverWorld.getBlockState(pos);
-				float hardness = state.getHardness(serverWorld, pos);
+				BlockState state = world.getBlockState(pos);
+				float hardness = state.getHardness(world, pos);
 				if (hardness >= 0 && (hardness < 0.5F || state.isIn(ModBlockTags.PIGLUTTON_BREAKABLE))) {
-					serverWorld.breakBlock(pos, true);
+					world.breakBlock(pos, true);
 				}
 			}
 		}
@@ -297,7 +297,7 @@ public class PigluttonEntity extends HostileEntity {
 	}
 
 	public static void attemptSpawn(LivingEntity living, int cannibalLevel, boolean ownFlesh) {
-		if (living.getWorld().isClient) {
+		if (living.getEntityWorld().isClient()) {
 			return;
 		}
 		float chance = (Math.min(90, cannibalLevel) - 40) / 800F;
@@ -305,7 +305,7 @@ public class PigluttonEntity extends HostileEntity {
 			chance *= 3;
 		}
 		if (living.getRandom().nextFloat() < chance) {
-			PigluttonEntity piglutton = ModEntityTypes.PIGLUTTON.create(living.getWorld(), SpawnReason.TRIGGERED);
+			PigluttonEntity piglutton = ModEntityTypes.PIGLUTTON.create(living.getEntityWorld(), SpawnReason.TRIGGERED);
 			if (piglutton != null) {
 				final int minH = 16, maxH = 32;
 				for (int i = 0; i < 8; i++) {
@@ -313,9 +313,9 @@ public class PigluttonEntity extends HostileEntity {
 					int dY = living.getRandom().nextBetween(-6, 6);
 					int dZ = living.getRandom().nextBetween(minH, maxH) * (living.getRandom().nextBoolean() ? 1 : -1);
 					if (piglutton.teleport(living.getX() + dX, living.getY() + dY, living.getZ() + dZ, false)) {
-						living.getWorld().spawnEntity(piglutton);
+						living.getEntityWorld().spawnEntity(piglutton);
 						piglutton.setTarget(living);
-						living.getWorld().playSoundFromEntity(null, piglutton, ModSoundEvents.ENTITY_PIGLUTTON_SPAWN, SoundCategory.HOSTILE, 3, 1);
+						living.getEntityWorld().playSoundFromEntity(null, piglutton, ModSoundEvents.ENTITY_PIGLUTTON_SPAWN, SoundCategory.HOSTILE, 3, 1);
 						return;
 					}
 				}

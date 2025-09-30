@@ -32,7 +32,7 @@ public class ModItems {
 	public static final Item PIGLUTTON_HEART = registerItem("piglutton_heart", FleshItem::new, settings().food(ModFoodComponents.COOKED_FLESH));
 	public static final Item TETHERED_HEART = registerItem("tethered_heart", TetheredHeartItem::new, settings().food(ModFoodComponents.TETHERED_HEART));
 
-	public static final Item PIGLUTTON_SPAWN_EGG = registerItem("piglutton_spawn_egg", settings -> new SpawnEggItem(ModEntityTypes.PIGLUTTON, settings));
+	public static final Item PIGLUTTON_SPAWN_EGG = registerItem("piglutton_spawn_egg", SpawnEggItem::new, settings().spawnEgg(ModEntityTypes.PIGLUTTON));
 
 	private static Item.Settings settings() {
 		return new Item.Settings();

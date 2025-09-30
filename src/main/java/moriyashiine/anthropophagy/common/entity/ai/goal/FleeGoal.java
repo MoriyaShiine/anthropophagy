@@ -20,9 +20,9 @@ public class FleeGoal extends Goal {
 	@Override
 	public boolean canStart() {
 		if (mob.isFleeing()) {
-			Vec3d pos = mob.getPos();
+			Vec3d pos = mob.getEntityPos();
 			if (mob.getTarget() != null) {
-				pos = mob.getTarget().getPos();
+				pos = mob.getTarget().getEntityPos();
 			}
 			Vec3d fleePos = NoPenaltyTargeting.findFrom(mob, 6, 7, pos);
 			if (fleePos != null) {

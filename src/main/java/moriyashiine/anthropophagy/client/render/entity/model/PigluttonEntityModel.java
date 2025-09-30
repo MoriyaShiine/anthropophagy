@@ -14,7 +14,7 @@ import net.minecraft.client.render.entity.model.ModelWithArms;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.util.Arm;
 
-public class PigluttonEntityModel extends EntityModel<PigluttonEntityRenderState> implements ModelWithArms {
+public class PigluttonEntityModel extends EntityModel<PigluttonEntityRenderState> implements ModelWithArms<PigluttonEntityRenderState> {
 	public static final EntityModelLayer MODEL_LAYER = new EntityModelLayer(Anthropophagy.id("piglutton"), "main");
 
 	private final ModelPart neck;
@@ -97,7 +97,7 @@ public class PigluttonEntityModel extends EntityModel<PigluttonEntityRenderState
 	}
 
 	@Override
-	public void setArmAngle(Arm arm, MatrixStack matrices) {
+	public void setArmAngle(PigluttonEntityRenderState state, Arm arm, MatrixStack matrices) {
 		for (ModelPart part : heldItemTranslations) {
 			part.applyTransform(matrices);
 		}

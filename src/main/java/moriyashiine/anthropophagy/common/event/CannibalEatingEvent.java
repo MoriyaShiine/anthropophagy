@@ -33,7 +33,7 @@ public class CannibalEatingEvent implements EatFoodEvent {
 					cannibalLevelComponent.setCannibalLevel(Math.min(CannibalLevelComponent.MAX_LEVEL, cannibalLevelComponent.getCannibalLevel() + 2));
 					cannibalLevelComponent.updateAttributes();
 				}
-				if (!world.isClient && cannibalLevelComponent.getCannibalLevel() == 20 || cannibalLevelComponent.getCannibalLevel() == 21) {
+				if (!world.isClient() && cannibalLevelComponent.getCannibalLevel() == 20 || cannibalLevelComponent.getCannibalLevel() == 21) {
 					entity.addStatusEffect(new StatusEffectInstance(StatusEffects.NAUSEA, 200));
 					entity.addStatusEffect(new StatusEffectInstance(StatusEffects.BLINDNESS, 200));
 				}
@@ -46,7 +46,7 @@ public class CannibalEatingEvent implements EatFoodEvent {
 				cannibalLevelComponent.setCannibalLevel(Math.max(0, cannibalLevelComponent.getCannibalLevel() - 1));
 				cannibalLevelComponent.updateAttributes();
 			}
-			if (!world.isClient && cannibalLevelComponent.getCannibalLevel() >= 20) {
+			if (!world.isClient() && cannibalLevelComponent.getCannibalLevel() >= 20) {
 				ModEntityComponents.playerCannibalLevel = cannibalLevelComponent.getCannibalLevel();
 			}
 		}

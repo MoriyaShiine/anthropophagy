@@ -24,7 +24,7 @@ public class BetterMobNavigation extends MobNavigation {
 	@Override
 	public void tick() {
 		BlockPos targetPos = getTargetPos();
-		if (NavigationConditions.isSolidAt(entity, entity.getBlockPos()) && entity.getSteppingBlockState().isFullCube(entity.getWorld(), entity.getSteppingPos())) {
+		if (NavigationConditions.isSolidAt(entity, entity.getBlockPos()) && entity.getSteppingBlockState().isFullCube(entity.getEntityWorld(), entity.getSteppingPos())) {
 			entity.getJumpControl().setActive();
 		}
 		if (isIdle() || targetPos == null) {

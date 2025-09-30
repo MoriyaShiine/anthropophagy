@@ -8,26 +8,19 @@ import com.google.gson.JsonParser;
 import com.google.gson.stream.JsonReader;
 import moriyashiine.anthropophagy.common.Anthropophagy;
 import moriyashiine.anthropophagy.common.util.FleshDropEntry;
-import net.fabricmc.fabric.api.resource.SimpleSynchronousResourceReloadListener;
 import net.minecraft.entity.EntityType;
 import net.minecraft.item.Item;
 import net.minecraft.registry.Registries;
 import net.minecraft.resource.Resource;
 import net.minecraft.resource.ResourceManager;
+import net.minecraft.resource.SynchronousResourceReloader;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.JsonHelper;
 
 import java.io.InputStream;
 import java.io.InputStreamReader;
 
-public class FleshDropsReloadListener implements SimpleSynchronousResourceReloadListener {
-	private static final Identifier ID = Anthropophagy.id("flesh_drops");
-
-	@Override
-	public Identifier getFabricId() {
-		return ID;
-	}
-
+public class FleshDropsReloadListener implements SynchronousResourceReloader {
 	@Override
 	public void reload(ResourceManager manager) {
 		FleshDropEntry.DROP_MAP.clear();

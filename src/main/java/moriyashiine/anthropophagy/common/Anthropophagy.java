@@ -18,7 +18,7 @@ import moriyashiine.strawberrylib.api.event.PreventEquipmentUsageEvent;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.entity.event.v1.EntitySleepEvents;
 import net.fabricmc.fabric.api.entity.event.v1.ServerPlayerEvents;
-import net.fabricmc.fabric.api.resource.ResourceManagerHelper;
+import net.fabricmc.fabric.api.resource.v1.ResourceLoader;
 import net.minecraft.resource.ResourceType;
 import net.minecraft.util.Identifier;
 import org.slf4j.Logger;
@@ -35,7 +35,7 @@ public class Anthropophagy implements ModInitializer {
 		SLib.init(MOD_ID);
 		initRegistries();
 		initEvents();
-		ResourceManagerHelper.get(ResourceType.SERVER_DATA).registerReloadListener(new FleshDropsReloadListener());
+		ResourceLoader.get(ResourceType.SERVER_DATA).registerReloader(id("flesh_drops"), new FleshDropsReloadListener());
 	}
 
 	public static Identifier id(String value) {

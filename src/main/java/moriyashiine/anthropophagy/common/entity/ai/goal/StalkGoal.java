@@ -40,7 +40,7 @@ public class StalkGoal extends Goal {
 			if (++mob.stalkTicks >= MAX_STALK_TICKS || mob.distanceTo(mob.getTarget()) < 12 || mob.getAttacker() != null) {
 				mob.canAttack = true;
 			}
-			mob.lookAt(EntityAnchorArgumentType.EntityAnchor.EYES, mob.getTarget().getPos());
+			mob.lookAt(EntityAnchorArgumentType.EntityAnchor.EYES, mob.getTarget().getEntityPos());
 		} else {
 			mob.canAttack = false;
 			mob.stalkTicks = 0;

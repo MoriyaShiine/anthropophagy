@@ -10,7 +10,7 @@ import moriyashiine.anthropophagy.common.init.ModEntityTypes;
 import moriyashiine.strawberrylib.api.event.client.ModifyNightVisionStrengthEvent;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.client.rendering.v1.EntityModelLayerRegistry;
-import net.fabricmc.fabric.api.client.rendering.v1.EntityRendererRegistry;
+import net.minecraft.client.render.entity.EntityRendererFactories;
 
 public class AnthropophagyClient implements ClientModInitializer {
 	@Override
@@ -21,7 +21,7 @@ public class AnthropophagyClient implements ClientModInitializer {
 
 	private void initEntities() {
 		EntityModelLayerRegistry.registerModelLayer(PigluttonEntityModel.MODEL_LAYER, PigluttonEntityModel::getTexturedModelData);
-		EntityRendererRegistry.register(ModEntityTypes.PIGLUTTON, PigluttonEntityRenderer::new);
+		EntityRendererFactories.register(ModEntityTypes.PIGLUTTON, PigluttonEntityRenderer::new);
 	}
 
 	private void initEvents() {
