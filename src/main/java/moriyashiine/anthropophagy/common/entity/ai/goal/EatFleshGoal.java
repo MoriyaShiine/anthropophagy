@@ -8,6 +8,7 @@ import moriyashiine.anthropophagy.common.init.ModItems;
 import moriyashiine.anthropophagy.common.item.FleshItem;
 import moriyashiine.anthropophagy.common.tag.ModItemTags;
 import moriyashiine.strawberrylib.api.module.SLibUtils;
+import moriyashiine.strawberrylib.api.objects.enums.ParticleAnchor;
 import net.minecraft.component.DataComponentTypes;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.ItemEntity;
@@ -85,7 +86,7 @@ public class EatFleshGoal extends Goal {
 		if (allowOverhaul && mob.getHealth() >= mob.getMaxHealth()) {
 			mob.overhealAmount += healAmount;
 			if (mob.overhealAmount >= OVERHEAL_REQUIRED) {
-				world.spawnParticles(ParticleTypes.SMOKE, mob.getX(), mob.getY() + mob.getHeight() / 2, mob.getZ(), 64, mob.getWidth() / 2, mob.getHeight() / 2, mob.getWidth() / 2, 0);
+				SLibUtils.addParticles(mob, ParticleTypes.SMOKE, 64, ParticleAnchor.BODY);
 				mob.dropItem(world, ModItems.PIGLUTTON_HEART);
 				mob.discard();
 			}
