@@ -9,6 +9,7 @@ import moriyashiine.anthropophagy.common.init.ModEntityTypes;
 import moriyashiine.anthropophagy.common.init.ModSoundEvents;
 import moriyashiine.anthropophagy.common.tag.ModBlockTags;
 import moriyashiine.anthropophagy.common.tag.ModEntityTypeTags;
+import moriyashiine.strawberrylib.api.module.SLibUtils;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.AnimationState;
 import net.minecraft.entity.EntityType;
@@ -25,7 +26,6 @@ import net.minecraft.entity.data.TrackedDataHandlerRegistry;
 import net.minecraft.entity.mob.HostileEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.server.world.ServerWorld;
-import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvent;
 import net.minecraft.storage.ReadView;
 import net.minecraft.storage.WriteView;
@@ -141,7 +141,7 @@ public class PigluttonEntity extends HostileEntity {
 	protected void mobTick(ServerWorld world) {
 		super.mobTick(world);
 		if (fleeingTicks > 0 && --fleeingTicks % 20 == 0) {
-			getEntityWorld().playSound(null, getBlockPos(), ModSoundEvents.ENTITY_PIGLUTTON_FLEE, getSoundCategory(), getSoundVolume() * 4, getSoundPitch());
+			SLibUtils.playSound(this, ModSoundEvents.ENTITY_PIGLUTTON_FLEE, getSoundVolume() * 2, getSoundPitch());
 		}
 		if (attackTicks > 0 && --attackTicks == 0 && getTarget() != null && distanceTo(getTarget()) < 4.5 * getScale()) {
 			tryAttack(world, getTarget());
@@ -315,7 +315,7 @@ public class PigluttonEntity extends HostileEntity {
 					if (piglutton.teleport(living.getX() + dX, living.getY() + dY, living.getZ() + dZ, false)) {
 						living.getEntityWorld().spawnEntity(piglutton);
 						piglutton.setTarget(living);
-						living.getEntityWorld().playSoundFromEntity(null, piglutton, ModSoundEvents.ENTITY_PIGLUTTON_SPAWN, SoundCategory.HOSTILE, 3, 1);
+						SLibUtils.playSound(piglutton, ModSoundEvents.ENTITY_PIGLUTTON_SPAWN, 3.5F, 1);
 						return;
 					}
 				}
