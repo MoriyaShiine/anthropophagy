@@ -1,0 +1,52 @@
+{
+  "entity.piglutton.ambient": {
+	"category": "neutral",
+	"sounds": [
+	  {
+		"type": "event",
+		"name": "minecraft:entity.hoglin.ambient"
+	  }
+	],
+	"subtitle": "subtitles.anthropophagy.entity.piglutton.ambient"
+  },
+  "entity.piglutton.death": {
+	"category": "neutral",
+	"sounds": [
+	  {
+		"type": "event",
+		"name": "minecraft:entity.hoglin.death"
+	  }
+	],
+	"subtitle": "subtitles.anthropophagy.entity.piglutton.death"
+  },
+  "entity.piglutton.flee": {
+	"category": "neutral",
+	"sounds": [
+	  {
+		"type": "event",
+		"name": "minecraft:entity.piglin.retreat"
+	  }
+	],
+	"subtitle": "subtitles.anthropophagy.entity.piglutton.flee"
+  },
+  "entity.piglutton.hurt": {
+	"category": "neutral",
+	"sounds": [
+	  {
+		"type": "event",
+		"name": "minecraft:entity.hoglin.hurt"
+	  }
+	],
+	"subtitle": "subtitles.anthropophagy.entity.piglutton.hurt"
+  },
+  "entity.piglutton.spawn": {
+	"category": "neutral",
+	"sounds": [
+	  {
+		"type": "event",
+		"name": "minecraft:entity.hoglin.converted_to_zombified"
+	  }
+	],
+	"subtitle": "subtitles.anthropophagy.entity.piglutton.spawn"
+  }
+}

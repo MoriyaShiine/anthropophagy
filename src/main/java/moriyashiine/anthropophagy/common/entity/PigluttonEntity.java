@@ -64,7 +64,7 @@ public class PigluttonEntity extends HostileEntity {
 		setPathfindingPenalty(PathNodeType.WATER, -1);
 	}
 
-	public static DefaultAttributeContainer.Builder buildAttributes() {
+	public static DefaultAttributeContainer.Builder createPigluttonAttributes() {
 		return HostileEntity.createHostileAttributes()
 				.add(EntityAttributes.MAX_HEALTH, 80)
 				.add(EntityAttributes.ARMOR, 14)
