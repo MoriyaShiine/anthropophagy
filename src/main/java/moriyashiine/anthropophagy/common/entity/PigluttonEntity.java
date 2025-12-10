@@ -33,9 +33,9 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Box;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.random.Random;
-import net.minecraft.world.GameRules;
 import net.minecraft.world.ServerWorldAccess;
 import net.minecraft.world.World;
+import net.minecraft.world.rule.GameRules;
 
 public class PigluttonEntity extends HostileEntity {
 	private static final int DAMAGE_THRESHOLD = 20;
@@ -166,7 +166,7 @@ public class PigluttonEntity extends HostileEntity {
 	@Override
 	public void tickMovement() {
 		super.tickMovement();
-		if (getEntityWorld() instanceof ServerWorld world && (horizontalCollision || (verticalCollision && !groundCollision)) && world.getGameRules().getBoolean(GameRules.DO_MOB_GRIEFING)) {
+		if (getEntityWorld() instanceof ServerWorld world && (horizontalCollision || (verticalCollision && !groundCollision)) && world.getGameRules().getValue(GameRules.DO_MOB_GRIEFING)) {
 			Box box = getBoundingBox().expand(0.2);
 			for (BlockPos pos : BlockPos.iterate(MathHelper.floor(box.minX), MathHelper.floor(box.minY), MathHelper.floor(box.minZ), MathHelper.floor(box.maxX), MathHelper.floor(box.maxY), MathHelper.floor(box.maxZ))) {
 				BlockState state = world.getBlockState(pos);
@@ -194,8 +194,8 @@ public class PigluttonEntity extends HostileEntity {
 	}
 
 	@Override
-	protected Box getAttackBox() {
-		return super.getAttackBox().expand(0.25, 0, 0.25);
+	protected Box getAttackBox(double attackRange) {
+		return super.getAttackBox(attackRange).expand(0.25, 0, 0.25);
 	}
 
 	@Override

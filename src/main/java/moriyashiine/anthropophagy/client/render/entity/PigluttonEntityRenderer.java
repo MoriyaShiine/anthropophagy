@@ -34,7 +34,7 @@ public class PigluttonEntityRenderer extends MobEntityRenderer<PigluttonEntity, 
 	@Override
 	public void updateRenderState(PigluttonEntity entity, PigluttonEntityRenderState state, float tickProgress) {
 		super.updateRenderState(entity, state, tickProgress);
-		ArmedEntityRenderState.updateRenderState(entity, state, itemModelResolver);
+		ArmedEntityRenderState.updateRenderState(entity, state, itemModelResolver, tickProgress);
 		state.idleAnimationState.copyFrom(entity.idleAnimationState);
 		state.attackLeftAnimationState.copyFrom(entity.attackLeftAnimationState);
 		state.attackRightAnimationState.copyFrom(entity.attackRightAnimationState);
