@@ -37,7 +37,7 @@ public class ModAdvancementProvider extends FabricAdvancementProvider {
 		RegistryWrapper<Item> itemLookup = registryLookup.getOrThrow(RegistryKeys.ITEM);
 		RegistryWrapper<EntityType<?>> entityTypeLookup = registryLookup.getOrThrow(RegistryKeys.ENTITY_TYPE);
 
-		consumer.accept(Advancement.Builder.create()
+		Advancement.Builder.create()
 				.parent(Identifier.tryParse("husbandry/root"))
 				.display(ModItems.FLESH,
 						Text.translatable("advancements.anthropophagy.husbandry.consume_flesh.title"),
@@ -48,9 +48,9 @@ public class ModAdvancementProvider extends FabricAdvancementProvider {
 						true,
 						true)
 				.criterion("consume_flesh", ConsumeItemCriterion.Conditions.predicate(ItemPredicate.Builder.create().tag(itemLookup, ModItemTags.FLESH)))
-				.build(consumer, Anthropophagy.id("husbandry/consume_flesh").toString()));
+				.build(consumer, Anthropophagy.id("husbandry/consume_flesh").toString());
 
-		consumer.accept(Advancement.Builder.create()
+		Advancement.Builder.create()
 				.parent(Identifier.tryParse("husbandry/root"))
 				.display(ModItems.PIGLUTTON_HEART,
 						Text.translatable("advancements.anthropophagy.husbandry.kill_piglutton.title"),
@@ -61,9 +61,9 @@ public class ModAdvancementProvider extends FabricAdvancementProvider {
 						true,
 						true)
 				.criterion("killed_piglutton", OnKilledCriterion.Conditions.createPlayerKilledEntity(new EntityPredicate.Builder().type(entityTypeLookup, ModEntityTypes.PIGLUTTON)))
-				.build(consumer, Anthropophagy.id("husbandry/kill_piglutton").toString()));
+				.build(consumer, Anthropophagy.id("husbandry/kill_piglutton").toString());
 
-		consumer.accept(Advancement.Builder.create()
+		Advancement.Builder.create()
 				.parent(Identifier.tryParse("husbandry/root"))
 				.display(ModItems.IRON_KNIFE,
 						Text.translatable("advancements.anthropophagy.husbandry.obtain_knife.title"),
@@ -74,6 +74,6 @@ public class ModAdvancementProvider extends FabricAdvancementProvider {
 						true,
 						false)
 				.criterion("has_knife", InventoryChangedCriterion.Conditions.items(ItemPredicate.Builder.create().tag(itemLookup, ModItemTags.KNIVES)))
-				.build(consumer, Anthropophagy.id("husbandry/obtain_knife").toString()));
+				.build(consumer, Anthropophagy.id("husbandry/obtain_knife").toString());
 	}
 }
