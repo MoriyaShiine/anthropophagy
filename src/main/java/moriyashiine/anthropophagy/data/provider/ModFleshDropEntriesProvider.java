@@ -28,7 +28,7 @@ public class ModFleshDropEntriesProvider extends FabricCodecDataProvider<FleshDr
 
 	@Override
 	protected final void configure(BiConsumer<Identifier, FleshDropEntry> provider, HolderLookup.Provider registries) {
-		configure((type, raw, cooked) -> provider.accept(BuiltInRegistries.ENTITY_TYPE.getKey(type), new FleshDropEntry(raw, cooked)));
+		configure((type, raw, cooked) -> provider.accept(type, new FleshDropEntry(raw, cooked)));
 	}
 
 	@Override
@@ -88,7 +88,15 @@ public class ModFleshDropEntriesProvider extends FabricCodecDataProvider<FleshDr
 
 	@FunctionalInterface
 	public interface Output {
-		void accept(EntityType<?> type, Item raw, Item cooked);
+		void accept(Identifier typeId, Item raw, Item cooked);
+
+		default void accept(Identifier typeId, Item drop) {
+			accept(typeId, drop, drop);
+		}
+
+		default void accept(EntityType<?> type, Item raw, Item cooked) {
+			accept(BuiltInRegistries.ENTITY_TYPE.getKey(type), raw, cooked);
+		}
 
 		default void accept(EntityType<?> type, Item drop) {
 			accept(type, drop, drop);
