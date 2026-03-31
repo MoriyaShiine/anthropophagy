@@ -1,4 +1,10 @@
 ------------------------------------------------------
+Version 26.1-r1
+------------------------------------------------------
+- update to 26.1
+- add various knife drops to other entities
+
+------------------------------------------------------
 Version 1.21.11-r2
 ------------------------------------------------------
 - update embedded midnightlib to avoid crashing when another mod doesn't have an updated version
