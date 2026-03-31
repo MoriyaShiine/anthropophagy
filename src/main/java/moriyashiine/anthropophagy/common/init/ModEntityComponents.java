@@ -1,6 +1,7 @@
 /*
  * Copyright (c) MoriyaShiine. All Rights Reserved.
  */
+
 package moriyashiine.anthropophagy.common.init;
 
 import moriyashiine.anthropophagy.common.Anthropophagy;
@@ -21,6 +22,6 @@ public class ModEntityComponents implements EntityComponentInitializer {
 	@Override
 	public void registerEntityComponentFactories(EntityComponentFactoryRegistry registry) {
 		registry.registerForPlayers(CANNIBAL_LEVEL, CannibalLevelComponent::new, RespawnCopyStrategy.LOSSLESS_ONLY);
-		registry.registerForPlayers(TETHERED, player -> new TetheredComponent(), RespawnCopyStrategy.LOSSLESS_ONLY);
+		registry.registerForPlayers(TETHERED, _ -> new TetheredComponent(), RespawnCopyStrategy.LOSSLESS_ONLY);
 	}
 }

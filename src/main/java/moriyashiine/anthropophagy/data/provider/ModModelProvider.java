@@ -1,38 +1,39 @@
 /*
  * Copyright (c) MoriyaShiine. All Rights Reserved.
  */
+
 package moriyashiine.anthropophagy.data.provider;
 
 import moriyashiine.anthropophagy.common.init.ModItems;
 import net.fabricmc.fabric.api.client.datagen.v1.provider.FabricModelProvider;
-import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
-import net.minecraft.client.data.BlockStateModelGenerator;
-import net.minecraft.client.data.ItemModelGenerator;
-import net.minecraft.client.data.Models;
+import net.fabricmc.fabric.api.datagen.v1.FabricPackOutput;
+import net.minecraft.client.data.models.BlockModelGenerators;
+import net.minecraft.client.data.models.ItemModelGenerators;
+import net.minecraft.client.data.models.model.ModelTemplates;
 
 public class ModModelProvider extends FabricModelProvider {
-	public ModModelProvider(FabricDataOutput output) {
+	public ModModelProvider(FabricPackOutput output) {
 		super(output);
 	}
 
 	@Override
-	public void generateBlockStateModels(BlockStateModelGenerator blockStateModelGenerator) {
+	public void generateBlockStateModels(BlockModelGenerators generators) {
 	}
 
 	@Override
-	public void generateItemModels(ItemModelGenerator itemModelGenerator) {
-		itemModelGenerator.register(ModItems.WOODEN_KNIFE, Models.HANDHELD);
-		itemModelGenerator.register(ModItems.STONE_KNIFE, Models.HANDHELD);
-		itemModelGenerator.register(ModItems.COPPER_KNIFE, Models.HANDHELD);
-		itemModelGenerator.register(ModItems.IRON_KNIFE, Models.HANDHELD);
-		itemModelGenerator.register(ModItems.GOLDEN_KNIFE, Models.HANDHELD);
-		itemModelGenerator.register(ModItems.DIAMOND_KNIFE, Models.HANDHELD);
-		itemModelGenerator.register(ModItems.NETHERITE_KNIFE, Models.HANDHELD);
-		itemModelGenerator.register(ModItems.FLESH, Models.GENERATED);
-		itemModelGenerator.register(ModItems.COOKED_FLESH, Models.GENERATED);
-		itemModelGenerator.register(ModItems.CORRUPT_FLESH, Models.GENERATED);
-		itemModelGenerator.register(ModItems.PIGLUTTON_HEART, Models.GENERATED);
-		itemModelGenerator.register(ModItems.TETHERED_HEART, Models.GENERATED);
-		itemModelGenerator.register(ModItems.PIGLUTTON_SPAWN_EGG, Models.GENERATED);
+	public void generateItemModels(ItemModelGenerators generators) {
+		generators.generateFlatItem(ModItems.WOODEN_KNIFE, ModelTemplates.FLAT_HANDHELD_ITEM);
+		generators.generateFlatItem(ModItems.STONE_KNIFE, ModelTemplates.FLAT_HANDHELD_ITEM);
+		generators.generateFlatItem(ModItems.COPPER_KNIFE, ModelTemplates.FLAT_HANDHELD_ITEM);
+		generators.generateFlatItem(ModItems.IRON_KNIFE, ModelTemplates.FLAT_HANDHELD_ITEM);
+		generators.generateFlatItem(ModItems.GOLDEN_KNIFE, ModelTemplates.FLAT_HANDHELD_ITEM);
+		generators.generateFlatItem(ModItems.DIAMOND_KNIFE, ModelTemplates.FLAT_HANDHELD_ITEM);
+		generators.generateFlatItem(ModItems.NETHERITE_KNIFE, ModelTemplates.FLAT_HANDHELD_ITEM);
+		generators.generateFlatItem(ModItems.FLESH, ModelTemplates.FLAT_ITEM);
+		generators.generateFlatItem(ModItems.COOKED_FLESH, ModelTemplates.FLAT_ITEM);
+		generators.generateFlatItem(ModItems.CORRUPT_FLESH, ModelTemplates.FLAT_ITEM);
+		generators.generateFlatItem(ModItems.PIGLUTTON_HEART, ModelTemplates.FLAT_ITEM);
+		generators.generateFlatItem(ModItems.TETHERED_HEART, ModelTemplates.FLAT_ITEM);
+		generators.generateFlatItem(ModItems.PIGLUTTON_SPAWN_EGG, ModelTemplates.FLAT_ITEM);
 	}
 }

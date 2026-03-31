@@ -1,28 +1,29 @@
 /*
  * Copyright (c) MoriyaShiine. All Rights Reserved.
  */
+
 package moriyashiine.anthropophagy.common.init;
 
 import moriyashiine.anthropophagy.common.ModConfig;
-import moriyashiine.anthropophagy.common.entity.PigluttonEntity;
+import moriyashiine.anthropophagy.common.world.entity.Piglutton;
 import net.fabricmc.fabric.api.biome.v1.BiomeModifications;
 import net.fabricmc.fabric.api.biome.v1.BiomeSelectors;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.SpawnGroup;
-import net.minecraft.entity.SpawnLocationTypes;
-import net.minecraft.entity.SpawnRestriction;
-import net.minecraft.registry.tag.BiomeTags;
-import net.minecraft.world.Heightmap;
+import net.minecraft.tags.BiomeTags;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.MobCategory;
+import net.minecraft.world.entity.SpawnPlacementTypes;
+import net.minecraft.world.entity.SpawnPlacements;
+import net.minecraft.world.level.levelgen.Heightmap;
 
 import static moriyashiine.strawberrylib.api.module.SLibRegistries.registerEntityType;
 
 public class ModEntityTypes {
-	public static final EntityType<PigluttonEntity> PIGLUTTON = registerEntityType("piglutton", EntityType.Builder.create(PigluttonEntity::new, SpawnGroup.MONSTER).dimensions(3, 2.6F).spawnableFarFromPlayer(), PigluttonEntity.createPigluttonAttributes());
+	public static final EntityType<Piglutton> PIGLUTTON = registerEntityType("piglutton", EntityType.Builder.of(Piglutton::new, MobCategory.MONSTER).sized(3, 2.6F).canSpawnFarFromPlayer(), Piglutton.createAttributes());
 
 	public static void init() {
-		SpawnRestriction.register(PIGLUTTON, SpawnLocationTypes.ON_GROUND, Heightmap.Type.WORLD_SURFACE, PigluttonEntity::canSpawn);
+		SpawnPlacements.register(PIGLUTTON, SpawnPlacementTypes.ON_GROUND, Heightmap.Types.WORLD_SURFACE, Piglutton::checkPigluttonSpawnRules);
 		if (ModConfig.enablePiglutton) {
-			BiomeModifications.addSpawn(BiomeSelectors.tag(BiomeTags.IS_FOREST), PIGLUTTON.getSpawnGroup(), PIGLUTTON, 1, 1, 1);
+			BiomeModifications.addSpawn(BiomeSelectors.tag(BiomeTags.IS_FOREST), PIGLUTTON.getCategory(), PIGLUTTON, 1, 1, 1);
 		}
 	}
 }

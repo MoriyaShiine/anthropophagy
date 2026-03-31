@@ -1,16 +1,17 @@
 /*
  * Copyright (c) MoriyaShiine. All Rights Reserved.
  */
+
 package moriyashiine.anthropophagy.client;
 
 import moriyashiine.anthropophagy.client.event.CannibalNightVisionEvent;
-import moriyashiine.anthropophagy.client.render.entity.PigluttonEntityRenderer;
-import moriyashiine.anthropophagy.client.render.entity.model.PigluttonEntityModel;
+import moriyashiine.anthropophagy.client.renderer.entity.PigluttonRenderer;
+import moriyashiine.anthropophagy.client.renderer.entity.model.PigluttonModel;
 import moriyashiine.anthropophagy.common.init.ModEntityTypes;
-import moriyashiine.strawberrylib.api.event.client.ModifyNightVisionStrengthEvent;
+import moriyashiine.strawberrylib.api.event.client.AddNightVisionScaleEvent;
 import net.fabricmc.api.ClientModInitializer;
-import net.fabricmc.fabric.api.client.rendering.v1.EntityModelLayerRegistry;
-import net.minecraft.client.render.entity.EntityRendererFactories;
+import net.fabricmc.fabric.api.client.rendering.v1.ModelLayerRegistry;
+import net.minecraft.client.renderer.entity.EntityRenderers;
 
 public class AnthropophagyClient implements ClientModInitializer {
 	@Override
@@ -20,11 +21,11 @@ public class AnthropophagyClient implements ClientModInitializer {
 	}
 
 	private void initEntities() {
-		EntityModelLayerRegistry.registerModelLayer(PigluttonEntityModel.MODEL_LAYER, PigluttonEntityModel::getTexturedModelData);
-		EntityRendererFactories.register(ModEntityTypes.PIGLUTTON, PigluttonEntityRenderer::new);
+		ModelLayerRegistry.registerModelLayer(PigluttonModel.MODEL_LAYER, PigluttonModel::createBodyLayer);
+		EntityRenderers.register(ModEntityTypes.PIGLUTTON, PigluttonRenderer::new);
 	}
 
 	private void initEvents() {
-		ModifyNightVisionStrengthEvent.ADD.register(new CannibalNightVisionEvent());
+		AddNightVisionScaleEvent.EVENT.register(new CannibalNightVisionEvent());
 	}
 }

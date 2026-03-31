@@ -1,6 +1,7 @@
 /*
  * Copyright (c) MoriyaShiine. All Rights Reserved.
  */
+
 package moriyashiine.anthropophagy.common;
 
 import eu.midnightdust.lib.config.MidnightConfig;
@@ -19,8 +20,8 @@ import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.entity.event.v1.EntitySleepEvents;
 import net.fabricmc.fabric.api.entity.event.v1.ServerPlayerEvents;
 import net.fabricmc.fabric.api.resource.v1.ResourceLoader;
-import net.minecraft.resource.ResourceType;
-import net.minecraft.util.Identifier;
+import net.minecraft.resources.Identifier;
+import net.minecraft.server.packs.PackType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -35,11 +36,11 @@ public class Anthropophagy implements ModInitializer {
 		SLib.init(MOD_ID);
 		initRegistries();
 		initEvents();
-		ResourceLoader.get(ResourceType.SERVER_DATA).registerReloader(id("flesh_drops"), new FleshDropsReloadListener());
+		ResourceLoader.get(PackType.SERVER_DATA).registerReloadListener(id("flesh_drops"), new FleshDropsReloadListener());
 	}
 
 	public static Identifier id(String value) {
-		return Identifier.of(MOD_ID, value);
+		return Identifier.fromNamespaceAndPath(MOD_ID, value);
 	}
 
 	private void initRegistries() {
@@ -52,7 +53,7 @@ public class Anthropophagy implements ModInitializer {
 	private void initEvents() {
 		AfterDamageIncludingDeathEvent.EVENT.register(new DropFleshEvent());
 		PreventEquipmentUsageEvent.EVENT.register(new CannibalEquipmentEvent());
-		ModifyMovementEvents.JUMP_VELOCITY.register(new CannibalJumpBoostEvent());
+		ModifyMovementEvents.JUMP_DELTA.register(new CannibalJumpBoostEvent());
 		EatFoodEvent.EVENT.register(new CannibalEatingEvent());
 		ServerPlayerEvents.COPY_FROM.register(new CopyCannibalLevelEvent());
 		EntitySleepEvents.ALLOW_SLEEPING.register(new CannibalSleepEvent());

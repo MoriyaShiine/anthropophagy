@@ -1,37 +1,38 @@
 /*
  * Copyright (c) MoriyaShiine. All Rights Reserved.
  */
+
 package moriyashiine.anthropophagy.common.event;
 
 import moriyashiine.anthropophagy.common.ModConfig;
-import moriyashiine.anthropophagy.common.entity.PigluttonEntity;
-import moriyashiine.anthropophagy.common.item.FleshItem;
 import moriyashiine.anthropophagy.common.tag.ModItemTags;
 import moriyashiine.anthropophagy.common.util.FleshDropEntry;
+import moriyashiine.anthropophagy.common.world.entity.Piglutton;
+import moriyashiine.anthropophagy.common.world.item.FleshItem;
 import moriyashiine.strawberrylib.api.event.AfterDamageIncludingDeathEvent;
 import moriyashiine.strawberrylib.api.module.SLibUtils;
-import net.minecraft.enchantment.EnchantmentHelper;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.damage.DamageSource;
-import net.minecraft.item.ItemStack;
-import net.minecraft.registry.tag.EnchantmentTags;
-import net.minecraft.server.world.ServerWorld;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.tags.EnchantmentTags;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.enchantment.EnchantmentHelper;
 
 public class DropFleshEvent implements AfterDamageIncludingDeathEvent {
 	@Override
-	public void afterDamage(LivingEntity entity, DamageSource source, float baseDamageTaken, float damageTaken, boolean blocked) {
+	public void afterDamage(LivingEntity victim, DamageSource source, float originalDamage, float modifiedDamage, boolean blocked) {
 		if (SLibUtils.isAttackingPlayerCooldownWithinThreshold(0.7F)) {
-			if (source.getSource() instanceof LivingEntity living && (living.getMainHandStack().isIn(ModItemTags.KNIVES) || source.getAttacker() instanceof PigluttonEntity)) {
-				boolean dropCooked = entity.getFireTicks() > 0 || EnchantmentHelper.hasAnyEnchantmentsIn(living.getMainHandStack(), EnchantmentTags.SMELTS_LOOT);
-				for (EntityType<?> entityType : FleshDropEntry.DROP_MAP.keySet()) {
-					if (entity.getType() == entityType && entity.getRandom().nextFloat() * ModConfig.damageNeededForGuaranteedFleshDrop < damageTaken) {
-						FleshDropEntry entry = FleshDropEntry.DROP_MAP.get(entityType);
-						ItemStack drop = new ItemStack(dropCooked ? entry.cooked_drop() : entry.raw_drop());
+			if (source.getDirectEntity() instanceof LivingEntity attacker && (attacker.getMainHandItem().is(ModItemTags.KNIVES) || source.getEntity() instanceof Piglutton)) {
+				boolean dropCooked = victim.getRemainingFireTicks() > 0 || EnchantmentHelper.hasTag(attacker.getMainHandItem(), EnchantmentTags.SMELTS_LOOT);
+				for (EntityType<?> type : FleshDropEntry.DROP_MAP.keySet()) {
+					if (victim.getType() == type && victim.getRandom().nextFloat() * ModConfig.damageNeededForGuaranteedFleshDrop < modifiedDamage) {
+						FleshDropEntry entry = FleshDropEntry.DROP_MAP.get(type);
+						ItemStack drop = new ItemStack(dropCooked ? entry.cooked() : entry.raw());
 						if (drop.getItem() instanceof FleshItem) {
-							FleshItem.setOwner(drop, entity);
+							FleshItem.setOwner(drop, victim);
 						}
-						entity.dropStack((ServerWorld) entity.getEntityWorld(), drop).setPickupDelay(40);
+						victim.spawnAtLocation((ServerLevel) victim.level(), drop).setPickUpDelay(40);
 					}
 				}
 			}

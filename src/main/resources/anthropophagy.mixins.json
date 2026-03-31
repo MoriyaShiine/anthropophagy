@@ -1,14 +1,17 @@
 {
   "required": true,
   "package": "moriyashiine.anthropophagy.mixin",
-  "compatibilityLevel": "JAVA_21",
+  "compatibilityLevel": "JAVA_25",
   "mixins": [
 	"AbstractFurnaceBlockEntityMixin",
 	"CampfireBlockEntityMixin",
-	"HungerManagerMixin",
+	"FoodDataMixin",
 	"LivingEntityMixin"
   ],
   "injectors": {
 	"defaultRequire": 1
+  },
+  "overwrites": {
+	"requireAnnotations": true
   }
 }

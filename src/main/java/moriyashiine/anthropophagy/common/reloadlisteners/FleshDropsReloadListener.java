@@ -1,54 +1,38 @@
 /*
  * Copyright (c) MoriyaShiine. All Rights Reserved.
  */
+
 package moriyashiine.anthropophagy.common.reloadlisteners;
 
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
-import com.google.gson.stream.JsonReader;
+import com.mojang.serialization.JsonOps;
 import moriyashiine.anthropophagy.common.Anthropophagy;
 import moriyashiine.anthropophagy.common.util.FleshDropEntry;
-import net.minecraft.entity.EntityType;
-import net.minecraft.item.Item;
-import net.minecraft.registry.Registries;
-import net.minecraft.resource.Resource;
-import net.minecraft.resource.ResourceManager;
-import net.minecraft.resource.SynchronousResourceReloader;
-import net.minecraft.util.Identifier;
-import net.minecraft.util.JsonHelper;
+import net.fabricmc.fabric.api.resource.v1.ResourceLoader;
+import net.fabricmc.fabric.api.resource.v1.reloader.SimpleReloadListener;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.resources.FileToIdConverter;
+import net.minecraft.resources.Identifier;
+import net.minecraft.server.packs.resources.SimpleJsonResourceReloadListener;
+import net.minecraft.world.entity.EntityType;
 
-import java.io.InputStream;
-import java.io.InputStreamReader;
+import java.util.HashMap;
+import java.util.Map;
 
-public class FleshDropsReloadListener implements SynchronousResourceReloader {
+public class FleshDropsReloadListener extends SimpleReloadListener<Map<EntityType<?>, FleshDropEntry>> {
+	public static final String DIRECTORY = Anthropophagy.MOD_ID + "/flesh_drops";
+
 	@Override
-	public void reload(ResourceManager manager) {
+	protected Map<EntityType<?>, FleshDropEntry> prepare(SharedState sharedState) {
+		Map<Identifier, FleshDropEntry> unmapped = new HashMap<>();
+		SimpleJsonResourceReloadListener.scanDirectory(sharedState.resourceManager(), FileToIdConverter.json(DIRECTORY), sharedState.get(ResourceLoader.REGISTRY_LOOKUP_KEY).createSerializationContext(JsonOps.INSTANCE), FleshDropEntry.CODEC, unmapped);
+		Map<EntityType<?>, FleshDropEntry> map = new HashMap<>();
+		unmapped.forEach(((identifier, entry) -> BuiltInRegistries.ENTITY_TYPE.getOptional(identifier).ifPresent(type -> map.put(type, entry))));
+		return map;
+	}
+
+	@Override
+	protected void apply(Map<EntityType<?>, FleshDropEntry> map, SharedState sharedState) {
 		FleshDropEntry.DROP_MAP.clear();
-		manager.findAllResources("flesh_drops", path -> path.getNamespace().equals(Anthropophagy.MOD_ID) && path.getPath().endsWith(".json")).forEach((identifier, resources) -> {
-			for (Resource resource : resources) {
-				try (InputStream stream = resource.getInputStream()) {
-					JsonObject object = JsonParser.parseReader(new JsonReader(new InputStreamReader(stream))).getAsJsonObject();
-					Identifier entityId = Identifier.of(identifier.getPath().substring(identifier.getPath().indexOf("/") + 1, identifier.getPath().length() - 5).replace("/", ":"));
-					EntityType<?> entityType = Registries.ENTITY_TYPE.get(entityId);
-					if (entityType == Registries.ENTITY_TYPE.get(Registries.ENTITY_TYPE.getDefaultId()) && !entityId.equals(Registries.ENTITY_TYPE.getDefaultId())) {
-						continue;
-					}
-					Identifier rawDropId = Identifier.of(JsonHelper.getString(object, "raw_drop"));
-					Item rawDrop = Registries.ITEM.get(rawDropId);
-					if (rawDrop == Registries.ITEM.get(Registries.ITEM.getDefaultId()) && !rawDropId.equals(Registries.ITEM.getDefaultId())) {
-						Anthropophagy.LOGGER.error("Unknown item '{}' in file '{}'", rawDropId, identifier);
-						continue;
-					}
-					Identifier cookedDropId = Identifier.of(JsonHelper.getString(object, "cooked_drop"));
-					Item cookedDrop = Registries.ITEM.get(cookedDropId);
-					if (cookedDrop == Registries.ITEM.get(Registries.ITEM.getDefaultId()) && !cookedDropId.equals(Registries.ITEM.getDefaultId())) {
-						Anthropophagy.LOGGER.error("Unknown item '{}' in file '{}'", cookedDropId, identifier);
-						continue;
-					}
-					FleshDropEntry.DROP_MAP.put(entityType, new FleshDropEntry(rawDrop, cookedDrop));
-				} catch (Exception ignored) {
-				}
-			}
-		});
+		FleshDropEntry.DROP_MAP.putAll(map);
 	}
 }

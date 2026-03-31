@@ -1,6 +1,5 @@
 {
   "entity.piglutton.ambient": {
-	"category": "neutral",
 	"sounds": [
 	  {
 		"type": "event",
@@ -10,7 +9,6 @@
 	"subtitle": "subtitles.anthropophagy.entity.piglutton.ambient"
   },
   "entity.piglutton.death": {
-	"category": "neutral",
 	"sounds": [
 	  {
 		"type": "event",
@@ -20,7 +18,6 @@
 	"subtitle": "subtitles.anthropophagy.entity.piglutton.death"
   },
   "entity.piglutton.flee": {
-	"category": "neutral",
 	"sounds": [
 	  {
 		"type": "event",
@@ -30,7 +27,6 @@
 	"subtitle": "subtitles.anthropophagy.entity.piglutton.flee"
   },
   "entity.piglutton.hurt": {
-	"category": "neutral",
 	"sounds": [
 	  {
 		"type": "event",
@@ -40,7 +36,6 @@
 	"subtitle": "subtitles.anthropophagy.entity.piglutton.hurt"
   },
   "entity.piglutton.spawn": {
-	"category": "neutral",
 	"sounds": [
 	  {
 		"type": "event",

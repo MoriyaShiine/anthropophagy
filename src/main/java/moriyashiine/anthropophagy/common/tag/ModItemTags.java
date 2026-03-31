@@ -1,16 +1,17 @@
 /*
  * Copyright (c) MoriyaShiine. All Rights Reserved.
  */
+
 package moriyashiine.anthropophagy.common.tag;
 
 import moriyashiine.anthropophagy.common.Anthropophagy;
-import net.minecraft.item.Item;
-import net.minecraft.registry.RegistryKeys;
-import net.minecraft.registry.tag.TagKey;
-import net.minecraft.util.Identifier;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.resources.Identifier;
+import net.minecraft.tags.TagKey;
+import net.minecraft.world.item.Item;
 
 public class ModItemTags {
-	public static final TagKey<Item> KNIVES = TagKey.of(RegistryKeys.ITEM, Identifier.of("c", "knives"));
+	public static final TagKey<Item> KNIVES = TagKey.create(Registries.ITEM, Identifier.fromNamespaceAndPath("c", "knives"));
 
-	public static final TagKey<Item> FLESH = TagKey.of(RegistryKeys.ITEM, Anthropophagy.id("flesh"));
+	public static final TagKey<Item> FLESH = TagKey.create(Registries.ITEM, Anthropophagy.id("flesh"));
 }
