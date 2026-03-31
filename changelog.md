@@ -3,6 +3,7 @@ Version 26.1-r1
 ------------------------------------------------------
 - update to 26.1
 - add various knife drops to other entities
+- add Turkish translation, thanks Hexasan!
 
 ------------------------------------------------------
 Version 1.21.11-r2
