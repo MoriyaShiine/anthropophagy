@@ -6,7 +6,7 @@ package moriyashiine.anthropophagy.common.event;
 
 import moriyashiine.anthropophagy.common.ModConfig;
 import moriyashiine.anthropophagy.common.tag.ModItemTags;
-import moriyashiine.anthropophagy.common.util.FleshDropEntry;
+import moriyashiine.anthropophagy.common.util.FleshDrop;
 import moriyashiine.anthropophagy.common.world.entity.Piglutton;
 import moriyashiine.anthropophagy.common.world.item.FleshItem;
 import moriyashiine.strawberrylib.api.event.AfterDamageIncludingDeathEvent;
@@ -25,9 +25,9 @@ public class DropFleshEvent implements AfterDamageIncludingDeathEvent {
 		if (SLibUtils.isAttackingPlayerCooldownWithinThreshold(0.7F)) {
 			if (source.getDirectEntity() instanceof LivingEntity attacker && (attacker.getMainHandItem().is(ModItemTags.KNIVES) || source.getEntity() instanceof Piglutton)) {
 				boolean dropCooked = victim.getRemainingFireTicks() > 0 || EnchantmentHelper.hasTag(attacker.getMainHandItem(), EnchantmentTags.SMELTS_LOOT);
-				for (EntityType<?> type : FleshDropEntry.DROP_MAP.keySet()) {
+				for (EntityType<?> type : FleshDrop.DROP_MAP.keySet()) {
 					if (victim.getType() == type && victim.getRandom().nextFloat() * ModConfig.damageNeededForGuaranteedFleshDrop < modifiedDamage) {
-						FleshDropEntry entry = FleshDropEntry.DROP_MAP.get(type);
+						FleshDrop entry = FleshDrop.DROP_MAP.get(type);
 						ItemStack drop = new ItemStack(dropCooked ? entry.cooked() : entry.raw());
 						if (drop.getItem() instanceof FleshItem) {
 							FleshItem.setOwner(drop, victim);

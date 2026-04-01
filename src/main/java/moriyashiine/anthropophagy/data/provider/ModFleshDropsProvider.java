@@ -4,10 +4,12 @@
 
 package moriyashiine.anthropophagy.data.provider;
 
+import com.mojang.datafixers.util.Either;
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
 import moriyashiine.anthropophagy.common.Anthropophagy;
 import moriyashiine.anthropophagy.common.init.ModItems;
-import moriyashiine.anthropophagy.common.reloadlisteners.FleshDropsReloadListener;
-import moriyashiine.anthropophagy.common.util.FleshDropEntry;
+import moriyashiine.anthropophagy.common.reloadlistener.FleshDropsReloadListener;
 import net.fabricmc.fabric.api.datagen.v1.FabricPackOutput;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricCodecDataProvider;
 import net.minecraft.core.HolderLookup;
@@ -21,14 +23,14 @@ import net.minecraft.world.item.Items;
 import java.util.concurrent.CompletableFuture;
 import java.util.function.BiConsumer;
 
-public class ModFleshDropEntriesProvider extends FabricCodecDataProvider<FleshDropEntry> {
-	public ModFleshDropEntriesProvider(FabricPackOutput output, CompletableFuture<HolderLookup.Provider> registriesFuture) {
-		super(output, registriesFuture, PackOutput.Target.DATA_PACK, FleshDropsReloadListener.DIRECTORY, FleshDropEntry.CODEC);
+public class ModFleshDropsProvider extends FabricCodecDataProvider<ModFleshDropsProvider.DatagenFleshDrop> {
+	public ModFleshDropsProvider(FabricPackOutput output, CompletableFuture<HolderLookup.Provider> registriesFuture) {
+		super(output, registriesFuture, PackOutput.Target.DATA_PACK, FleshDropsReloadListener.DIRECTORY, DatagenFleshDrop.CODEC);
 	}
 
 	@Override
-	protected final void configure(BiConsumer<Identifier, FleshDropEntry> provider, HolderLookup.Provider registries) {
-		configure((type, raw, cooked) -> provider.accept(type, new FleshDropEntry(raw, cooked)));
+	protected final void configure(BiConsumer<Identifier, DatagenFleshDrop> provider, HolderLookup.Provider registries) {
+		configure((typeId, rawId, cookedId) -> provider.accept(typeId, new DatagenFleshDrop(rawId, cookedId)));
 	}
 
 	@Override
@@ -88,18 +90,37 @@ public class ModFleshDropEntriesProvider extends FabricCodecDataProvider<FleshDr
 
 	@FunctionalInterface
 	public interface Output {
-		void accept(Identifier typeId, Item raw, Item cooked);
+		void accept(Identifier typeId, Identifier rawId, Identifier cookedId);
 
-		default void accept(Identifier typeId, Item drop) {
-			accept(typeId, drop, drop);
+		default void accept(Identifier typeId, Identifier dropId) {
+			accept(typeId, dropId, dropId);
+		}
+
+		default void accept(EntityType<?> type, Identifier rawId, Identifier cookedId) {
+			accept(BuiltInRegistries.ENTITY_TYPE.getKey(type), rawId, cookedId);
+		}
+
+		default void accept(EntityType<?> type, Identifier dropId) {
+			accept(type, dropId, dropId);
 		}
 
 		default void accept(EntityType<?> type, Item raw, Item cooked) {
-			accept(BuiltInRegistries.ENTITY_TYPE.getKey(type), raw, cooked);
+			accept(type, BuiltInRegistries.ITEM.getKey(raw), BuiltInRegistries.ITEM.getKey(cooked));
 		}
 
 		default void accept(EntityType<?> type, Item drop) {
 			accept(type, drop, drop);
 		}
+	}
+
+	public record DatagenFleshDrop(Identifier raw, Identifier cooked) {
+		private static final Codec<DatagenFleshDrop> SINGLE_CODEC = RecordCodecBuilder.create(instance -> instance.group(
+				Identifier.CODEC.fieldOf("drop").forGetter(DatagenFleshDrop::raw)
+		).apply(instance, drop -> new DatagenFleshDrop(drop, drop)));
+		private static final Codec<DatagenFleshDrop> BOTH_CODEC = RecordCodecBuilder.create(instance -> instance.group(
+				Identifier.CODEC.fieldOf("raw").forGetter(DatagenFleshDrop::raw),
+				Identifier.CODEC.fieldOf("cooked").forGetter(DatagenFleshDrop::cooked)
+		).apply(instance, DatagenFleshDrop::new));
+		public static final Codec<DatagenFleshDrop> CODEC = Codec.either(SINGLE_CODEC, BOTH_CODEC).xmap(Either::unwrap, entry -> entry.raw() == entry.cooked() ? Either.left(entry) : Either.right(entry));
 	}
 }

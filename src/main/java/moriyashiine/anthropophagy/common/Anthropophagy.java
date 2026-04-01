@@ -10,7 +10,7 @@ import moriyashiine.anthropophagy.common.init.ModComponentTypes;
 import moriyashiine.anthropophagy.common.init.ModEntityTypes;
 import moriyashiine.anthropophagy.common.init.ModItems;
 import moriyashiine.anthropophagy.common.init.ModSoundEvents;
-import moriyashiine.anthropophagy.common.reloadlisteners.FleshDropsReloadListener;
+import moriyashiine.anthropophagy.common.reloadlistener.FleshDropsReloadListener;
 import moriyashiine.strawberrylib.api.SLib;
 import moriyashiine.strawberrylib.api.event.AfterDamageIncludingDeathEvent;
 import moriyashiine.strawberrylib.api.event.EatFoodEvent;
