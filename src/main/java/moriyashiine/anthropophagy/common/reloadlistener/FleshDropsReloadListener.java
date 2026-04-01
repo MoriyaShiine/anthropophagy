@@ -25,7 +25,7 @@ public class FleshDropsReloadListener extends SimpleReloadListener<Map<EntityTyp
 	@Override
 	protected Map<EntityType<?>, FleshDrop> prepare(SharedState sharedState) {
 		Map<Identifier, FleshDrop> unmapped = new HashMap<>();
-		SLibRegistries.scanErrorless(() -> SimpleJsonResourceReloadListener.scanDirectory(sharedState.resourceManager(), FileToIdConverter.json(DIRECTORY), sharedState.get(ResourceLoader.REGISTRY_LOOKUP_KEY).createSerializationContext(JsonOps.INSTANCE), FleshDrop.CODEC, unmapped));
+		SLibRegistries.scanErrorless(DIRECTORY, () -> SimpleJsonResourceReloadListener.scanDirectory(sharedState.resourceManager(), FileToIdConverter.json(DIRECTORY), sharedState.get(ResourceLoader.REGISTRY_LOOKUP_KEY).createSerializationContext(JsonOps.INSTANCE), FleshDrop.CODEC, unmapped));
 		Map<EntityType<?>, FleshDrop> map = new HashMap<>();
 		unmapped.forEach(((identifier, entry) -> BuiltInRegistries.ENTITY_TYPE.getOptional(identifier).ifPresent(type -> map.put(type, entry))));
 		return map;
