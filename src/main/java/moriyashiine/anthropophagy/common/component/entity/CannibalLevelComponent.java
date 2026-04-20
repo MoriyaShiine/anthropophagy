@@ -83,7 +83,6 @@ public class CannibalLevelComponent implements AutoSyncedComponent {
 
 	public void updateAttributes() {
 		if (!obj.level().isClientSide()) {
-			PreventEquipmentUsageEvent.triggerEquipmentCheck(obj);
 			obj.getAttribute(Attributes.ATTACK_DAMAGE).removeModifier(ATTACK_DAMAGE_ID);
 			obj.getAttribute(Attributes.ARMOR).removeModifier(ARMOR_ID);
 			obj.getAttribute(Attributes.KNOCKBACK_RESISTANCE).removeModifier(KNOCKBACK_RESISTANCE_ID);
