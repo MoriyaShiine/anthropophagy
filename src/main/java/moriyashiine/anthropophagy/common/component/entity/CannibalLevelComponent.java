@@ -6,7 +6,6 @@ package moriyashiine.anthropophagy.common.component.entity;
 
 import moriyashiine.anthropophagy.common.Anthropophagy;
 import moriyashiine.anthropophagy.common.init.ModEntityComponents;
-import moriyashiine.strawberrylib.api.event.PreventEquipmentUsageEvent;
 import net.minecraft.core.Holder;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.resources.Identifier;
@@ -70,13 +69,13 @@ public class CannibalLevelComponent implements AutoSyncedComponent {
 	public boolean cannotEquip(ItemStack stack) {
 		if (stack.getOrDefault(DataComponents.ATTRIBUTE_MODIFIERS, ItemAttributeModifiers.EMPTY).modifiers().stream().anyMatch(entry -> entry.attribute() == Attributes.ARMOR) || stack.has(DataComponents.GLIDER)) {
 			EquipmentSlot slot = obj.getEquipmentSlotForItem(stack);
-			if (cannibalLevel >= 30 && slot == EquipmentSlot.LEGS) {
+			if (getCannibalLevel() >= 30 && slot == EquipmentSlot.LEGS) {
 				return true;
-			} else if (cannibalLevel >= 50 && slot == EquipmentSlot.HEAD) {
+			} else if (getCannibalLevel() >= 50 && slot == EquipmentSlot.HEAD) {
 				return true;
-			} else if (cannibalLevel >= 70 && slot == EquipmentSlot.FEET) {
+			} else if (getCannibalLevel() >= 70 && slot == EquipmentSlot.FEET) {
 				return true;
-			} else return cannibalLevel >= 90 && slot == EquipmentSlot.CHEST;
+			} else return getCannibalLevel() >= 90 && slot == EquipmentSlot.CHEST;
 		}
 		return false;
 	}
@@ -89,7 +88,7 @@ public class CannibalLevelComponent implements AutoSyncedComponent {
 			obj.getAttribute(Attributes.MOVEMENT_SPEED).removeModifier(MOVEMENT_SPEED_ID);
 			obj.getAttribute(Attributes.SAFE_FALL_DISTANCE).removeModifier(SAFE_FALL_DISTANCE_ID);
 			obj.getAttribute(Attributes.STEP_HEIGHT).removeModifier(STEP_HEIGHT_ID);
-			getModifiersForLevel(cannibalLevel).attributes().forEach(pair -> obj.getAttribute(pair.getA()).addPermanentModifier(pair.getB()));
+			getModifiersForLevel(getCannibalLevel()).attributes().forEach(pair -> obj.getAttribute(pair.getA()).addPermanentModifier(pair.getB()));
 		}
 	}
 
