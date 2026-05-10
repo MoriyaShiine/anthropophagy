@@ -17,7 +17,6 @@ import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvent;
-import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.AnimationState;
@@ -52,7 +51,7 @@ public class Piglutton extends Monster {
 	public boolean canAttack = false;
 	public int overhealAmount = 0, stalkTicks = 0;
 	private float damageTaken = 0;
-	private int fleeingTicks = 0;
+	private int fleeTicks = 0;
 
 	private int attackTicks = 0, eatingTicks = 0;
 
@@ -62,7 +61,7 @@ public class Piglutton extends Monster {
 	public final AnimationState attackTusksAnimationState = new AnimationState();
 	public final AnimationState eatAnimationState = new AnimationState();
 
-	public Piglutton(EntityType<? extends Monster> type, Level level) {
+	public Piglutton(EntityType<Piglutton> type, Level level) {
 		super(type, level);
 		xpReward = 30;
 		setPathfindingMalus(PathType.LEAVES, 0);
@@ -98,7 +97,7 @@ public class Piglutton extends Monster {
 		damageTaken = input.getFloatOr("DamageTaken", 0);
 		overhealAmount = input.getIntOr("OverhealAmount", 0);
 		stalkTicks = input.getIntOr("StalkTicks", 0);
-		fleeingTicks = input.getIntOr("FleeingTicks", 0);
+		fleeTicks = input.getIntOr("FleeTicks", 0);
 	}
 
 	@Override
@@ -110,7 +109,7 @@ public class Piglutton extends Monster {
 		output.putFloat("DamageTaken", damageTaken);
 		output.putInt("OverhealAmount", overhealAmount);
 		output.putInt("StalkTicks", stalkTicks);
-		output.putInt("FleeingTicks", fleeingTicks);
+		output.putInt("FleeTicks", fleeTicks);
 	}
 
 	@Override
@@ -150,7 +149,17 @@ public class Piglutton extends Monster {
 	@Override
 	protected void customServerAiStep(ServerLevel level) {
 		super.customServerAiStep(level);
-		if (fleeingTicks > 0 && --fleeingTicks % 20 == 0) {
+		if ((horizontalCollision || (verticalCollision && !verticalCollisionBelow)) && level.getGameRules().get(GameRules.MOB_GRIEFING)) {
+			BlockPos.betweenClosed(getBoundingBox().inflate(0.2)).forEach(pos -> {
+				BlockState state = level.getBlockState(pos);
+				float destroySpeed = state.getDestroySpeed(level, pos);
+				if (destroySpeed >= 0 && (destroySpeed < 0.5F || state.is(ModBlockTags.PIGLUTTON_BREAKABLE))) {
+					level.destroyBlock(pos, true);
+				}
+			});
+		}
+
+		if (fleeTicks > 0 && --fleeTicks % 20 == 0) {
 			SLibUtils.playSound(this, ModSoundEvents.ENTITY_PIGLUTTON_FLEE, getSoundVolume() * 2, getVoicePitch());
 		}
 		if (attackTicks > 0 && --attackTicks == 0 && getTarget() != null && distanceTo(getTarget()) < 4.5 * getScale()) {
@@ -169,21 +178,6 @@ public class Piglutton extends Monster {
 			}
 			if (eatingTicks == 0) {
 				setEating(false);
-			}
-		}
-	}
-
-	@Override
-	public void aiStep() {
-		super.aiStep();
-		if (level() instanceof ServerLevel level && (horizontalCollision || (verticalCollision && !verticalCollisionBelow)) && level.getGameRules().get(GameRules.MOB_GRIEFING)) {
-			AABB box = getBoundingBox().inflate(0.2);
-			for (BlockPos pos : BlockPos.betweenClosed(Mth.floor(box.minX), Mth.floor(box.minY), Mth.floor(box.minZ), Mth.floor(box.maxX), Mth.floor(box.maxY), Mth.floor(box.maxZ))) {
-				BlockState state = level.getBlockState(pos);
-				float destroySpeed = state.getDestroySpeed(level, pos);
-				if (destroySpeed >= 0 && (destroySpeed < 0.5F || state.is(ModBlockTags.PIGLUTTON_BREAKABLE))) {
-					level.destroyBlock(pos, true);
-				}
 			}
 		}
 	}
@@ -212,10 +206,10 @@ public class Piglutton extends Monster {
 	protected float getDamageAfterMagicAbsorb(DamageSource source, float damage) {
 		float damageTaken = super.getDamageAfterMagicAbsorb(source, damage);
 		this.damageTaken += damageTaken;
-		fleeingTicks = 0;
+		fleeTicks = 0;
 		if (this.damageTaken >= DAMAGE_THRESHOLD) {
 			this.damageTaken = 0;
-			fleeingTicks = 160;
+			fleeTicks = 160;
 		}
 		return damageTaken;
 	}
@@ -299,7 +293,7 @@ public class Piglutton extends Monster {
 	}
 
 	public boolean isFleeing() {
-		return fleeingTicks > 0;
+		return fleeTicks > 0;
 	}
 
 	public boolean isBusy() {

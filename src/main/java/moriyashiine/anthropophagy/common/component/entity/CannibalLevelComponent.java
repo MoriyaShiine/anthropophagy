@@ -152,8 +152,7 @@ public class CannibalLevelComponent implements AutoSyncedComponent {
 		return level >= minInc && level < maxExc;
 	}
 
-	private record AttributeModifierSet(
-			List<Tuple<Holder<Attribute>, AttributeModifier>> attributes) {
+	private record AttributeModifierSet(List<Tuple<Holder<Attribute>, AttributeModifier>> attributes) {
 		void addModifier(Holder<Attribute> attribute, AttributeModifier modifier) {
 			attributes().add(new Tuple<>(attribute, modifier));
 		}
