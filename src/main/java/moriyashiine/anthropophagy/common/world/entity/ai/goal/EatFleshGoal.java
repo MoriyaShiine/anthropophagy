@@ -68,7 +68,7 @@ public class EatFleshGoal extends Goal {
 	}
 
 	@Nullable
-	public static ItemEntity getNearestFlesh(PathfinderMob mob) {
+	private static ItemEntity getNearestFlesh(PathfinderMob mob) {
 		List<ItemEntity> drops = mob.level().getEntities(EntityType.ITEM, mob.getBoundingBox().inflate(10, 4, 10), foundEntity -> foundEntity.getItem().is(ModItemTags.FLESH) && !foundEntity.getItem().is(ModItems.CORRUPT_FLESH));
 		if (drops.isEmpty()) {
 			return null;
