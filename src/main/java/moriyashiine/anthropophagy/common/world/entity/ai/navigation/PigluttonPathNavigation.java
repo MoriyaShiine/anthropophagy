@@ -4,19 +4,19 @@
 
 package moriyashiine.anthropophagy.common.world.entity.ai.navigation;
 
+import moriyashiine.anthropophagy.common.world.entity.Piglutton;
 import net.minecraft.core.BlockPos;
 import net.minecraft.util.Mth;
-import net.minecraft.world.entity.PathfinderMob;
 import net.minecraft.world.entity.ai.navigation.GroundPathNavigation;
 import net.minecraft.world.entity.ai.util.GoalUtils;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
 
 public class PigluttonPathNavigation extends GroundPathNavigation {
-	private final PathfinderMob mob;
+	private final Piglutton mob;
 	private final int timeOutSpeed;
 
-	public PigluttonPathNavigation(PathfinderMob mob, Level level, int timeOutSpeed) {
+	public PigluttonPathNavigation(Piglutton mob, Level level, int timeOutSpeed) {
 		super(mob, level);
 		this.mob = mob;
 		this.timeOutSpeed = timeOutSpeed;

@@ -12,6 +12,7 @@ import moriyashiine.anthropophagy.common.tag.ModItemTags;
 import moriyashiine.anthropophagy.common.world.entity.Piglutton;
 import moriyashiine.anthropophagy.common.world.item.FleshItem;
 import moriyashiine.strawberrylib.api.event.EatFoodEvent;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.LivingEntity;
@@ -38,8 +39,8 @@ public class CannibalEatingEvent implements EatFoodEvent {
 					user.addEffect(new MobEffectInstance(MobEffects.BLINDNESS, 200));
 				}
 			}
-			if (ModConfig.enablePiglutton) {
-				Piglutton.attemptSpawn(user, cannibalLevelComponent.getCannibalLevel(), FleshItem.isOwnerPlayer(stack) && user.getName().getString().equals(FleshItem.getOwnerName(stack)));
+			if (ModConfig.enablePiglutton && level instanceof ServerLevel serverLevel) {
+				Piglutton.attemptSpawn(serverLevel, user, cannibalLevelComponent.getCannibalLevel(), FleshItem.isOwnerPlayer(stack) && user.getName().getString().equals(FleshItem.getOwnerName(stack)));
 			}
 		} else {
 			if (!tetheredComponent.isTethered() && cannibalLevelComponent.getCannibalLevel() > 0) {

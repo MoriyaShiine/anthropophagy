@@ -7,14 +7,15 @@ package moriyashiine.anthropophagy.common.world.entity.ai.goal;
 import moriyashiine.anthropophagy.common.world.entity.Piglutton;
 import net.minecraft.world.entity.ai.goal.WaterAvoidingRandomStrollGoal;
 
-public class PigluttonWanderAroundFarGoal extends WaterAvoidingRandomStrollGoal {
-	public PigluttonWanderAroundFarGoal(Piglutton mob, double speedModifier) {
+public class PigluttonRandomStrollGoal extends WaterAvoidingRandomStrollGoal {
+	public PigluttonRandomStrollGoal(Piglutton mob, double speedModifier) {
 		super(mob, speedModifier);
-		this.interval = 60;
+		interval = DEFAULT_INTERVAL / 2;
 	}
 
 	@Override
 	public boolean canUse() {
-		return ((Piglutton) mob).stalkTicks == 0 && super.canUse();
+		Piglutton piglutton = (Piglutton) mob;
+		return piglutton.getTarget() == null && !piglutton.isEating() && super.canUse();
 	}
 }

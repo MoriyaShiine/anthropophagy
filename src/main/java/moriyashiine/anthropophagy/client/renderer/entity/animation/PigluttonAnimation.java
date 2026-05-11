@@ -396,7 +396,7 @@ public class PigluttonAnimation {
 			))
 			.build();
 
-	public static final AnimationDefinition EAT = AnimationDefinition.Builder.withLength(2.0833F)
+	public static final AnimationDefinition EAT = AnimationDefinition.Builder.withLength(1.5F)
 			.addAnimation("head", new AnimationChannel(AnimationChannel.Targets.ROTATION,
 					new Keyframe(0, KeyframeAnimations.degreeVec(0, 0, 0), AnimationChannel.Interpolations.LINEAR),
 					new Keyframe(0.25F, KeyframeAnimations.degreeVec(15, 10, 0), AnimationChannel.Interpolations.LINEAR),
@@ -411,7 +411,7 @@ public class PigluttonAnimation {
 					new Keyframe(1.1667F, KeyframeAnimations.degreeVec(-20, 0, 0), AnimationChannel.Interpolations.LINEAR),
 					new Keyframe(1.3333F, KeyframeAnimations.degreeVec(-20, 0, 0), AnimationChannel.Interpolations.LINEAR),
 					new Keyframe(1.4167F, KeyframeAnimations.degreeVec(0, 0, 0), AnimationChannel.Interpolations.LINEAR),
-					new Keyframe(1.5417F, KeyframeAnimations.degreeVec(0, 0, 0), AnimationChannel.Interpolations.LINEAR)
+					new Keyframe(1.5F, KeyframeAnimations.degreeVec(0, 0, 0), AnimationChannel.Interpolations.LINEAR)
 			))
 			.addAnimation("lowerJaw", new AnimationChannel(AnimationChannel.Targets.ROTATION,
 					new Keyframe(0.3333F, KeyframeAnimations.degreeVec(0, 0, 0), AnimationChannel.Interpolations.LINEAR),
@@ -421,12 +421,7 @@ public class PigluttonAnimation {
 					new Keyframe(0.7083F, KeyframeAnimations.degreeVec(0, 0, 0), AnimationChannel.Interpolations.LINEAR),
 					new Keyframe(0.8333F, KeyframeAnimations.degreeVec(15, 0, 0), AnimationChannel.Interpolations.LINEAR),
 					new Keyframe(0.9167F, KeyframeAnimations.degreeVec(0, 0, 0), AnimationChannel.Interpolations.LINEAR),
-					new Keyframe(1, KeyframeAnimations.degreeVec(0, 0, 0), AnimationChannel.Interpolations.LINEAR),
-					new Keyframe(1.625F, KeyframeAnimations.degreeVec(0, 0, 0), AnimationChannel.Interpolations.LINEAR),
-					new Keyframe(1.7083F, KeyframeAnimations.degreeVec(12.5F, 0, 0), AnimationChannel.Interpolations.LINEAR),
-					new Keyframe(1.8333F, KeyframeAnimations.degreeVec(0, 0, 0), AnimationChannel.Interpolations.LINEAR),
-					new Keyframe(1.9583F, KeyframeAnimations.degreeVec(12.5F, 0, 0), AnimationChannel.Interpolations.LINEAR),
-					new Keyframe(2.0833F, KeyframeAnimations.degreeVec(0, 0, 0), AnimationChannel.Interpolations.LINEAR)
+					new Keyframe(1, KeyframeAnimations.degreeVec(0, 0, 0), AnimationChannel.Interpolations.LINEAR)
 			))
 			.addAnimation("rArm01", new AnimationChannel(AnimationChannel.Targets.ROTATION,
 					new Keyframe(0, KeyframeAnimations.degreeVec(0, 0, 0), AnimationChannel.Interpolations.LINEAR),

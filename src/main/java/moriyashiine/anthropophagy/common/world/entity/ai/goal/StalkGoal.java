@@ -6,14 +6,13 @@ package moriyashiine.anthropophagy.common.world.entity.ai.goal;
 
 import moriyashiine.anthropophagy.common.world.entity.Piglutton;
 import net.minecraft.commands.arguments.EntityAnchorArgument;
-import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.goal.Goal;
-import net.minecraft.world.entity.player.Player;
 
 public class StalkGoal extends Goal {
 	private static final int MAX_STALK_TICKS = 120;
 
 	private final Piglutton mob;
+	private int stalkTicks = 0;
 
 	public StalkGoal(Piglutton mob) {
 		this.mob = mob;
@@ -21,7 +20,7 @@ public class StalkGoal extends Goal {
 
 	@Override
 	public boolean canUse() {
-		return !mob.isBusy();
+		return !mob.isEating() && mob.getTarget() != null && mob.distanceTo(mob.getTarget()) > 8;
 	}
 
 	@Override
@@ -31,27 +30,21 @@ public class StalkGoal extends Goal {
 
 	@Override
 	public void start() {
-		mob.canAttack = false;
-		mob.stalkTicks = 0;
+		mob.stalking = true;
+		stalkTicks = 0;
+	}
+
+	@Override
+	public void stop() {
+		mob.stalking = false;
+		stalkTicks = 0;
 	}
 
 	@Override
 	public void tick() {
-		if (canAttack(mob.getTarget())) {
-			if (++mob.stalkTicks >= MAX_STALK_TICKS || mob.distanceTo(mob.getTarget()) < 12 || mob.getLastHurtByMob() != null) {
-				mob.canAttack = true;
-			}
+		if (mob.getTarget() != null) {
+			mob.stalking = ++stalkTicks <= MAX_STALK_TICKS;
 			mob.lookAt(EntityAnchorArgument.Anchor.EYES, mob.getTarget().position());
-		} else {
-			mob.canAttack = false;
-			mob.stalkTicks = 0;
 		}
-	}
-
-	private boolean canAttack(LivingEntity entity) {
-		if (entity == null || entity.isDeadOrDying() || !entity.isAttackable()) {
-			return false;
-		}
-		return !(entity instanceof Player player) || !player.getAbilities().invulnerable;
 	}
 }

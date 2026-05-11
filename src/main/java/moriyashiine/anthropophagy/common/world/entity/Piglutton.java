@@ -5,18 +5,24 @@
 package moriyashiine.anthropophagy.common.world.entity;
 
 import moriyashiine.anthropophagy.common.init.ModEntityTypes;
+import moriyashiine.anthropophagy.common.init.ModItems;
 import moriyashiine.anthropophagy.common.init.ModSoundEvents;
 import moriyashiine.anthropophagy.common.tag.ModBlockTags;
 import moriyashiine.anthropophagy.common.tag.ModEntityTypeTags;
 import moriyashiine.anthropophagy.common.world.entity.ai.goal.*;
 import moriyashiine.anthropophagy.common.world.entity.ai.navigation.PigluttonPathNavigation;
 import moriyashiine.strawberrylib.api.module.SLibUtils;
+import moriyashiine.strawberrylib.api.objects.enums.ParticleAnchor;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.component.DataComponents;
+import net.minecraft.core.particles.ItemParticleOption;
+import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvent;
+import net.minecraft.sounds.SoundEvents;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.AnimationState;
@@ -26,13 +32,11 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.goal.FloatGoal;
-import net.minecraft.world.entity.ai.goal.LookAtPlayerGoal;
-import net.minecraft.world.entity.ai.goal.RandomLookAroundGoal;
 import net.minecraft.world.entity.ai.goal.target.HurtByTargetGoal;
 import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
 import net.minecraft.world.entity.ai.navigation.PathNavigation;
 import net.minecraft.world.entity.monster.Monster;
-import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.level.block.state.BlockState;
@@ -41,19 +45,19 @@ import net.minecraft.world.level.pathfinder.PathType;
 import net.minecraft.world.level.storage.ValueInput;
 import net.minecraft.world.level.storage.ValueOutput;
 import net.minecraft.world.phys.AABB;
+import net.minecraft.world.phys.Vec3;
 
 public class Piglutton extends Monster {
-	private static final int DAMAGE_THRESHOLD = 20;
+	private static final int MAX_OVERHEAL = 30;
 
 	private static final EntityDataAccessor<Boolean> EATING = SynchedEntityData.defineId(Piglutton.class, EntityDataSerializers.BOOLEAN);
 	private static final EntityDataAccessor<Integer> ATTACK_INDEX = SynchedEntityData.defineId(Piglutton.class, EntityDataSerializers.INT);
 
-	public boolean canAttack = false;
-	public int overhealAmount = 0, stalkTicks = 0;
-	private float damageTaken = 0;
-	private int fleeTicks = 0;
+	private int overhealAmount = 0;
 
-	private int attackTicks = 0, eatingTicks = 0;
+	public boolean stalking = false;
+
+	private int eatingTicks = 0, attackTicks = 0;
 
 	public final AnimationState idleAnimationState = new AnimationState();
 	public final AnimationState attackLeftAnimationState = new AnimationState();
@@ -93,11 +97,7 @@ public class Piglutton extends Monster {
 		super.readAdditionalSaveData(input);
 		setEating(input.getBooleanOr("Eating", false));
 		setAttackIndex(input.getIntOr("AttackIndex", 0));
-		canAttack = input.getBooleanOr("CanAttack", false);
-		damageTaken = input.getFloatOr("DamageTaken", 0);
 		overhealAmount = input.getIntOr("OverhealAmount", 0);
-		stalkTicks = input.getIntOr("StalkTicks", 0);
-		fleeTicks = input.getIntOr("FleeTicks", 0);
 	}
 
 	@Override
@@ -105,11 +105,7 @@ public class Piglutton extends Monster {
 		super.addAdditionalSaveData(output);
 		output.putBoolean("Eating", isEating());
 		output.putInt("AttackIndex", getAttackIndex());
-		output.putBoolean("CanAttack", canAttack);
-		output.putFloat("DamageTaken", damageTaken);
 		output.putInt("OverhealAmount", overhealAmount);
-		output.putInt("StalkTicks", stalkTicks);
-		output.putInt("FleeTicks", fleeTicks);
 	}
 
 	@Override
@@ -122,15 +118,13 @@ public class Piglutton extends Monster {
 	@Override
 	protected void registerGoals() {
 		goalSelector.addGoal(0, new FloatGoal(this));
-		goalSelector.addGoal(1, new EatFleshGoal(this));
+		goalSelector.addGoal(1, new FindFleshGoal(this));
 		goalSelector.addGoal(2, new StalkGoal(this));
-		goalSelector.addGoal(2, new FleeGoal(this));
 		goalSelector.addGoal(3, new PigluttonMeleeAttackGoal(this, 1, true));
-		goalSelector.addGoal(4, new PigluttonWanderAroundFarGoal(this, 1 / 3F));
-		goalSelector.addGoal(5, new LookAtPlayerGoal(this, Player.class, 16));
-		goalSelector.addGoal(5, new RandomLookAroundGoal(this));
+		goalSelector.addGoal(4, new PigluttonRandomStrollGoal(this, 1 / 3F));
+		goalSelector.addGoal(5, new PigluttonRandomLookAroundGoal(this));
 		targetSelector.addGoal(0, new HurtByTargetGoal(this));
-		targetSelector.addGoal(1, new NearestAttackableTargetGoal<>(this, LivingEntity.class, 10, true, false, (target, _) -> !isBusy() && target.is(ModEntityTypeTags.PIGLUTTON_TARGETS)));
+		targetSelector.addGoal(1, new NearestAttackableTargetGoal<>(this, LivingEntity.class, 10, true, false, (target, _) -> !isEating() && target.is(ModEntityTypeTags.PIGLUTTON_TARGETS)));
 	}
 
 	@Override
@@ -158,27 +152,24 @@ public class Piglutton extends Monster {
 				}
 			});
 		}
-
-		if (fleeTicks > 0 && --fleeTicks % 20 == 0) {
-			SLibUtils.playSound(this, ModSoundEvents.ENTITY_PIGLUTTON_FLEE, getSoundVolume() * 2, getVoicePitch());
-		}
-		if (attackTicks > 0 && --attackTicks == 0 && getTarget() != null && distanceTo(getTarget()) < 4.5 * getScale()) {
-			doHurtTarget(level, getTarget());
-		}
 		if (eatingTicks > 0) {
+			getNavigation().stop();
 			eatingTicks--;
-			if (eatingTicks <= 35 && eatingTicks >= 15 && eatingTicks % 5 == 0) {
-				EatFleshGoal.playEffects(this, getMainHandItem(), getEyePosition().add(getLookAngle().scale(2).scale(getScale())));
+			if (eatingTicks <= 50 && eatingTicks >= 25 && eatingTicks % 5 == 0) {
+				playFoodEffects(level, getMainHandItem(), getEyePosition().add(getLookAngle().scale(2).scale(getScale())));
 			}
-			if (eatingTicks == 15) {
-				EatFleshGoal.heal(level, this, getMainHandItem(), !hasCustomName());
+			if (eatingTicks == 25) {
+				heal(level, getMainHandItem(), !hasCustomName());
 			}
-			if (eatingTicks == 14) {
+			if (eatingTicks == 24) {
 				getMainHandItem().shrink(1);
 			}
 			if (eatingTicks == 0) {
 				setEating(false);
 			}
+		}
+		if (attackTicks > 0 && --attackTicks == 0 && getTarget() != null) {
+			doHurtTarget(level, getTarget());
 		}
 	}
 
@@ -203,18 +194,6 @@ public class Piglutton extends Monster {
 	}
 
 	@Override
-	protected float getDamageAfterMagicAbsorb(DamageSource source, float damage) {
-		float damageTaken = super.getDamageAfterMagicAbsorb(source, damage);
-		this.damageTaken += damageTaken;
-		fleeTicks = 0;
-		if (this.damageTaken >= DAMAGE_THRESHOLD) {
-			this.damageTaken = 0;
-			fleeTicks = 160;
-		}
-		return damageTaken;
-	}
-
-	@Override
 	public boolean requiresCustomPersistence() {
 		return true;
 	}
@@ -229,7 +208,7 @@ public class Piglutton extends Monster {
 		super.onSyncedDataUpdated(accessor);
 		if (accessor == EATING) {
 			if (entityData.get(EATING)) {
-				eatingTicks = 65;
+				eatingTicks = 60;
 			} else {
 				eatingTicks = 0;
 			}
@@ -241,33 +220,33 @@ public class Piglutton extends Monster {
 
 	@Override
 	public void setXRot(float xRot) {
-		if (eatingTicks == 0) {
+		if (!isEating()) {
 			super.setXRot(xRot);
 		}
 	}
 
 	@Override
 	public void setYRot(float yRot) {
-		if (eatingTicks == 0) {
+		if (!isEating()) {
 			super.setYRot(yRot);
 		}
 	}
 
 	@Override
 	public void setYBodyRot(float yBodyRot) {
-		if (eatingTicks == 0) {
+		if (!isEating()) {
 			super.setYBodyRot(yBodyRot);
 		}
 	}
 
 	@Override
 	public void setYHeadRot(float yHeadRot) {
-		if (eatingTicks == 0) {
+		if (!isEating()) {
 			super.setYHeadRot(yHeadRot);
 		}
 	}
 
-	public int getAttackIndex() {
+	private int getAttackIndex() {
 		return entityData.get(ATTACK_INDEX);
 	}
 
@@ -292,24 +271,39 @@ public class Piglutton extends Monster {
 		setAttackIndex(index);
 	}
 
-	public boolean isFleeing() {
-		return fleeTicks > 0;
-	}
-
-	public boolean isBusy() {
-		return isFleeing() || eatingTicks > 0;
-	}
-
-	public static void attemptSpawn(LivingEntity living, int cannibalLevel, boolean ownFlesh) {
-		if (living.level().isClientSide()) {
-			return;
+	public void heal(ServerLevel level, ItemStack stack, boolean allowOverheal) {
+		int healAmount = 6;
+		if (stack.has(DataComponents.FOOD)) {
+			healAmount = stack.get(DataComponents.FOOD).nutrition() * 2;
 		}
+		if (allowOverheal && getHealth() >= getMaxHealth()) {
+			overhealAmount += healAmount;
+			if (overhealAmount >= MAX_OVERHEAL) {
+				SLibUtils.addParticles(this, ParticleTypes.SMOKE, 64, ParticleAnchor.BODY);
+				spawnAtLocation(level, ModItems.PIGLUTTON_HEART);
+				discard();
+			}
+		} else {
+			heal(healAmount);
+		}
+	}
+
+	public void playFoodEffects(ServerLevel level, ItemStack stack, Vec3 pos) {
+		level.sendParticles(new ItemParticleOption(ParticleTypes.ITEM, stack.getItem()),
+				pos.x(), pos.y(), pos.z(),
+				8,
+				0.125, 0.125, 0.125,
+				0);
+		SLibUtils.playSound(this, SoundEvents.GENERIC_EAT.value());
+	}
+
+	public static void attemptSpawn(ServerLevel level, LivingEntity living, int cannibalLevel, boolean ownFlesh) {
 		float chance = (Math.min(90, cannibalLevel) - 40) / 800F;
 		if (ownFlesh) {
 			chance *= 3;
 		}
 		if (living.getRandom().nextFloat() < chance) {
-			Piglutton piglutton = ModEntityTypes.PIGLUTTON.create(living.level(), EntitySpawnReason.TRIGGERED);
+			Piglutton piglutton = ModEntityTypes.PIGLUTTON.create(level, EntitySpawnReason.TRIGGERED);
 			if (piglutton != null) {
 				final int minH = 16, maxH = 32;
 				for (int i = 0; i < 8; i++) {
@@ -317,7 +311,7 @@ public class Piglutton extends Monster {
 					int dY = living.getRandom().nextIntBetweenInclusive(-6, 6);
 					int dZ = living.getRandom().nextIntBetweenInclusive(minH, maxH) * (living.getRandom().nextBoolean() ? 1 : -1);
 					if (piglutton.randomTeleport(living.getX() + dX, living.getY() + dY, living.getZ() + dZ, false)) {
-						living.level().addFreshEntity(piglutton);
+						level.addFreshEntity(piglutton);
 						piglutton.setTarget(living);
 						SLibUtils.playSound(piglutton, ModSoundEvents.ENTITY_PIGLUTTON_SPAWN, 3.5F, 1);
 						return;

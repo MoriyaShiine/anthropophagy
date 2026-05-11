@@ -13,7 +13,6 @@ public class ModSoundEvents {
 	public static final SoundEvent ENTITY_PIGLUTTON_HURT = registerSoundEvent("entity.piglutton.hurt");
 	public static final SoundEvent ENTITY_PIGLUTTON_DEATH = registerSoundEvent("entity.piglutton.death");
 	public static final SoundEvent ENTITY_PIGLUTTON_SPAWN = registerSoundEvent("entity.piglutton.spawn");
-	public static final SoundEvent ENTITY_PIGLUTTON_FLEE = registerSoundEvent("entity.piglutton.flee");
 
 	public static void init() {
 	}

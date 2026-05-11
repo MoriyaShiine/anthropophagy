@@ -31,8 +31,6 @@ public class ModSoundsProvider extends FabricSoundsProvider {
 				.sound(ofEvent(SoundEvents.HOGLIN_DEATH)));
 		exporter.add(ModSoundEvents.ENTITY_PIGLUTTON_SPAWN, of().subtitle("subtitles.anthropophagy.entity.piglutton.spawn")
 				.sound(ofEvent(SoundEvents.HOGLIN_CONVERTED_TO_ZOMBIFIED)));
-		exporter.add(ModSoundEvents.ENTITY_PIGLUTTON_FLEE, of().subtitle("subtitles.anthropophagy.entity.piglutton.flee")
-				.sound(ofEvent(SoundEvents.PIGLIN_RETREAT)));
 	}
 
 	@Override

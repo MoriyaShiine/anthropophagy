@@ -19,22 +19,15 @@ public class PigluttonMeleeAttackGoal extends MeleeAttackGoal {
 
 	@Override
 	public boolean canUse() {
-		return mob.canAttack && !mob.isBusy() && super.canUse();
-	}
-
-	@Override
-	public void tick() {
-		if (mob.canAttack && !mob.isBusy()) {
-			super.tick();
-		}
+		return !mob.stalking && !mob.isEating() && super.canUse();
 	}
 
 	@Override
 	protected void checkAndPerformAttack(LivingEntity target) {
 		if (canPerformAttack(target)) {
-			mob.attack();
 			resetAttackCooldown();
 			mob.swing(InteractionHand.MAIN_HAND);
+			mob.attack();
 		}
 	}
 }

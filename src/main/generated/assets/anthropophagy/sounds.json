@@ -17,15 +17,6 @@
 	],
 	"subtitle": "subtitles.anthropophagy.entity.piglutton.death"
   },
-  "entity.piglutton.flee": {
-	"sounds": [
-	  {
-		"type": "event",
-		"name": "minecraft:entity.piglin.retreat"
-	  }
-	],
-	"subtitle": "subtitles.anthropophagy.entity.piglutton.flee"
-  },
   "entity.piglutton.hurt": {
 	"sounds": [
 	  {

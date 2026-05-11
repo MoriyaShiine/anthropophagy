@@ -83,16 +83,12 @@ public class PigluttonModel extends EntityModel<PigluttonRenderState> implements
 	@Override
 	public void setupAnim(PigluttonRenderState state) {
 		super.setupAnim(state);
-		if (!state.eatAnimationState.isStarted()) {
-			neck.xRot = (float) Math.toRadians(state.xRot / 2);
-			neck.yRot = (float) Math.toRadians(state.yRot / 2);
-		}
 		walkAnimation.applyWalk(state.walkAnimationPos, state.walkAnimationSpeed, 4, 25);
 		idleAnimation.apply(state.idleAnimationState, state.ageInTicks);
 		attackLeftAnimation.apply(state.attackLeftAnimationState, state.ageInTicks);
 		attackRightAnimation.apply(state.attackRightAnimationState, state.ageInTicks);
 		attackTusksAnimation.apply(state.attackTusksAnimationState, state.ageInTicks);
-		eatAnimation.apply(state.eatAnimationState, state.ageInTicks, 0.4F);
+		eatAnimation.apply(state.eatAnimationState, state.ageInTicks, 0.5F);
 	}
 
 	@Override
