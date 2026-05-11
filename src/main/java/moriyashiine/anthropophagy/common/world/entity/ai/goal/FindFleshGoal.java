@@ -31,8 +31,21 @@ public class FindFleshGoal extends Goal {
 
 	@Override
 	public boolean canUse() {
+		if (mob.isEating()) {
+			return false;
+		}
 		closestFleshItem = getNearestFlesh(mob);
 		return closestFleshItem != null;
+	}
+
+	@Override
+	public void start() {
+		mob.pathingToFlesh = true;
+	}
+
+	@Override
+	public void stop() {
+		mob.pathingToFlesh = false;
 	}
 
 	@Override

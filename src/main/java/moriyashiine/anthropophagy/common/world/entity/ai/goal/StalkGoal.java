@@ -20,7 +20,7 @@ public class StalkGoal extends Goal {
 
 	@Override
 	public boolean canUse() {
-		return !mob.isEating() && mob.getTarget() != null && mob.distanceTo(mob.getTarget()) > 8;
+		return mob.isCapableOfActing() && mob.getTarget() != null && mob.distanceTo(mob.getTarget()) > 16;
 	}
 
 	@Override

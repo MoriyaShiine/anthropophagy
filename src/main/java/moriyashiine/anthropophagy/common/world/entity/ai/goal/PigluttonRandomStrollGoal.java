@@ -16,6 +16,6 @@ public class PigluttonRandomStrollGoal extends WaterAvoidingRandomStrollGoal {
 	@Override
 	public boolean canUse() {
 		Piglutton piglutton = (Piglutton) mob;
-		return piglutton.getTarget() == null && !piglutton.isEating() && super.canUse();
+		return piglutton.isCapableOfActing() && piglutton.getTarget() == null && super.canUse();
 	}
 }

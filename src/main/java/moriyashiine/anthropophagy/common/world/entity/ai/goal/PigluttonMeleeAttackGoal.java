@@ -19,7 +19,7 @@ public class PigluttonMeleeAttackGoal extends MeleeAttackGoal {
 
 	@Override
 	public boolean canUse() {
-		return !mob.stalking && !mob.isEating() && super.canUse();
+		return !mob.stalking && mob.isCapableOfActing() && super.canUse();
 	}
 
 	@Override

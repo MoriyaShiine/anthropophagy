@@ -10,6 +10,7 @@ import moriyashiine.anthropophagy.common.init.ModSoundEvents;
 import moriyashiine.anthropophagy.common.tag.ModBlockTags;
 import moriyashiine.anthropophagy.common.tag.ModEntityTypeTags;
 import moriyashiine.anthropophagy.common.world.entity.ai.goal.*;
+import moriyashiine.anthropophagy.common.world.entity.ai.goal.target.PigluttonHurtByTargetGoal;
 import moriyashiine.anthropophagy.common.world.entity.ai.navigation.PigluttonPathNavigation;
 import moriyashiine.strawberrylib.api.module.SLibUtils;
 import moriyashiine.strawberrylib.api.objects.enums.ParticleAnchor;
@@ -33,10 +34,11 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.goal.FloatGoal;
-import net.minecraft.world.entity.ai.goal.target.HurtByTargetGoal;
+import net.minecraft.world.entity.ai.goal.LookAtPlayerGoal;
 import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
 import net.minecraft.world.entity.ai.navigation.PathNavigation;
 import net.minecraft.world.entity.monster.Monster;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.ServerLevelAccessor;
@@ -59,7 +61,7 @@ public class Piglutton extends Monster {
 
 	private int overhealAmount = 0;
 
-	public boolean stalking = false;
+	public boolean stalking = false, pathingToFlesh = false;
 
 	private int eatingTicks = 0, attackTicks = 0;
 
@@ -129,9 +131,10 @@ public class Piglutton extends Monster {
 		goalSelector.addGoal(2, new StalkGoal(this));
 		goalSelector.addGoal(3, new PigluttonMeleeAttackGoal(this, 1, true));
 		goalSelector.addGoal(4, new PigluttonRandomStrollGoal(this, 1 / 3F));
+		goalSelector.addGoal(5, new LookAtPlayerGoal(this, Player.class, 16));
 		goalSelector.addGoal(5, new PigluttonRandomLookAroundGoal(this));
-		targetSelector.addGoal(0, new HurtByTargetGoal(this));
-		targetSelector.addGoal(1, new NearestAttackableTargetGoal<>(this, LivingEntity.class, 10, true, false, (target, _) -> !isEating() && target.is(ModEntityTypeTags.PIGLUTTON_TARGETS)));
+		targetSelector.addGoal(0, new PigluttonHurtByTargetGoal(this));
+		targetSelector.addGoal(1, new NearestAttackableTargetGoal<>(this, LivingEntity.class, 10, true, false, (target, _) -> isCapableOfActing() && target.is(ModEntityTypeTags.PIGLUTTON_TARGETS)));
 	}
 
 	@Override
@@ -238,6 +241,10 @@ public class Piglutton extends Monster {
 		entityData.set(EATING_ROTATION, rotation.toVector3f());
 	}
 
+	public boolean isCapableOfActing() {
+		return !pathingToFlesh && !isEating();
+	}
+
 	public void attack() {
 		int index = getAttackIndex();
 		index++;
@@ -275,8 +282,9 @@ public class Piglutton extends Monster {
 
 	private void tickEating(ServerLevel level) {
 		if (eatingTicks > 0) {
-			getNavigation().stop();
 			eatingTicks--;
+			setTarget(null);
+			setLastHurtByMob(null);
 			if (eatingTicks == 0 || (eatingTicks > 24 && getMainHandItem().isEmpty())) {
 				setEating(false);
 				return;

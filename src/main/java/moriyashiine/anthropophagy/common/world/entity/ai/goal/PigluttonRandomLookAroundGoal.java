@@ -17,6 +17,6 @@ public class PigluttonRandomLookAroundGoal extends RandomLookAroundGoal {
 
 	@Override
 	public boolean canUse() {
-		return mob.getTarget() == null && !mob.isEating() && super.canUse();
+		return mob.isCapableOfActing() && mob.getTarget() == null && super.canUse();
 	}
 }
