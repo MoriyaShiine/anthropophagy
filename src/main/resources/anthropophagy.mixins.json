@@ -6,7 +6,8 @@
 	"AbstractFurnaceBlockEntityMixin",
 	"CampfireBlockEntityMixin",
 	"FoodDataMixin",
-	"LivingEntityMixin"
+	"LivingEntityMixin",
+	"MobMixin"
   ],
   "injectors": {
 	"defaultRequire": 1
