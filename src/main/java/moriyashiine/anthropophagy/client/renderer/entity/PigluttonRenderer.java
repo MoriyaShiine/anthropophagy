@@ -7,7 +7,7 @@ package moriyashiine.anthropophagy.client.renderer.entity;
 import moriyashiine.anthropophagy.client.renderer.entity.model.PigluttonModel;
 import moriyashiine.anthropophagy.client.renderer.entity.state.PigluttonRenderState;
 import moriyashiine.anthropophagy.common.Anthropophagy;
-import moriyashiine.anthropophagy.common.world.entity.Piglutton;
+import moriyashiine.anthropophagy.common.world.entity.monster.Piglutton;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.entity.MobRenderer;
 import net.minecraft.client.renderer.entity.layers.ItemInHandLayer;

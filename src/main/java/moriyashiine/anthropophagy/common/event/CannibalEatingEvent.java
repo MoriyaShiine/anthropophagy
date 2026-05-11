@@ -9,7 +9,7 @@ import moriyashiine.anthropophagy.common.component.entity.CannibalLevelComponent
 import moriyashiine.anthropophagy.common.component.entity.TetheredComponent;
 import moriyashiine.anthropophagy.common.init.ModEntityComponents;
 import moriyashiine.anthropophagy.common.tag.ModItemTags;
-import moriyashiine.anthropophagy.common.world.entity.Piglutton;
+import moriyashiine.anthropophagy.common.world.entity.monster.Piglutton;
 import moriyashiine.anthropophagy.common.world.item.FleshItem;
 import moriyashiine.strawberrylib.api.event.EatFoodEvent;
 import net.minecraft.server.level.ServerLevel;

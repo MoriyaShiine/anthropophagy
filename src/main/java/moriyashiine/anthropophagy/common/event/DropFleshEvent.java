@@ -7,7 +7,7 @@ package moriyashiine.anthropophagy.common.event;
 import moriyashiine.anthropophagy.common.ModConfig;
 import moriyashiine.anthropophagy.common.tag.ModItemTags;
 import moriyashiine.anthropophagy.common.util.FleshDrop;
-import moriyashiine.anthropophagy.common.world.entity.Piglutton;
+import moriyashiine.anthropophagy.common.world.entity.monster.Piglutton;
 import moriyashiine.anthropophagy.common.world.item.FleshItem;
 import moriyashiine.strawberrylib.api.event.AfterDamageIncludingDeathEvent;
 import moriyashiine.strawberrylib.api.module.SLibUtils;

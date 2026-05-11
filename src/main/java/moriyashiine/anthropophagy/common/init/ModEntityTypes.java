@@ -5,7 +5,7 @@
 package moriyashiine.anthropophagy.common.init;
 
 import moriyashiine.anthropophagy.common.ModConfig;
-import moriyashiine.anthropophagy.common.world.entity.Piglutton;
+import moriyashiine.anthropophagy.common.world.entity.monster.Piglutton;
 import net.fabricmc.fabric.api.biome.v1.BiomeModifications;
 import net.fabricmc.fabric.api.biome.v1.BiomeSelectors;
 import net.minecraft.tags.BiomeTags;

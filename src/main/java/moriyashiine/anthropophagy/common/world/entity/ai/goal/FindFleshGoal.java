@@ -6,7 +6,7 @@ package moriyashiine.anthropophagy.common.world.entity.ai.goal;
 
 import moriyashiine.anthropophagy.common.init.ModItems;
 import moriyashiine.anthropophagy.common.tag.ModItemTags;
-import moriyashiine.anthropophagy.common.world.entity.Piglutton;
+import moriyashiine.anthropophagy.common.world.entity.monster.Piglutton;
 import moriyashiine.anthropophagy.common.world.item.FleshItem;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.InteractionHand;

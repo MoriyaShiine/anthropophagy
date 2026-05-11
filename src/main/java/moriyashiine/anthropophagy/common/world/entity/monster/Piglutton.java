@@ -2,7 +2,7 @@
  * Copyright (c) MoriyaShiine. All Rights Reserved.
  */
 
-package moriyashiine.anthropophagy.common.world.entity;
+package moriyashiine.anthropophagy.common.world.entity.monster;
 
 import moriyashiine.anthropophagy.common.init.ModEntityTypes;
 import moriyashiine.anthropophagy.common.init.ModItems;

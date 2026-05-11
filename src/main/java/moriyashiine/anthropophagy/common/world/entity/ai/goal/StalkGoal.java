@@ -4,7 +4,7 @@
 
 package moriyashiine.anthropophagy.common.world.entity.ai.goal;
 
-import moriyashiine.anthropophagy.common.world.entity.Piglutton;
+import moriyashiine.anthropophagy.common.world.entity.monster.Piglutton;
 import net.minecraft.commands.arguments.EntityAnchorArgument;
 import net.minecraft.world.entity.ai.goal.Goal;
 

@@ -4,7 +4,7 @@
 
 package moriyashiine.anthropophagy.common.world.entity.ai.navigation;
 
-import moriyashiine.anthropophagy.common.world.entity.Piglutton;
+import moriyashiine.anthropophagy.common.world.entity.monster.Piglutton;
 import net.minecraft.core.BlockPos;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.ai.navigation.GroundPathNavigation;
