@@ -13,6 +13,7 @@ import moriyashiine.anthropophagy.common.world.entity.ai.goal.*;
 import moriyashiine.anthropophagy.common.world.entity.ai.navigation.PigluttonPathNavigation;
 import moriyashiine.strawberrylib.api.module.SLibUtils;
 import moriyashiine.strawberrylib.api.objects.enums.ParticleAnchor;
+import net.minecraft.commands.arguments.EntityAnchorArgument;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.particles.ItemParticleOption;
@@ -46,11 +47,14 @@ import net.minecraft.world.level.storage.ValueInput;
 import net.minecraft.world.level.storage.ValueOutput;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
+import org.joml.Vector3f;
+import org.joml.Vector3fc;
 
 public class Piglutton extends Monster {
 	private static final int MAX_OVERHEAL = 30;
 
 	private static final EntityDataAccessor<Boolean> EATING = SynchedEntityData.defineId(Piglutton.class, EntityDataSerializers.BOOLEAN);
+	private static final EntityDataAccessor<Vector3fc> EATING_ROTATION = SynchedEntityData.defineId(Piglutton.class, EntityDataSerializers.VECTOR3);
 	private static final EntityDataAccessor<Integer> ATTACK_INDEX = SynchedEntityData.defineId(Piglutton.class, EntityDataSerializers.INT);
 
 	private int overhealAmount = 0;
@@ -96,6 +100,7 @@ public class Piglutton extends Monster {
 	protected void readAdditionalSaveData(ValueInput input) {
 		super.readAdditionalSaveData(input);
 		setEating(input.getBooleanOr("Eating", false));
+		setEatingRotation(input.read("EatingRotation", Vec3.CODEC).orElse(Vec3.ZERO));
 		setAttackIndex(input.getIntOr("AttackIndex", 0));
 		overhealAmount = input.getIntOr("OverhealAmount", 0);
 	}
@@ -104,6 +109,7 @@ public class Piglutton extends Monster {
 	protected void addAdditionalSaveData(ValueOutput output) {
 		super.addAdditionalSaveData(output);
 		output.putBoolean("Eating", isEating());
+		output.store("EatingRotation", Vec3.CODEC, getEatingRotation());
 		output.putInt("AttackIndex", getAttackIndex());
 		output.putInt("OverhealAmount", overhealAmount);
 	}
@@ -112,6 +118,7 @@ public class Piglutton extends Monster {
 	protected void defineSynchedData(SynchedEntityData.Builder entityData) {
 		super.defineSynchedData(entityData);
 		entityData.define(EATING, false);
+		entityData.define(EATING_ROTATION, new Vector3f());
 		entityData.define(ATTACK_INDEX, 0);
 	}
 
@@ -130,6 +137,9 @@ public class Piglutton extends Monster {
 	@Override
 	public void tick() {
 		super.tick();
+		if (isEating()) {
+			lookAt(EntityAnchorArgument.Anchor.FEET, position().add(getEatingRotation()));
+		}
 		if (level().isClientSide()) {
 			idleAnimationState.startIfStopped(tickCount);
 			int index = getAttackIndex();
@@ -152,22 +162,7 @@ public class Piglutton extends Monster {
 				}
 			});
 		}
-		if (eatingTicks > 0) {
-			getNavigation().stop();
-			eatingTicks--;
-			if (eatingTicks <= 50 && eatingTicks >= 25 && eatingTicks % 5 == 0) {
-				playFoodEffects(level, getMainHandItem(), getEyePosition().add(getLookAngle().scale(2).scale(getScale())));
-			}
-			if (eatingTicks == 25) {
-				heal(level, getMainHandItem(), !hasCustomName());
-			}
-			if (eatingTicks == 24) {
-				getMainHandItem().shrink(1);
-			}
-			if (eatingTicks == 0) {
-				setEating(false);
-			}
-		}
+		tickEating(level);
 		if (attackTicks > 0 && --attackTicks == 0 && getTarget() != null) {
 			doHurtTarget(level, getTarget());
 		}
@@ -218,34 +213,6 @@ public class Piglutton extends Monster {
 		}
 	}
 
-	@Override
-	public void setXRot(float xRot) {
-		if (!isEating()) {
-			super.setXRot(xRot);
-		}
-	}
-
-	@Override
-	public void setYRot(float yRot) {
-		if (!isEating()) {
-			super.setYRot(yRot);
-		}
-	}
-
-	@Override
-	public void setYBodyRot(float yBodyRot) {
-		if (!isEating()) {
-			super.setYBodyRot(yBodyRot);
-		}
-	}
-
-	@Override
-	public void setYHeadRot(float yHeadRot) {
-		if (!isEating()) {
-			super.setYHeadRot(yHeadRot);
-		}
-	}
-
 	private int getAttackIndex() {
 		return entityData.get(ATTACK_INDEX);
 	}
@@ -260,6 +227,15 @@ public class Piglutton extends Monster {
 
 	public void setEating(boolean eating) {
 		entityData.set(EATING, eating);
+		setEatingRotation(eating ? getHeadLookAngle() : Vec3.ZERO);
+	}
+
+	private Vec3 getEatingRotation() {
+		return new Vec3(entityData.get(EATING_ROTATION));
+	}
+
+	private void setEatingRotation(Vec3 rotation) {
+		entityData.set(EATING_ROTATION, rotation.toVector3f());
 	}
 
 	public void attack() {
@@ -295,6 +271,26 @@ public class Piglutton extends Monster {
 				0.125, 0.125, 0.125,
 				0);
 		SLibUtils.playSound(this, SoundEvents.GENERIC_EAT.value());
+	}
+
+	private void tickEating(ServerLevel level) {
+		if (eatingTicks > 0) {
+			getNavigation().stop();
+			eatingTicks--;
+			if (eatingTicks == 0 || (eatingTicks > 24 && getMainHandItem().isEmpty())) {
+				setEating(false);
+				return;
+			}
+			if (eatingTicks <= 50 && eatingTicks >= 25 && eatingTicks % 5 == 0) {
+				playFoodEffects(level, getMainHandItem(), getEyePosition().subtract(0, 0.75, 0).add(getHeadLookAngle().scale(2).scale(getScale())));
+			}
+			if (eatingTicks == 25) {
+				heal(level, getMainHandItem(), !hasCustomName());
+			}
+			if (eatingTicks == 24) {
+				getMainHandItem().shrink(1);
+			}
+		}
 	}
 
 	public static void attemptSpawn(ServerLevel level, LivingEntity living, int cannibalLevel, boolean ownFlesh) {
