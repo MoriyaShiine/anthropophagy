@@ -1,4 +1,14 @@
 ------------------------------------------------------
+Version 26.1-r6
+------------------------------------------------------
+- pigluttons no longer flee when taking lots of damage
+- pigluttons can now break bamboo
+- reduce piglutton hitbox
+- mobs the piglutton targets now flee from it
+- fix tons of issues with piglutton pathing, ai, and animations
+- fix pigluttons spawning in peaceful
+
+------------------------------------------------------
 Version 26.1-r5
 ------------------------------------------------------
 - cleanup datagen for other mods to use
