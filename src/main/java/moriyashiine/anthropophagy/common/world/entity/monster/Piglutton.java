@@ -4,11 +4,11 @@
 
 package moriyashiine.anthropophagy.common.world.entity.monster;
 
-import moriyashiine.anthropophagy.common.init.ModEntityTypes;
-import moriyashiine.anthropophagy.common.init.ModItems;
-import moriyashiine.anthropophagy.common.init.ModSoundEvents;
-import moriyashiine.anthropophagy.common.tag.ModBlockTags;
-import moriyashiine.anthropophagy.common.tag.ModEntityTypeTags;
+import moriyashiine.anthropophagy.common.init.AnthropophagyEntityTypes;
+import moriyashiine.anthropophagy.common.init.AnthropophagyItems;
+import moriyashiine.anthropophagy.common.init.AnthropophagySoundEvents;
+import moriyashiine.anthropophagy.common.tag.AnthropophagyBlockTags;
+import moriyashiine.anthropophagy.common.tag.AnthropophagyEntityTypeTags;
 import moriyashiine.anthropophagy.common.world.entity.ai.goal.*;
 import moriyashiine.anthropophagy.common.world.entity.ai.goal.target.PigluttonHurtByTargetGoal;
 import moriyashiine.anthropophagy.common.world.entity.ai.navigation.PigluttonPathNavigation;
@@ -134,7 +134,7 @@ public class Piglutton extends Monster {
 		goalSelector.addGoal(5, new LookAtPlayerGoal(this, Player.class, 16));
 		goalSelector.addGoal(5, new PigluttonRandomLookAroundGoal(this));
 		targetSelector.addGoal(0, new PigluttonHurtByTargetGoal(this));
-		targetSelector.addGoal(1, new NearestAttackableTargetGoal<>(this, LivingEntity.class, 10, true, false, (target, _) -> isCapableOfActing() && target.is(ModEntityTypeTags.PIGLUTTON_TARGETS)));
+		targetSelector.addGoal(1, new NearestAttackableTargetGoal<>(this, LivingEntity.class, 10, true, false, (target, _) -> isCapableOfActing() && target.is(AnthropophagyEntityTypeTags.PIGLUTTON_TARGETS)));
 	}
 
 	@Override
@@ -160,7 +160,7 @@ public class Piglutton extends Monster {
 			BlockPos.betweenClosed(getBoundingBox().inflate(0.2)).forEach(pos -> {
 				BlockState state = level.getBlockState(pos);
 				float destroySpeed = state.getDestroySpeed(level, pos);
-				if (destroySpeed >= 0 && (destroySpeed < 0.5F || state.is(ModBlockTags.PIGLUTTON_BREAKABLE))) {
+				if (destroySpeed >= 0 && (destroySpeed < 0.5F || state.is(AnthropophagyBlockTags.PIGLUTTON_BREAKABLE))) {
 					level.destroyBlock(pos, true);
 				}
 			});
@@ -173,17 +173,17 @@ public class Piglutton extends Monster {
 
 	@Override
 	protected SoundEvent getAmbientSound() {
-		return ModSoundEvents.ENTITY_PIGLUTTON_AMBIENT;
+		return AnthropophagySoundEvents.PIGLUTTON_AMBIENT;
 	}
 
 	@Override
 	protected SoundEvent getHurtSound(DamageSource source) {
-		return ModSoundEvents.ENTITY_PIGLUTTON_HURT;
+		return AnthropophagySoundEvents.PIGLUTTON_HURT;
 	}
 
 	@Override
 	protected SoundEvent getDeathSound() {
-		return ModSoundEvents.ENTITY_PIGLUTTON_DEATH;
+		return AnthropophagySoundEvents.PIGLUTTON_DEATH;
 	}
 
 	@Override
@@ -263,7 +263,7 @@ public class Piglutton extends Monster {
 			overhealAmount += healAmount;
 			if (overhealAmount >= MAX_OVERHEAL) {
 				SLibUtils.addParticles(this, ParticleTypes.SMOKE, 64, ParticleAnchor.BODY);
-				spawnAtLocation(level, ModItems.PIGLUTTON_HEART);
+				spawnAtLocation(level, AnthropophagyItems.PIGLUTTON_HEART);
 				discard();
 			}
 		} else {
@@ -307,7 +307,7 @@ public class Piglutton extends Monster {
 			chance *= 3;
 		}
 		if (living.getRandom().nextFloat() < chance) {
-			Piglutton piglutton = ModEntityTypes.PIGLUTTON.create(level, EntitySpawnReason.TRIGGERED);
+			Piglutton piglutton = AnthropophagyEntityTypes.PIGLUTTON.create(level, EntitySpawnReason.TRIGGERED);
 			if (piglutton != null) {
 				final int minH = 16, maxH = 32;
 				for (int i = 0; i < 8; i++) {
@@ -317,7 +317,7 @@ public class Piglutton extends Monster {
 					if (piglutton.randomTeleport(living.getX() + dX, living.getY() + dY, living.getZ() + dZ, false)) {
 						level.addFreshEntity(piglutton);
 						piglutton.setTarget(living);
-						SLibUtils.playSound(piglutton, ModSoundEvents.ENTITY_PIGLUTTON_SPAWN, 3.5F, 1);
+						SLibUtils.playSound(piglutton, AnthropophagySoundEvents.PIGLUTTON_SPAWN, 3.5F, 1);
 						return;
 					}
 				}

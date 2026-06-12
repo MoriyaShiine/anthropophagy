@@ -4,13 +4,13 @@
 
 package moriyashiine.anthropophagy.common.component.entity;
 
+import com.mojang.datafixers.util.Pair;
 import moriyashiine.anthropophagy.common.Anthropophagy;
-import moriyashiine.anthropophagy.common.init.ModEntityComponents;
+import moriyashiine.anthropophagy.common.init.AnthropophagyEntityComponents;
 import net.minecraft.core.Holder;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.resources.Identifier;
 import net.minecraft.util.Mth;
-import net.minecraft.util.Tuple;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
@@ -25,7 +25,7 @@ import org.ladysnake.cca.api.v3.component.sync.AutoSyncedComponent;
 import java.util.ArrayList;
 import java.util.List;
 
-public class CannibalLevelComponent implements AutoSyncedComponent {
+public class CannibalComponent implements AutoSyncedComponent {
 	public static final int MAX_LEVEL = 120;
 	public static final int MIN_FUNCTIONAL_LEVEL = 30;
 	private static final float MAX_FUNCTIONAL_LEVEL = MAX_LEVEL - MIN_FUNCTIONAL_LEVEL;
@@ -38,44 +38,55 @@ public class CannibalLevelComponent implements AutoSyncedComponent {
 	private static final Identifier STEP_HEIGHT_ID = Anthropophagy.id("step_height");
 
 	private final Player obj;
-	private int cannibalLevel = 0;
+	private boolean tethered = false;
+	private int level = 0;
 
-	public CannibalLevelComponent(Player obj) {
+	public CannibalComponent(Player obj) {
 		this.obj = obj;
 	}
 
 	@Override
 	public void readData(ValueInput input) {
-		cannibalLevel = input.getIntOr("CannibalLevel", 0);
+		tethered = input.getBooleanOr("Tethered", false);
+		level = input.getIntOr("Level", 0);
 	}
 
 	@Override
 	public void writeData(ValueOutput output) {
-		output.putInt("CannibalLevel", cannibalLevel);
+		output.putBoolean("Tethered", tethered);
+		output.putInt("Level", level);
 	}
 
 	public void sync() {
-		ModEntityComponents.CANNIBAL_LEVEL.sync(obj);
+		AnthropophagyEntityComponents.CANNIBAL.sync(obj);
 	}
 
-	public int getCannibalLevel() {
-		return cannibalLevel;
+	public boolean isTethered() {
+		return tethered;
 	}
 
-	public void setCannibalLevel(int cannibalLevel) {
-		this.cannibalLevel = cannibalLevel;
+	public void setTethered(boolean tethered) {
+		this.tethered = tethered;
+	}
+
+	public int getLevel() {
+		return level;
+	}
+
+	public void setLevel(int level) {
+		this.level = level;
 	}
 
 	public boolean cannotEquip(ItemStack stack) {
 		if (stack.getOrDefault(DataComponents.ATTRIBUTE_MODIFIERS, ItemAttributeModifiers.EMPTY).modifiers().stream().anyMatch(entry -> entry.attribute() == Attributes.ARMOR) || stack.has(DataComponents.GLIDER)) {
 			EquipmentSlot slot = obj.getEquipmentSlotForItem(stack);
-			if (getCannibalLevel() >= 30 && slot == EquipmentSlot.LEGS) {
+			if (getLevel() >= 30 && slot == EquipmentSlot.LEGS) {
 				return true;
-			} else if (getCannibalLevel() >= 50 && slot == EquipmentSlot.HEAD) {
+			} else if (getLevel() >= 50 && slot == EquipmentSlot.HEAD) {
 				return true;
-			} else if (getCannibalLevel() >= 70 && slot == EquipmentSlot.FEET) {
+			} else if (getLevel() >= 70 && slot == EquipmentSlot.FEET) {
 				return true;
-			} else return getCannibalLevel() >= 90 && slot == EquipmentSlot.CHEST;
+			} else return getLevel() >= 90 && slot == EquipmentSlot.CHEST;
 		}
 		return false;
 	}
@@ -88,7 +99,7 @@ public class CannibalLevelComponent implements AutoSyncedComponent {
 			obj.getAttribute(Attributes.MOVEMENT_SPEED).removeModifier(MOVEMENT_SPEED_ID);
 			obj.getAttribute(Attributes.SAFE_FALL_DISTANCE).removeModifier(SAFE_FALL_DISTANCE_ID);
 			obj.getAttribute(Attributes.STEP_HEIGHT).removeModifier(STEP_HEIGHT_ID);
-			getModifiersForLevel(getCannibalLevel()).attributes().forEach(pair -> obj.getAttribute(pair.getA()).addPermanentModifier(pair.getB()));
+			getModifiersForLevel(getLevel()).attributes().forEach(pair -> obj.getAttribute(pair.getFirst()).addPermanentModifier(pair.getSecond()));
 		}
 	}
 
@@ -135,7 +146,7 @@ public class CannibalLevelComponent implements AutoSyncedComponent {
 								AttributeModifier.Operation.ADD_VALUE));
 			}
 		}
-		attributes.attributes().removeIf(pair -> pair.getB().amount() == 0);
+		attributes.attributes().removeIf(pair -> pair.getSecond().amount() == 0);
 		return attributes;
 	}
 
@@ -148,13 +159,13 @@ public class CannibalLevelComponent implements AutoSyncedComponent {
 	}
 
 	private static boolean compareLevel(Player player, int minInc, int maxExc) {
-		int level = ModEntityComponents.CANNIBAL_LEVEL.get(player).getCannibalLevel();
+		int level = AnthropophagyEntityComponents.CANNIBAL.get(player).getLevel();
 		return level >= minInc && level < maxExc;
 	}
 
-	private record AttributeModifierSet(List<Tuple<Holder<Attribute>, AttributeModifier>> attributes) {
+	private record AttributeModifierSet(List<Pair<Holder<Attribute>, AttributeModifier>> attributes) {
 		void addModifier(Holder<Attribute> attribute, AttributeModifier modifier) {
-			attributes().add(new Tuple<>(attribute, modifier));
+			attributes().add(Pair.of(attribute, modifier));
 		}
 	}
 }

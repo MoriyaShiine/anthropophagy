@@ -4,7 +4,7 @@
 
 package moriyashiine.anthropophagy.mixin;
 
-import moriyashiine.anthropophagy.common.tag.ModEntityTypeTags;
+import moriyashiine.anthropophagy.common.tag.AnthropophagyEntityTypeTags;
 import moriyashiine.anthropophagy.common.world.entity.monster.Piglutton;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
@@ -33,7 +33,7 @@ public abstract class MobMixin extends LivingEntity {
 	@SuppressWarnings("ConstantValue")
 	@Inject(method = "<init>", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/Mob;registerGoals()V"))
 	private void anthropophagy$fleeFromPiglutton(CallbackInfo ci) {
-		if (is(ModEntityTypeTags.PIGLUTTON_TARGETS) && (Object) this instanceof PathfinderMob mob) {
+		if (is(AnthropophagyEntityTypeTags.PIGLUTTON_TARGETS) && (Object) this instanceof PathfinderMob mob) {
 			goalSelector.addGoal(2, new AvoidEntityGoal<>(mob, Piglutton.class, 16, 1, 1.2));
 		}
 	}

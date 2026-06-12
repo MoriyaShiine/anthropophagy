@@ -6,7 +6,7 @@ package moriyashiine.anthropophagy.common;
 
 import eu.midnightdust.lib.config.MidnightConfig;
 
-public class ModConfig extends MidnightConfig {
+public class AnthropophagyConfig extends MidnightConfig {
 	@Entry
 	public static boolean enablePiglutton = true;
 

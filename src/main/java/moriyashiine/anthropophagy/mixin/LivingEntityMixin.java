@@ -4,9 +4,8 @@
 
 package moriyashiine.anthropophagy.mixin;
 
-import moriyashiine.anthropophagy.common.component.entity.TetheredComponent;
-import moriyashiine.anthropophagy.common.init.ModEntityComponents;
-import moriyashiine.anthropophagy.common.init.ModItems;
+import moriyashiine.anthropophagy.common.init.AnthropophagyEntityComponents;
+import moriyashiine.anthropophagy.common.init.AnthropophagyItems;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
@@ -20,15 +19,16 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(LivingEntity.class)
 public abstract class LivingEntityMixin extends Entity {
-	public LivingEntityMixin(EntityType<?> type, Level world) {
-		super(type, world);
+	public LivingEntityMixin(EntityType<?> type, Level level) {
+		super(type, level);
 	}
 
 	@Inject(method = "dropCustomDeathLoot", at = @At("HEAD"))
 	private void anthropophagy$dropTetheredHeart(ServerLevel level, DamageSource source, boolean killedByPlayer, CallbackInfo ci) {
-		TetheredComponent tetheredComponent = ModEntityComponents.TETHERED.getNullable(this);
-		if (tetheredComponent != null && tetheredComponent.isTethered()) {
-			spawnAtLocation(level, ModItems.PIGLUTTON_HEART);
-		}
+		AnthropophagyEntityComponents.CANNIBAL.maybeGet(this).ifPresent(cannibal -> {
+			if (cannibal.isTethered()) {
+				spawnAtLocation(level, AnthropophagyItems.PIGLUTTON_HEART);
+			}
+		});
 	}
 }

@@ -6,7 +6,7 @@ package moriyashiine.anthropophagy.common.init;
 
 import net.minecraft.world.food.FoodProperties;
 
-public class ModFoods {
+public class AnthropophagyFoods {
 	public static final FoodProperties FLESH = new FoodProperties.Builder().nutrition(3).saturationModifier(0.3F).build();
 	public static final FoodProperties COOKED_FLESH = new FoodProperties.Builder().nutrition(8).saturationModifier(0.8F).build();
 	public static final FoodProperties CORRUPT_FLESH = new FoodProperties.Builder().nutrition(3).saturationModifier(0.3F).build();

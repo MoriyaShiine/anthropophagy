@@ -50,9 +50,11 @@ public class PigluttonPathNavigation extends GroundPathNavigation {
 		}
 		doStuckDetection(currentPos);
 
-		if (this.path != null && !this.path.isDone() && getTargetPos() != null &&
-				Vec3.atBottomCenterOf(this.path.getNextNodePos()).distanceTo(getTargetPos().getCenter()) > mob.position().distanceTo(getTargetPos().getCenter())) {
-			recomputePath();
+		if (path != null && !path.isDone() && getTargetPos() != null) {
+			Vec3 target = Vec3.atCenterOf(getTargetPos());
+			if (Vec3.atBottomCenterOf(path.getNextNodePos()).distanceTo(target) > mob.position().distanceTo(target)) {
+				recomputePath();
+			}
 		}
 	}
 

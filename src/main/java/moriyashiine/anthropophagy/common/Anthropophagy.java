@@ -5,34 +5,25 @@
 package moriyashiine.anthropophagy.common;
 
 import eu.midnightdust.lib.config.MidnightConfig;
-import moriyashiine.anthropophagy.common.event.*;
-import moriyashiine.anthropophagy.common.init.ModComponentTypes;
-import moriyashiine.anthropophagy.common.init.ModEntityTypes;
-import moriyashiine.anthropophagy.common.init.ModItems;
-import moriyashiine.anthropophagy.common.init.ModSoundEvents;
+import moriyashiine.anthropophagy.common.event.CannibalEvent;
+import moriyashiine.anthropophagy.common.event.DropFleshEvent;
+import moriyashiine.anthropophagy.common.init.AnthropophagyDataComponents;
+import moriyashiine.anthropophagy.common.init.AnthropophagyEntityTypes;
+import moriyashiine.anthropophagy.common.init.AnthropophagyItems;
+import moriyashiine.anthropophagy.common.init.AnthropophagySoundEvents;
 import moriyashiine.anthropophagy.common.reloadlistener.FleshDropsReloadListener;
 import moriyashiine.strawberrylib.api.SLib;
-import moriyashiine.strawberrylib.api.event.AfterDamageIncludingDeathEvent;
-import moriyashiine.strawberrylib.api.event.EatFoodEvent;
-import moriyashiine.strawberrylib.api.event.ModifyMovementEvents;
-import moriyashiine.strawberrylib.api.event.PreventEquipmentUsageEvent;
 import net.fabricmc.api.ModInitializer;
-import net.fabricmc.fabric.api.entity.event.v1.EntitySleepEvents;
-import net.fabricmc.fabric.api.entity.event.v1.ServerPlayerEvents;
 import net.fabricmc.fabric.api.resource.v1.ResourceLoader;
 import net.minecraft.resources.Identifier;
 import net.minecraft.server.packs.PackType;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 public class Anthropophagy implements ModInitializer {
 	public static final String MOD_ID = "anthropophagy";
 
-	public static final Logger LOGGER = LoggerFactory.getLogger(MOD_ID);
-
 	@Override
 	public void onInitialize() {
-		MidnightConfig.init(MOD_ID, ModConfig.class);
+		MidnightConfig.init(MOD_ID, AnthropophagyConfig.class);
 		SLib.init(MOD_ID);
 		initRegistries();
 		initEvents();
@@ -44,18 +35,14 @@ public class Anthropophagy implements ModInitializer {
 	}
 
 	private void initRegistries() {
-		ModComponentTypes.init();
-		ModEntityTypes.init();
-		ModItems.init();
-		ModSoundEvents.init();
+		AnthropophagyDataComponents.init();
+		AnthropophagyEntityTypes.init();
+		AnthropophagyItems.init();
+		AnthropophagySoundEvents.init();
 	}
 
 	private void initEvents() {
-		AfterDamageIncludingDeathEvent.EVENT.register(new DropFleshEvent());
-		PreventEquipmentUsageEvent.EVENT.register(new CannibalEquipmentEvent());
-		ModifyMovementEvents.JUMP_DELTA.register(new CannibalJumpBoostEvent());
-		EatFoodEvent.EVENT.register(new CannibalEatingEvent());
-		ServerPlayerEvents.COPY_FROM.register(new CopyCannibalLevelEvent());
-		EntitySleepEvents.ALLOW_SLEEPING.register(new CannibalSleepEvent());
+		CannibalEvent.init();
+		DropFleshEvent.init();
 	}
 }

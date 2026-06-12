@@ -5,9 +5,9 @@
 package moriyashiine.anthropophagy.common.world.item;
 
 import moriyashiine.anthropophagy.common.Anthropophagy;
-import moriyashiine.anthropophagy.common.component.entity.TetheredComponent;
-import moriyashiine.anthropophagy.common.init.ModEntityComponents;
-import moriyashiine.anthropophagy.common.init.ModItems;
+import moriyashiine.anthropophagy.common.component.entity.CannibalComponent;
+import moriyashiine.anthropophagy.common.init.AnthropophagyEntityComponents;
+import moriyashiine.anthropophagy.common.init.AnthropophagyItems;
 import moriyashiine.strawberrylib.api.module.SLibUtils;
 import moriyashiine.strawberrylib.api.objects.records.ModifierTrio;
 import net.minecraft.server.level.ServerLevel;
@@ -35,11 +35,11 @@ public class KnifeItem extends Item {
 	public InteractionResult use(Level level, Player player, InteractionHand hand) {
 		if (player.hurtTime == 0 && player.isShiftKeyDown()) {
 			SLibUtils.runWithPvpBypass(() -> player.attack(player));
-			TetheredComponent tetheredComponent = ModEntityComponents.TETHERED.get(player);
-			if (tetheredComponent.isTethered()) {
-				tetheredComponent.setTethered(false);
+			CannibalComponent cannibal = AnthropophagyEntityComponents.CANNIBAL.get(player);
+			if (cannibal.isTethered()) {
+				cannibal.setTethered(false);
 				if (level instanceof ServerLevel serverLevel) {
-					player.spawnAtLocation(serverLevel, ModItems.PIGLUTTON_HEART);
+					player.spawnAtLocation(serverLevel, AnthropophagyItems.PIGLUTTON_HEART);
 				}
 			}
 			return InteractionResult.SUCCESS;

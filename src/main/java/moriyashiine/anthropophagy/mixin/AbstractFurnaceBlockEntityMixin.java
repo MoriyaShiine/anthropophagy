@@ -6,7 +6,7 @@ package moriyashiine.anthropophagy.mixin;
 
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
-import moriyashiine.anthropophagy.common.init.ModComponentTypes;
+import moriyashiine.anthropophagy.common.init.AnthropophagyDataComponents;
 import moriyashiine.anthropophagy.common.world.item.FleshItem;
 import net.minecraft.core.NonNullList;
 import net.minecraft.world.item.ItemStack;
@@ -21,10 +21,10 @@ public class AbstractFurnaceBlockEntityMixin {
 	private static boolean anthropophagy$compareFlesh(ItemStack a, ItemStack b, Operation<Boolean> original, NonNullList<ItemStack> items) {
 		boolean allow = original.call(a, b);
 		ItemStack toCook = items.getFirst();
-		if (allow && toCook.has(ModComponentTypes.OWNER_NAME) && !FleshItem.getOwnerName(toCook).equals(FleshItem.getOwnerName(a))) {
+		if (allow && toCook.has(AnthropophagyDataComponents.OWNER_NAME) && !FleshItem.getOwnerName(toCook).equals(FleshItem.getOwnerName(a))) {
 			return false;
 		}
-		if (!allow && toCook.has(ModComponentTypes.OWNER_NAME) && FleshItem.getOwnerName(toCook).equals(FleshItem.getOwnerName(a))) {
+		if (!allow && toCook.has(AnthropophagyDataComponents.OWNER_NAME) && FleshItem.getOwnerName(toCook).equals(FleshItem.getOwnerName(a))) {
 			return true;
 		}
 		return allow;

@@ -7,7 +7,7 @@ package moriyashiine.anthropophagy.client;
 import moriyashiine.anthropophagy.client.event.CannibalNightVisionEvent;
 import moriyashiine.anthropophagy.client.renderer.entity.PigluttonRenderer;
 import moriyashiine.anthropophagy.client.renderer.entity.model.PigluttonModel;
-import moriyashiine.anthropophagy.common.init.ModEntityTypes;
+import moriyashiine.anthropophagy.common.init.AnthropophagyEntityTypes;
 import moriyashiine.strawberrylib.api.event.client.AddNightVisionScaleEvent;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.client.rendering.v1.ModelLayerRegistry;
@@ -22,7 +22,7 @@ public class AnthropophagyClient implements ClientModInitializer {
 
 	private void initEntities() {
 		ModelLayerRegistry.registerModelLayer(PigluttonModel.MODEL_LAYER, PigluttonModel::createBodyLayer);
-		EntityRenderers.register(ModEntityTypes.PIGLUTTON, PigluttonRenderer::new);
+		EntityRenderers.register(AnthropophagyEntityTypes.PIGLUTTON, PigluttonRenderer::new);
 	}
 
 	private void initEvents() {

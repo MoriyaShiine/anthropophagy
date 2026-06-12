@@ -21,7 +21,7 @@
   "environment": "*",
   "entrypoints": {
 	"fabric-datagen": [
-	  "moriyashiine.anthropophagy.datagen.ModDataGenerator"
+	  "moriyashiine.anthropophagy.datagen.AnthropophagyDataGenerator"
 	],
 	"main": [
 	  "moriyashiine.anthropophagy.common.Anthropophagy"
@@ -30,7 +30,7 @@
 	  "moriyashiine.anthropophagy.client.AnthropophagyClient"
 	],
 	"cardinal-components-entity": [
-	  "moriyashiine.anthropophagy.common.init.ModEntityComponents"
+	  "moriyashiine.anthropophagy.common.init.AnthropophagyEntityComponents"
 	]
   },
   "mixins": [
@@ -38,15 +38,14 @@
   ],
   "depends": {
 	"fabricloader": "*",
-	"minecraft": "~26.1",
+	"minecraft": "~26.2",
 	"java": ">=25",
 	"fabric-api": "*",
 	"strawberrylib": "*"
   },
   "custom": {
 	"cardinal-components": [
-	  "anthropophagy:cannibal_level",
-	  "anthropophagy:tethered"
+	  "anthropophagy:cannibal"
 	]
   }
 }

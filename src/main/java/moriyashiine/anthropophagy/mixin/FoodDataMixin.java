@@ -4,7 +4,7 @@
 
 package moriyashiine.anthropophagy.mixin;
 
-import moriyashiine.anthropophagy.common.init.ModEntityComponents;
+import moriyashiine.anthropophagy.common.init.AnthropophagyEntityComponents;
 import net.minecraft.world.food.FoodData;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
@@ -15,17 +15,17 @@ import org.spongepowered.asm.mixin.injection.ModifyVariable;
 public class FoodDataMixin {
 	@ModifyVariable(method = "add", at = @At("HEAD"), argsOnly = true)
 	private int anthropophagy$reduceHungerGained(int food) {
-		if (ModEntityComponents.playerCannibalLevel != -1) {
-			return Math.round(food * getFoodModifier(ModEntityComponents.playerCannibalLevel));
+		if (AnthropophagyEntityComponents.playerCannibalLevel != -1) {
+			return Math.round(food * getFoodModifier(AnthropophagyEntityComponents.playerCannibalLevel));
 		}
 		return food;
 	}
 
 	@ModifyVariable(method = "add", at = @At("HEAD"), argsOnly = true)
 	private float anthropophagy$reduceSaturationGained(float saturation) {
-		if (ModEntityComponents.playerCannibalLevel != -1) {
-			saturation *= getFoodModifier(ModEntityComponents.playerCannibalLevel);
-			ModEntityComponents.playerCannibalLevel = -1;
+		if (AnthropophagyEntityComponents.playerCannibalLevel != -1) {
+			saturation *= getFoodModifier(AnthropophagyEntityComponents.playerCannibalLevel);
+			AnthropophagyEntityComponents.playerCannibalLevel = -1;
 		}
 		return saturation;
 	}

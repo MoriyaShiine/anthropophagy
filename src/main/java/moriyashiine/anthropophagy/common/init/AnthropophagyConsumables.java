@@ -10,7 +10,7 @@ import net.minecraft.world.item.component.Consumable;
 import net.minecraft.world.item.component.Consumables;
 import net.minecraft.world.item.consume_effects.ApplyStatusEffectsConsumeEffect;
 
-public class ModConsumables {
+public class AnthropophagyConsumables {
 	public static final Consumable CORRUPT_FLESH = Consumables.defaultFood()
 			.onConsume(new ApplyStatusEffectsConsumeEffect(new MobEffectInstance(MobEffects.INSTANT_DAMAGE, 1, 1), 1))
 			.build();
