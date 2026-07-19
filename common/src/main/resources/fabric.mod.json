@@ -1,0 +1,52 @@
+{
+  "schemaVersion": 1,
+  "id": "${mod_id}",
+  "version": "${version}",
+  "name": "${mod_name}",
+  "description": "${mod_description}",
+  "authors": [
+	"MoriyaShiine",
+	"cybercat5555"
+  ],
+  "contributors": [
+	"sorazodia"
+  ],
+  "contact": {
+	"homepage": "https://modrinth.com/mod/${project_name}",
+	"sources": "https://github.com/MoriyaShiine/${project_name}",
+	"issues": "https://github.com/MoriyaShiine/${project_name}/issues"
+  },
+  "license": "All Rights Reserved",
+  "icon": "assets/${mod_id}/icon.png",
+  "environment": "*",
+  "entrypoints": {
+	"fabric-datagen": [
+	  "moriyashiine.anthropophagy.datagen.AnthropophagyDataGenerator"
+	],
+	"main": [
+	  "moriyashiine.anthropophagy.common.Anthropophagy"
+	],
+	"client": [
+	  "moriyashiine.anthropophagy.client.AnthropophagyClient"
+	],
+	"cardinal-components-entity": [
+	  "moriyashiine.anthropophagy.common.init.AnthropophagyEntityComponents"
+	]
+  },
+  "mixins": [
+	"${mod_id}.mixins.json"
+  ],
+  "depends": {
+	"fabricloader": "*",
+	"minecraft": "~26.1",
+	"java": ">=25",
+	"fabric-api": "*",
+	"strawberrylib": "*"
+  },
+  "custom": {
+	"launchpad:compatible": true,
+	"cardinal-components": [
+	  "${mod_id}:cannibal"
+	]
+  }
+}
