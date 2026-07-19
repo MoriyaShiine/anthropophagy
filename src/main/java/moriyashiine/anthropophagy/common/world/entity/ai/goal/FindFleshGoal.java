@@ -10,7 +10,7 @@ import moriyashiine.anthropophagy.common.world.entity.monster.Piglutton;
 import moriyashiine.anthropophagy.common.world.item.FleshItem;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.InteractionHand;
-import net.minecraft.world.entity.EntityTypes;
+import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.PathfinderMob;
 import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.world.entity.item.ItemEntity;
@@ -68,7 +68,7 @@ public class FindFleshGoal extends Goal {
 	}
 
 	private static @Nullable ItemEntity getNearestFlesh(PathfinderMob mob) {
-		List<ItemEntity> drops = mob.level().getEntities(EntityTypes.ITEM, mob.getBoundingBox().inflate(10, 4, 10), foundEntity -> foundEntity.getItem().is(AnthropophagyItemTags.FLESH) && !foundEntity.getItem().is(AnthropophagyItems.CORRUPT_FLESH));
+		List<ItemEntity> drops = mob.level().getEntities(EntityType.ITEM, mob.getBoundingBox().inflate(10, 4, 10), foundEntity -> foundEntity.getItem().is(AnthropophagyItemTags.FLESH) && !foundEntity.getItem().is(AnthropophagyItems.CORRUPT_FLESH));
 		if (drops.isEmpty()) {
 			return null;
 		}

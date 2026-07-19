@@ -8,8 +8,8 @@ import moriyashiine.anthropophagy.common.tag.AnthropophagyBlockTags;
 import net.fabricmc.fabric.api.datagen.v1.FabricPackOutput;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricTagsProvider;
 import net.minecraft.core.HolderLookup;
-import net.minecraft.references.BlockItemIds;
 import net.minecraft.tags.BlockTags;
+import net.minecraft.world.level.block.Blocks;
 
 import java.util.concurrent.CompletableFuture;
 
@@ -20,11 +20,11 @@ public class AnthropophagyBlockTagsProvider extends FabricTagsProvider.BlockTags
 
 	@Override
 	protected void addTags(HolderLookup.Provider registries) {
-		builder(AnthropophagyBlockTags.PIGLUTTON_BREAKABLE)
+		valueLookupBuilder(AnthropophagyBlockTags.PIGLUTTON_BREAKABLE)
 				.forceAddTag(BlockTags.FENCE_GATES)
 				.forceAddTag(BlockTags.LOGS)
 				.forceAddTag(BlockTags.PLANKS)
 				.forceAddTag(BlockTags.WOODEN_FENCES)
-				.add(BlockItemIds.BAMBOO.block());
+				.add(Blocks.BAMBOO);
 	}
 }

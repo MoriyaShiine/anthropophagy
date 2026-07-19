@@ -6,11 +6,11 @@ package moriyashiine.anthropophagy.api.datagen;
 
 import moriyashiine.anthropophagy.common.reloadlistener.FleshDropsReloadListener;
 import moriyashiine.anthropophagy.common.util.FleshDrop;
+import moriyashiine.strawberrylib.api.objects.records.BlockItemId;
 import net.fabricmc.fabric.api.datagen.v1.FabricPackOutput;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricCodecDataProvider;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.data.PackOutput;
-import net.minecraft.references.BlockItemId;
 import net.minecraft.resources.Identifier;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.entity.EntityType;
@@ -53,6 +53,14 @@ public abstract class FleshDropsProvider extends FabricCodecDataProvider<FleshDr
 
 		default void accept(ResourceKey<EntityType<?>> type, BlockItemId drop) {
 			accept(type, drop.item());
+		}
+
+		default void accept(EntityType<?> type, Item raw, Item cooked) {
+			accept(type.builtInRegistryHolder().key(), raw.builtInRegistryHolder().key(), cooked.builtInRegistryHolder().key());
+		}
+
+		default void accept(EntityType<?> type, Item drop) {
+			accept(type, drop, drop);
 		}
 	}
 }
