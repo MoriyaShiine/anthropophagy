@@ -5,7 +5,7 @@ import moriyashiine.anthropophagy.common.component.entity.CannibalComponent;
 import moriyashiine.anthropophagy.common.init.AnthropophagyEntityComponents;
 import moriyashiine.anthropophagy.common.init.AnthropophagyItems;
 import moriyashiine.strawberrylib.api.module.SLibUtils;
-import moriyashiine.strawberrylib.api.objects.records.ModifierTrio;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
@@ -17,14 +17,13 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ToolMaterial;
 import net.minecraft.world.level.Level;
 
-import static moriyashiine.strawberrylib.api.module.SLibRegistries.editModifiers;
-
 public class KnifeItem extends Item {
 	private static final AttributeModifier ENTITY_INTERACTION_RANGE_MODIFIER = new AttributeModifier(Anthropophagy.id("knife_interaction_range"), -0.5, AttributeModifier.Operation.ADD_VALUE);
-	private static final ModifierTrio MODIFIER = new ModifierTrio(Attributes.ENTITY_INTERACTION_RANGE, ENTITY_INTERACTION_RANGE_MODIFIER, EquipmentSlotGroup.MAINHAND);
 
 	public KnifeItem(ToolMaterial material, Properties properties) {
-		super(editModifiers(() -> properties.sword(material, 0, -2), MODIFIER));
+		super(properties.sword(material, 0, -2)
+				.modifyComponent(DataComponents.ATTRIBUTE_MODIFIERS, (original, _, _) ->
+						original.withModifierAdded(Attributes.ENTITY_INTERACTION_RANGE, ENTITY_INTERACTION_RANGE_MODIFIER, EquipmentSlotGroup.MAINHAND)));
 	}
 
 	@Override
