@@ -16,13 +16,13 @@ import static moriyashiine.strawberrylib.api.module.SLibRegistries.registerItem;
 public class AnthropophagyItems {
 	public static CreativeModeTab TAB;
 
-	public static final Item WOODEN_KNIFE = registerItem(AnthropophagyItemIds.WOODEN_KNIFE, settings -> new KnifeItem(ToolMaterial.WOOD, settings));
-	public static final Item STONE_KNIFE = registerItem(AnthropophagyItemIds.STONE_KNIFE, settings -> new KnifeItem(ToolMaterial.STONE, settings));
-	public static final Item COPPER_KNIFE = registerItem(AnthropophagyItemIds.COPPER_KNIFE, settings -> new KnifeItem(ToolMaterial.COPPER, settings));
-	public static final Item IRON_KNIFE = registerItem(AnthropophagyItemIds.IRON_KNIFE, settings -> new KnifeItem(ToolMaterial.IRON, settings));
-	public static final Item GOLDEN_KNIFE = registerItem(AnthropophagyItemIds.GOLDEN_KNIFE, settings -> new KnifeItem(ToolMaterial.GOLD, settings));
-	public static final Item DIAMOND_KNIFE = registerItem(AnthropophagyItemIds.DIAMOND_KNIFE, settings -> new KnifeItem(ToolMaterial.DIAMOND, settings));
-	public static final Item NETHERITE_KNIFE = registerItem(AnthropophagyItemIds.NETHERITE_KNIFE, settings -> new KnifeItem(ToolMaterial.NETHERITE, settings), properties().fireResistant());
+	public static final Item WOODEN_KNIFE = registerItem(AnthropophagyItemIds.WOODEN_KNIFE, properties -> new KnifeItem(ToolMaterial.WOOD, properties));
+	public static final Item STONE_KNIFE = registerItem(AnthropophagyItemIds.STONE_KNIFE, properties -> new KnifeItem(ToolMaterial.STONE, properties));
+	public static final Item COPPER_KNIFE = registerItem(AnthropophagyItemIds.COPPER_KNIFE, properties -> new KnifeItem(ToolMaterial.COPPER, properties));
+	public static final Item IRON_KNIFE = registerItem(AnthropophagyItemIds.IRON_KNIFE, properties -> new KnifeItem(ToolMaterial.IRON, properties));
+	public static final Item GOLDEN_KNIFE = registerItem(AnthropophagyItemIds.GOLDEN_KNIFE, properties -> new KnifeItem(ToolMaterial.GOLD, properties));
+	public static final Item DIAMOND_KNIFE = registerItem(AnthropophagyItemIds.DIAMOND_KNIFE, properties -> new KnifeItem(ToolMaterial.DIAMOND, properties));
+	public static final Item NETHERITE_KNIFE = registerItem(AnthropophagyItemIds.NETHERITE_KNIFE, properties -> new KnifeItem(ToolMaterial.NETHERITE, properties), properties().fireResistant());
 
 	public static final Item FLESH = registerItem(AnthropophagyItemIds.FLESH, FleshItem::new, properties().food(AnthropophagyFoods.FLESH));
 	public static final Item COOKED_FLESH = registerItem(AnthropophagyItemIds.COOKED_FLESH, FleshItem::new, properties().food(AnthropophagyFoods.COOKED_FLESH));
