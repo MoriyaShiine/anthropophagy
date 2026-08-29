@@ -6,7 +6,7 @@ import moriyashiine.anthropophagy.common.init.AnthropophagyEntityComponents;
 import moriyashiine.anthropophagy.common.tag.AnthropophagyItemTags;
 import moriyashiine.anthropophagy.common.world.entity.monster.Piglutton;
 import moriyashiine.anthropophagy.common.world.item.FleshItem;
-import moriyashiine.strawberrylib.api.event.EatFoodEvent;
+import moriyashiine.strawberrylib.api.event.FoodEvents;
 import moriyashiine.strawberrylib.api.event.ModifyMovementEvents;
 import moriyashiine.strawberrylib.api.event.PreventEquipmentUsageEvent;
 import moriyashiine.strawberrylib.api.objects.enums.PreventionResult;
@@ -20,7 +20,6 @@ import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.food.FoodProperties;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.AABB;
@@ -32,7 +31,8 @@ import java.util.List;
 public class CannibalEvent {
 	public static void init() {
 		ModifyMovementEvents.JUMP_DELTA.register(new CrouchJump());
-		EatFoodEvent.EVENT.register(new EatFood());
+		FoodEvents.EAT.register(new EatFood());
+		FoodEvents.MODIFY_NUTRITION.register(new ModifyNutrition());
 		PreventEquipmentUsageEvent.EVENT.register(new PreventEquipmentUsage());
 		EntitySleepEvents.ALLOW_SLEEPING.register(new PreventSleeping());
 		ServerPlayerEvents.COPY_FROM.register(new Respawn());
@@ -51,9 +51,9 @@ public class CannibalEvent {
 		}
 	}
 
-	private static class EatFood implements EatFoodEvent {
+	private static class EatFood implements FoodEvents.Eat {
 		@Override
-		public void eat(Level level, LivingEntity user, ItemStack stack, FoodProperties properties) {
+		public void eat(Level level, LivingEntity user, ItemStack stack) {
 			AnthropophagyEntityComponents.CANNIBAL.maybeGet(user).ifPresent(cannibal -> {
 				if (stack.is(AnthropophagyItemTags.FLESH)) {
 					if (!cannibal.isTethered()) {
@@ -74,11 +74,40 @@ public class CannibalEvent {
 						cannibal.setLevel(Math.max(0, cannibal.getLevel() - 1));
 						cannibal.updateAttributes();
 					}
-					if (!level.isClientSide() && cannibal.getLevel() >= 20) {
-						AnthropophagyEntityComponents.playerCannibalLevel = cannibal.getLevel();
-					}
 				}
 			});
+		}
+	}
+
+	private static class ModifyNutrition implements FoodEvents.ModifyNutrition {
+		@Override
+		public int modify(int nutrition, Level level, Player user, ItemStack stack) {
+			if (stack.is(AnthropophagyItemTags.FLESH)) {
+				return nutrition;
+			}
+			return Math.round(nutrition * getFoodModifier(AnthropophagyEntityComponents.CANNIBAL.get(user).getLevel()));
+		}
+
+		private static float getFoodModifier(int level) {
+			if (level >= 70) {
+				return 0.4F;
+			}
+			if (level >= 60) {
+				return 0.5F;
+			}
+			if (level >= 50) {
+				return 0.6F;
+			}
+			if (level >= 40) {
+				return 0.7F;
+			}
+			if (level >= 30) {
+				return 0.8F;
+			}
+			if (level >= 20) {
+				return 0.9F;
+			}
+			return 1;
 		}
 	}
 

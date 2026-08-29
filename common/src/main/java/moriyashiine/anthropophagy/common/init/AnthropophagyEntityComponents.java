@@ -9,8 +9,6 @@ import org.ladysnake.cca.api.v3.entity.EntityComponentInitializer;
 import org.ladysnake.cca.api.v3.entity.RespawnCopyStrategy;
 
 public class AnthropophagyEntityComponents implements EntityComponentInitializer {
-	public static int playerCannibalLevel = -1;
-
 	public static final ComponentKey<CannibalComponent> CANNIBAL = ComponentRegistry.getOrCreate(Anthropophagy.id("cannibal"), CannibalComponent.class);
 
 	@Override
