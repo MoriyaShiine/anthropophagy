@@ -10,6 +10,6 @@ public class CannibalNightVisionEvent implements AddNightVisionScaleEvent {
 	@Override
 	public float addScale(LivingEntity entity) {
 		CannibalComponent cannibal = AnthropophagyEntityComponents.CANNIBAL.getNullable(entity);
-		return cannibal != null ? Mth.clamp(Mth.lerp((cannibal.getLevel() - CannibalComponent.MIN_FUNCTIONAL_LEVEL) / 20F, 0, 1F), 0, 1) : 0;
+		return cannibal != null ? Mth.clamp((cannibal.getLevel() - CannibalComponent.MIN_FUNCTIONAL_LEVEL) / 20F, 0, 1) : 0;
 	}
 }
