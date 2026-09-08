@@ -13,7 +13,7 @@
 	},
 	"has_the_recipe": {
 	  "conditions": {
-		"recipe": "anthropophagy:netherite_knife_smithing"
+		"recipes": "anthropophagy:netherite_knife_smithing"
 	  },
 	  "trigger": "minecraft:recipe_unlocked"
 	}

@@ -13,7 +13,7 @@
 	},
 	"has_the_recipe": {
 	  "conditions": {
-		"recipe": "anthropophagy:golden_knife"
+		"recipes": "anthropophagy:golden_knife"
 	  },
 	  "trigger": "minecraft:recipe_unlocked"
 	}

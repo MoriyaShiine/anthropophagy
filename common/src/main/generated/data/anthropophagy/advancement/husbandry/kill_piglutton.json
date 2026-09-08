@@ -3,15 +3,13 @@
   "criteria": {
 	"killed_piglutton": {
 	  "conditions": {
-		"entity": [
-		  {
-			"condition": "minecraft:entity_properties",
-			"entity": "this",
-			"predicate": {
-			  "minecraft:entity_type": "anthropophagy:piglutton"
-			}
+		"entity": {
+		  "type": "minecraft:entity_properties",
+		  "entity": "this",
+		  "predicate": {
+			"minecraft:entity_type": "anthropophagy:piglutton"
 		  }
-		]
+		}
 	  },
 	  "trigger": "minecraft:player_killed_entity"
 	}

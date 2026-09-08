@@ -13,7 +13,7 @@
 	},
 	"has_the_recipe": {
 	  "conditions": {
-		"recipe": "anthropophagy:tethered_heart"
+		"recipes": "anthropophagy:tethered_heart"
 	  },
 	  "trigger": "minecraft:recipe_unlocked"
 	}

@@ -310,7 +310,7 @@ public class Piglutton extends Monster {
 					int dX = living.getRandom().nextIntBetweenInclusive(minH, maxH) * (living.getRandom().nextBoolean() ? 1 : -1);
 					int dY = living.getRandom().nextIntBetweenInclusive(-6, 6);
 					int dZ = living.getRandom().nextIntBetweenInclusive(minH, maxH) * (living.getRandom().nextBoolean() ? 1 : -1);
-					if (piglutton.randomTeleport(living.getX() + dX, living.getY() + dY, living.getZ() + dZ, false)) {
+					if (piglutton.randomTeleport(living.getX() + dX, living.getY() + dY, living.getZ() + dZ, false, AnthropophagyBlockTags.PIGLUTTON_DOES_NOT_TELEPORT_TO)) {
 						level.addFreshEntity(piglutton);
 						piglutton.setTarget(living);
 						SLibUtils.playSound(piglutton, AnthropophagySoundEvents.PIGLUTTON_SPAWN, 3.5F, 1);

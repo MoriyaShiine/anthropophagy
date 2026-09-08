@@ -5,17 +5,15 @@ import moriyashiine.anthropophagy.common.init.AnthropophagyItems;
 import net.fabricmc.fabric.api.datagen.v1.FabricPackOutput;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricRecipeProvider;
 import net.fabricmc.fabric.api.tag.convention.v2.ConventionalItemTags;
+import net.minecraft.advancements.Advancement;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.data.recipes.RecipeCategory;
-import net.minecraft.data.recipes.RecipeOutput;
 import net.minecraft.data.recipes.RecipeProvider;
 import net.minecraft.data.recipes.SimpleCookingRecipeBuilder;
+import net.minecraft.data.worldgen.BootstrapContext;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.world.item.Items;
-import net.minecraft.world.item.crafting.CampfireCookingRecipe;
-import net.minecraft.world.item.crafting.CookingBookCategory;
-import net.minecraft.world.item.crafting.Ingredient;
-import net.minecraft.world.item.crafting.SmokingRecipe;
+import net.minecraft.world.item.crafting.*;
 
 import java.util.concurrent.CompletableFuture;
 
@@ -25,8 +23,8 @@ public class AnthropophagyRecipeProvider extends FabricRecipeProvider {
 	}
 
 	@Override
-	protected RecipeProvider createRecipeProvider(HolderLookup.Provider registries, RecipeOutput output) {
-		return new RecipeProvider(registries, output) {
+	protected RecipeProvider createRecipeProvider(HolderLookup.Provider registries, BootstrapContext<Recipe<?>> recipes, BootstrapContext<Advancement> advancements) {
+		return new RecipeProvider(recipes, advancements) {
 			@Override
 			public void buildRecipes() {
 				shaped(RecipeCategory.COMBAT, AnthropophagyItems.WOODEN_KNIFE).define('M', ItemTags.WOODEN_TOOL_MATERIALS).define('S', Items.STICK).pattern(" M").pattern("S ").unlockedBy("has_wood", has(ItemTags.WOODEN_TOOL_MATERIALS)).save(output);

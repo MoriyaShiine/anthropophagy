@@ -13,7 +13,7 @@
 	},
 	"has_the_recipe": {
 	  "conditions": {
-		"recipe": "anthropophagy:cooked_flesh_from_smoking"
+		"recipes": "anthropophagy:cooked_flesh_from_smoking"
 	  },
 	  "trigger": "minecraft:recipe_unlocked"
 	}

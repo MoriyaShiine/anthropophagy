@@ -22,7 +22,7 @@ public class PigluttonMeleeAttackGoal extends MeleeAttackGoal {
 	protected void checkAndPerformAttack(LivingEntity target) {
 		if (canPerformAttack(target)) {
 			resetAttackCooldown();
-			mob.swing(InteractionHand.MAIN_HAND);
+			mob.swingForAttack(InteractionHand.MAIN_HAND);
 			mob.attack();
 		}
 	}

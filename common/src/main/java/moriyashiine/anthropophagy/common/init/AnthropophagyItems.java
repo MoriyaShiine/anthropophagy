@@ -10,8 +10,7 @@ import net.fabricmc.fabric.api.creativetab.v1.FabricCreativeModeTab;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.*;
 
-import static moriyashiine.strawberrylib.api.module.SLibRegistries.registerCreativeModeTab;
-import static moriyashiine.strawberrylib.api.module.SLibRegistries.registerItem;
+import static moriyashiine.strawberrylib.api.module.SLibRegistries.*;
 
 public class AnthropophagyItems {
 	public static CreativeModeTab TAB;
@@ -22,7 +21,7 @@ public class AnthropophagyItems {
 	public static final Item IRON_KNIFE = registerItem(AnthropophagyItemIds.IRON_KNIFE, properties -> new KnifeItem(ToolMaterial.IRON, properties));
 	public static final Item GOLDEN_KNIFE = registerItem(AnthropophagyItemIds.GOLDEN_KNIFE, properties -> new KnifeItem(ToolMaterial.GOLD, properties));
 	public static final Item DIAMOND_KNIFE = registerItem(AnthropophagyItemIds.DIAMOND_KNIFE, properties -> new KnifeItem(ToolMaterial.DIAMOND, properties));
-	public static final Item NETHERITE_KNIFE = registerItem(AnthropophagyItemIds.NETHERITE_KNIFE, properties -> new KnifeItem(ToolMaterial.NETHERITE, properties), properties().fireResistant());
+	public static final Item NETHERITE_KNIFE = registerItem(AnthropophagyItemIds.NETHERITE_KNIFE, properties -> new KnifeItem(ToolMaterial.NETHERITE, properties), fireproof());
 
 	public static final Item FLESH = registerItem(AnthropophagyItemIds.FLESH, FleshItem::new, properties().food(AnthropophagyFoods.FLESH));
 	public static final Item COOKED_FLESH = registerItem(AnthropophagyItemIds.COOKED_FLESH, FleshItem::new, properties().food(AnthropophagyFoods.COOKED_FLESH));
@@ -32,10 +31,6 @@ public class AnthropophagyItems {
 	public static final Item TETHERED_HEART = registerItem(AnthropophagyItemIds.TETHERED_HEART, TetheredHeartItem::new, properties().food(AnthropophagyFoods.TETHERED_HEART));
 
 	public static final Item PIGLUTTON_SPAWN_EGG = registerItem(AnthropophagyItemIds.PIGLUTTON_SPAWN_EGG, SpawnEggItem::new, properties().spawnEgg(AnthropophagyEntityTypes.PIGLUTTON));
-
-	private static Item.Properties properties() {
-		return new Item.Properties();
-	}
 
 	public static void init() {
 		TAB = registerCreativeModeTab(FabricCreativeModeTab.builder().title(Component.translatable("itemGroup." + Anthropophagy.MOD_ID)).icon(AnthropophagyItems.IRON_KNIFE::getDefaultInstance).displayItems((_, output) -> {

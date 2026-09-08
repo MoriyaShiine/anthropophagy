@@ -39,38 +39,35 @@ public class AnthropophagyAdvancementProvider extends FabricAdvancementProvider 
 				.display(AnthropophagyItems.FLESH,
 						Component.translatable("advancements.anthropophagy.husbandry.consume_flesh.title"),
 						Component.translatable("advancements.anthropophagy.husbandry.consume_flesh.description"),
-						null,
 						AdvancementType.TASK,
 						true,
 						true,
 						true)
 				.addCriterion("consume_flesh", ConsumeItemTrigger.TriggerInstance.usedItem(ItemPredicate.Builder.item().of(itemLookup, AnthropophagyItemTags.FLESH)))
-				.save(consumer, Anthropophagy.id("husbandry/consume_flesh").toString());
+				.save(consumer, Anthropophagy.id("husbandry/consume_flesh"));
 
 		Advancement.Builder.advancement()
 				.parent(Identifier.withDefaultNamespace("husbandry/root"))
 				.display(AnthropophagyItems.PIGLUTTON_HEART,
 						Component.translatable("advancements.anthropophagy.husbandry.kill_piglutton.title"),
 						Component.translatable("advancements.anthropophagy.husbandry.kill_piglutton.description"),
-						null,
 						AdvancementType.TASK,
 						true,
 						true,
 						true)
 				.addCriterion("killed_piglutton", KilledTrigger.TriggerInstance.playerKilledEntity(new EntityPredicate.Builder().of(entityTypeLookup, AnthropophagyEntityTypes.PIGLUTTON)))
-				.save(consumer, Anthropophagy.id("husbandry/kill_piglutton").toString());
+				.save(consumer, Anthropophagy.id("husbandry/kill_piglutton"));
 
 		Advancement.Builder.advancement()
 				.parent(Identifier.withDefaultNamespace("husbandry/root"))
 				.display(AnthropophagyItems.IRON_KNIFE,
 						Component.translatable("advancements.anthropophagy.husbandry.obtain_knife.title"),
 						Component.translatable("advancements.anthropophagy.husbandry.obtain_knife.description"),
-						null,
 						AdvancementType.TASK,
 						true,
 						true,
 						false)
 				.addCriterion("has_knife", InventoryChangeTrigger.TriggerInstance.hasItems(ItemPredicate.Builder.item().of(itemLookup, AnthropophagyItemTags.KNIVES)))
-				.save(consumer, Anthropophagy.id("husbandry/obtain_knife").toString());
+				.save(consumer, Anthropophagy.id("husbandry/obtain_knife"));
 	}
 }

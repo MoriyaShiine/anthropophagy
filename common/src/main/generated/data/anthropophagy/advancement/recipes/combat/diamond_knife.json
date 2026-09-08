@@ -13,7 +13,7 @@
 	},
 	"has_the_recipe": {
 	  "conditions": {
-		"recipe": "anthropophagy:diamond_knife"
+		"recipes": "anthropophagy:diamond_knife"
 	  },
 	  "trigger": "minecraft:recipe_unlocked"
 	}

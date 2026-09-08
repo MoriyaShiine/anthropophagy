@@ -22,5 +22,8 @@ public class AnthropophagyBlockTagsProvider extends FabricTagsProvider.BlockTags
 				.forceAddTag(BlockTags.PLANKS)
 				.forceAddTag(BlockTags.WOODEN_FENCES)
 				.add(BlockItemIds.BAMBOO.block());
+		builder(AnthropophagyBlockTags.PIGLUTTON_DOES_NOT_TELEPORT_TO)
+				.add(BlockItemIds.BEDROCK)
+				.forceAddTag(BlockTags.DANGEROUS_FOR_TELEPORTATION);
 	}
 }
