@@ -15,7 +15,12 @@ import net.minecraft.world.level.levelgen.Heightmap;
 import static moriyashiine.strawberrylib.api.module.SLibRegistries.registerEntityType;
 
 public class AnthropophagyEntityTypes {
-	public static final EntityType<Piglutton> PIGLUTTON = registerEntityType(AnthropophagyEntityTypeIds.PIGLUTTON, EntityType.Builder.of(Piglutton::new, MobCategory.MONSTER).sized(2.4F, 2.6F).canSpawnFarFromPlayer().notInPeaceful(), Piglutton.createAttributes());
+	public static final EntityType<Piglutton> PIGLUTTON = registerEntityType(AnthropophagyEntityTypeIds.PIGLUTTON,
+			EntityType.Builder.of(Piglutton::new, MobCategory.MONSTER)
+					.sized(2.4F, 2.6F)
+					.canSpawnFarFromPlayer()
+					.notInPeaceful(),
+			Piglutton.createAttributes());
 
 	public static void init() {
 		SpawnPlacements.register(PIGLUTTON, SpawnPlacementTypes.ON_GROUND, Heightmap.Types.WORLD_SURFACE, Piglutton::checkPigluttonSpawnRules);

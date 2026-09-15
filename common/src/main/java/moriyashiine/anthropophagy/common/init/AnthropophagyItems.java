@@ -23,14 +23,20 @@ public class AnthropophagyItems {
 	public static final Item DIAMOND_KNIFE = registerItem(AnthropophagyItemIds.DIAMOND_KNIFE, properties -> new KnifeItem(ToolMaterial.DIAMOND, properties));
 	public static final Item NETHERITE_KNIFE = registerItem(AnthropophagyItemIds.NETHERITE_KNIFE, properties -> new KnifeItem(ToolMaterial.NETHERITE, properties), fireproof());
 
-	public static final Item FLESH = registerItem(AnthropophagyItemIds.FLESH, FleshItem::new, properties().food(AnthropophagyFoods.FLESH));
-	public static final Item COOKED_FLESH = registerItem(AnthropophagyItemIds.COOKED_FLESH, FleshItem::new, properties().food(AnthropophagyFoods.COOKED_FLESH));
-	public static final Item CORRUPT_FLESH = registerItem(AnthropophagyItemIds.CORRUPT_FLESH, FleshItem::new, properties().food(AnthropophagyFoods.CORRUPT_FLESH, AnthropophagyConsumables.CORRUPT_FLESH));
+	public static final Item FLESH = registerItem(AnthropophagyItemIds.FLESH, FleshItem::new, properties()
+			.food(AnthropophagyFoods.FLESH));
+	public static final Item COOKED_FLESH = registerItem(AnthropophagyItemIds.COOKED_FLESH, FleshItem::new, properties()
+			.food(AnthropophagyFoods.COOKED_FLESH));
+	public static final Item CORRUPT_FLESH = registerItem(AnthropophagyItemIds.CORRUPT_FLESH, FleshItem::new, properties()
+			.food(AnthropophagyFoods.CORRUPT_FLESH, AnthropophagyConsumables.CORRUPT_FLESH));
 
-	public static final Item PIGLUTTON_HEART = registerItem(AnthropophagyItemIds.PIGLUTTON_HEART, FleshItem::new, properties().food(AnthropophagyFoods.COOKED_FLESH));
-	public static final Item TETHERED_HEART = registerItem(AnthropophagyItemIds.TETHERED_HEART, TetheredHeartItem::new, properties().food(AnthropophagyFoods.TETHERED_HEART));
+	public static final Item PIGLUTTON_HEART = registerItem(AnthropophagyItemIds.PIGLUTTON_HEART, FleshItem::new, properties()
+			.food(AnthropophagyFoods.COOKED_FLESH));
+	public static final Item TETHERED_HEART = registerItem(AnthropophagyItemIds.TETHERED_HEART, TetheredHeartItem::new, properties()
+			.food(AnthropophagyFoods.TETHERED_HEART));
 
-	public static final Item PIGLUTTON_SPAWN_EGG = registerItem(AnthropophagyItemIds.PIGLUTTON_SPAWN_EGG, SpawnEggItem::new, properties().spawnEgg(AnthropophagyEntityTypes.PIGLUTTON));
+	public static final Item PIGLUTTON_SPAWN_EGG = registerItem(AnthropophagyItemIds.PIGLUTTON_SPAWN_EGG, SpawnEggItem::new, properties()
+			.spawnEgg(AnthropophagyEntityTypes.PIGLUTTON));
 
 	public static void init() {
 		TAB = registerCreativeModeTab(FabricCreativeModeTab.builder().title(Component.translatable("itemGroup." + Anthropophagy.MOD_ID)).icon(AnthropophagyItems.IRON_KNIFE::getDefaultInstance).displayItems((_, output) -> {
